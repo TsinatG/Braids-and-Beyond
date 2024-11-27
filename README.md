@@ -1,7 +1,7 @@
 # Braids and beyond
 
 # GitHub Repository
-The source code for this project is available on GitHub: https://github.com/xxyy
+The source code for this project is available on GitHub: https://github.com/TsinatG/Braids-and-Beyond.
 
 ## Identification
 - **Name:** 
