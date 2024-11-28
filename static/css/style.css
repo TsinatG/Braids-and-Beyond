@@ -1,11 +1,21 @@
 /* Base Styles */
 :root {
   --primary-color: #ff69b4;
-  --background-color: #ffffff;
-  --text-color: #000000;
+  --background-color: #000000;
+  --text-color: #ffffff;
   --accent-color: #ff69b4;
   --font-heading: "Playfair Display", serif;
   --font-body: "Poppins", sans-serif;
+}
+
+select {
+  background-color: gray;
+  color: var(--text-color);
+}
+
+select option {
+  background-color: var(--primary-color);
+  color: var(--text-color);
 }
 
 * {
@@ -25,15 +35,348 @@ main {
   padding: 5rem;
 }
 
-.landing-page {
-  display: flex;
-  justify-items: center;
-  align-items: center;
+/* Header & Navigation */
+header {
+  background-color: rgba(0, 0, 0, 0.9);
+  padding: 1rem 0;
+  position: fixed;
   width: 100%;
-  padding: 5px;
+  top: 0;
+  z-index: 1000;
 }
 
-.landing-page h1{
-  font-size: 20px;
+nav ul {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  gap: 2rem;
+}
 
+nav ul li a {
+  color: var(--text-color);
+  text-decoration: none;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: color 0.3s ease;
+}
+
+nav ul li a:hover {
+  color: var(--primary-color);
+}
+
+/* Landing Page Styles */
+.landing-page {
+  padding-top: 0px;
+}
+
+.hero {
+  position: relative;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background-color: var(--background-color);
+  padding: 2rem;
+}
+
+.hero-content h1{
+  position: absolute;
+  font-family: var(--font-heading);
+  font-size: 15rem;
+  max-width: 50%;
+  text-align: left;
+  top: 5rem;
+  left: 0;
+  text-shadow: 4px 4px 0px rgba(255, 105, 180, 0.2);
+  color: rgba(255, 255, 255, 0.8);
+  overlay: hidden;
+  letter-spacing: 4px;
+  line-height: 1;
+}
+
+.hero-linker {
+  position: relative;
+  margin-top: 8rem;
+
+  z-index: 1;
+}
+
+.hero-content img {
+  position: absolute;
+  bottom: 0;
+  right: -2rem;
+  height: 100%;
+  object-fit: cover;
+}
+
+.subtitle {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  color: var(--primary-color);
+  margin-bottom: 0.5rem;
+}
+
+.location {
+  font-size: 0.9rem;
+  letter-spacing: 2px;
+  margin-bottom: 2rem;
+}
+
+.cta-button {
+  display: inline-block;
+  padding: 1rem 2rem;
+  background-color: var(--primary-color);
+  color: var(--text-color);
+  text-decoration: none;
+  border-radius: 4px;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+.cta-button:hover {
+  background-color: #ff4da6;
+}
+
+/* Stylist Introduction */
+.stylist-intro {
+  padding: 4rem 2rem;
+  display: flex;
+  align-items: center;
+  gap: 4rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.profile-image {
+  flex: 1;
+  text-align: center;
+}
+
+.profile-image img {
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.intro-content {
+  flex: 2;
+}
+
+.intro-content h2 {
+  font-family: var(--font-heading);
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+}
+
+/* Business Info */
+.business-info {
+  padding: 4rem 2rem;
+  display: flex;
+  justify-content: center;
+  gap: 4rem;
+  background-color: rgba(255, 105, 180, 0.1);
+}
+
+.hours-section,
+.contact-section {
+  text-align: center;
+}
+
+.business-info h2 {
+  font-family: var(--font-heading);
+  color: var(--primary-color);
+  margin-bottom: 1.5rem;
+}
+
+.business-info ul {
+  list-style: none;
+}
+
+.business-info ul li {
+  margin-bottom: 1rem;
+}
+
+.hours-section ul li span {
+  display: block;
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+/* Booking Policies */
+.booking-policies {
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.booking-policies h2 {
+  font-family: var(--font-heading);
+  color: var(--primary-color);
+  margin-bottom: 2rem;
+}
+
+.policy-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.policy-item {
+  padding: 2rem;
+  background-color: rgba(255, 105, 180, 0.1);
+  border-radius: 8px;
+}
+
+.policy-icon {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+/* Forms */
+form {
+  max-width: 600px;
+  /* background-color: rgba(255, 255, 255, 0.05); */
+  border-radius: 8px;
+}
+
+.delete-button {
+  padding: 1rem;
+  background: linear-gradient(to right, #ff0000, #ff4da6);
+  border-radius: 8px;
+}
+.delete-button:hover {
+  background: linear-gradient(to right, #ff4da6, #ff0000);
+}
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--primary-color);
+}
+
+input,
+select {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1.5rem;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--primary-color);
+  border-radius: 4px;
+  color: var(--text-color);
+}
+
+button {
+  background-color: var(--primary-color);
+  color: var(--text-color);
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #ff4da6;
+}
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 2rem 0;
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+th,
+td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid rgba(255, 105, 180, 0.2);
+}
+
+th {
+  background-color: rgba(255, 105, 180, 0.1);
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+/* Flash Messages */
+.flash-message {
+  padding: 1rem;
+  margin: 1rem 0;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.success {
+  background-color: rgba(75, 181, 67, 0.2);
+  color: #4bb543;
+}
+
+.error {
+  background-color: rgba(255, 0, 0, 0.2);
+  color: #ff0000;
+}
+
+/* Footer */
+footer {
+  background-color: rgba(0, 0, 0, 0.9);
+  padding: 2rem 0;
+  text-align: center;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .hero-content h1 {
+    font-size: 3rem;
+  }
+
+  .stylist-intro {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .business-info {
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  nav ul {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .policy-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Utility Classes */
+.btn {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.btn-edit {
+  background-color: var(--primary-color);
+  color: var(--text-color);
+}
+
+.btn-edit:hover {
+  background-color: #ff4da6;
 }

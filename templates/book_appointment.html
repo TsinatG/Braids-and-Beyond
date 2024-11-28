@@ -1,5 +1,64 @@
 {% extends "base.html" %} {% block title %}Book Appointment{% endblock %} {%
 block content %}
 <h1>Book Appointment</h1>
+<form action="{{ url_for('book_appointment_route') }}" method="post">
+  <label for="customer_name">Name:</label>
+  <input type="text" id="customer_name" name="customer_name" required />
 
+  <label for="service_id">Service:</label>
+  <select id="service_id" name="service_id" required>
+    {% for service in services %}
+    <option value="{{ service.id }}">
+      {{ service.name }} - ${{ service.price }}
+    </option>
+    {% endfor %}
+  </select>
+
+  <label for="stylist_id">Stylist:</label>
+  <select id="stylist_id" name="stylist_id" required>
+    {% for stylist in stylists %}
+    <option value="{{ stylist.id }}">
+      {{ stylist.name }} - {{ stylist.specialization }}
+    </option>
+    {% endfor %}
+  </select>
+
+  <label for="date">Date:</label>
+  <input type="date" id="date" name="date" required />
+
+  <label for="time">Time:</label>
+  <select id="time" name="time" required>
+    <option value="">Select a date and stylist first</option>
+  </select>
+
+  <button type="submit">Book Appointment</button>
+</form>
+
+<script>
+  const dateInput = document.getElementById("date");
+  const stylistInput = document.getElementById("stylist_id");
+  const timeSelect = document.getElementById("time");
+
+  function updateAvailableTimes() {
+    const date = dateInput.value;
+    const stylistId = stylistInput.value;
+
+    if (date && stylistId) {
+      fetch(`/available_times?date=${date}&stylist_id=${stylistId}`)
+        .then((response) => response.json())
+        .then((data) => {
+          timeSelect.innerHTML = "";
+          data.times.forEach((time) => {
+            const option = document.createElement("option");
+            option.value = time;
+            option.textContent = time;
+            timeSelect.appendChild(option);
+          });
+        });
+    }
+  }
+
+  dateInput.addEventListener("change", updateAvailableTimes);
+  stylistInput.addEventListener("change", updateAvailableTimes);
+</script>
 {% endblock %}

@@ -1,6 +1,82 @@
 {% extends "base.html" %} {% block title %}STYLED - Your Premier Hair Salon{%
 endblock %} {% block content %}
 <div class="landing-page">
-    <h1>Hello World!</h1>
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Braids and Beyond</h1>
+      <img
+        src="{{ url_for('static', filename='images/hair.png') }}"
+        alt="Professional Hair Stylist"
+      />
+      <div class="hero-linker">
+        <p class="subtitle">By Tsinat Gezahegne</p>
+        <p class="location">BASED IN HOUSTON, TEXAS</p>
+        <a href="{{ url_for('book_appointment_route') }}" class="cta-button"
+          >SCHEDULE NOW</a
+        >
+      </div>
+    </div>
+  </section>
+
+  <section class="stylist-intro">
+    <div class="profile-image">
+      <img
+        src="{{ url_for('static', filename='images/stylist.png') }}"
+        alt="Professional Hair Stylist"
+      />
+    </div>
+    <div class="intro-content">
+      <h2>HAIR STYLIST</h2>
+      <p>
+        Hey there! I'm Amber (Certified Professional), and I specialize in
+        creating stunning, personalized hairstyles that make you feel confident
+        and beautiful. With over 7 years of experience, I'm dedicated to
+        providing top-notch service and ensuring you leave my chair feeling
+        amazing.
+      </p>
+    </div>
+  </section>
+
+  <section class="business-info">
+    <div class="hours-section">
+      <h2>HOURS</h2>
+      <ul>
+        <li><span>TUESDAY-FRIDAY</span>10:00 AM - 6:00 PM</li>
+        <li><span>SATURDAY</span>9:00 AM - 4:00 PM</li>
+        <li><span>SUNDAY-MONDAY</span>CLOSED</li>
+      </ul>
+    </div>
+
+    <div class="contact-section">
+      <h2>CONTACT INFO</h2>
+      <ul>
+        <li>(123) 456-7890</li>
+        <li>info@styled.com</li>
+        <li>@styled.instagram</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="booking-policies">
+    <h2>BOOKING POLICIES</h2>
+    <div class="policy-grid">
+      <div class="policy-item">
+        <span class="policy-icon">📅</span>
+        <p>24-hour notice required for scheduling</p>
+      </div>
+      <div class="policy-item">
+        <span class="policy-icon">💳</span>
+        <p>Deposit required for new clients</p>
+      </div>
+      <div class="policy-item">
+        <span class="policy-icon">⏰</span>
+        <p>15-minute grace period</p>
+      </div>
+      <div class="policy-item">
+        <span class="policy-icon">❌</span>
+        <p>24-hour cancellation policy</p>
+      </div>
+    </div>
+  </section>
 </div>
 {% endblock %}
