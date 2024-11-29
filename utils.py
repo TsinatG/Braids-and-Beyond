@@ -128,3 +128,14 @@ def add_stylist(name, specialization):
     }
     stylists.append(new_stylist)
     write_csv('stylists.csv', new_stylist.keys(), stylists)
+
+def update_stylist(stylist_id, name, specialization):
+    stylists = get_stylists()
+    for stylist in stylists:
+        if stylist['id'] == stylist_id:
+            stylist.update({
+                'name': name,
+                'specialization': specialization
+            })
+            break
+    write_csv('stylists.csv', stylists[0].keys(), stylists)

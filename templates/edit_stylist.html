@@ -1,8 +1,28 @@
-{% extends "base.html" %}
+{% extends "base.html" %} {% block title %}Edit Stylist{% endblock %} {% block
+content %}
+<h1>Edit Stylist</h1>
+<form
+  action="{{ url_for('edit_stylist', stylist_id=stylist.id) }}"
+  method="post"
+>
+  <label for="name">Name:</label>
+  <input
+    type="text"
+    id="name"
+    name="name"
+    value="{{ stylist.name }}"
+    required
+  />
 
-{% block title %}Edit Stylist{% endblock %}
+  <label for="specialization">Specialization:</label>
+  <input
+    type="text"
+    id="specialization"
+    name="specialization"
+    value="{{ stylist.specialization }}"
+    required
+  />
 
-{% block content %}
-    <h1>Edit Stylist</h1>
-
+  <button type="submit">Update Stylist</button>
+</form>
 {% endblock %}

@@ -3,7 +3,7 @@ import os
 from flask import Flask, render_template, request, redirect, url_for, flash
 from utils import (
     delete_appointment, read_csv, write_csv, get_available_times, get_services, get_stylists, get_available_times, 
-    book_appointment, get_appointments, update_appointment, add_service, update_service, delete_service, add_stylist
+    book_appointment, get_appointments, update_appointment, add_service, update_service, delete_service, add_stylist, update_stylist
 
 )
 import csv
@@ -129,6 +129,23 @@ def manage_stylists():
     
     stylists = get_stylists()
     return render_template('manage_stylists.html', stylists=stylists)
+
+@app.route('/stylists/edit/<stylist_id>', methods=['GET', 'POST'])
+def edit_stylist(stylist_id):
+    
+    if request.method == 'POST':
+        name = request.form['name']
+        specialization = request.form['specialization']
+        update_stylist(stylist_id, name, specialization)
+        flash('Stylist updated successfully!', 'success')
+        return redirect(url_for('manage_stylists'))
+    
+    stylist = next((s for s in get_stylists() if s['id'] == stylist_id), None)
+    if not stylist:
+        flash('Stylist not found', 'error')
+        return redirect(url_for('manage_stylists'))
+    
+    return render_template('edit_stylist.html', stylist=stylist)
 
 
 if __name__ == '__main__':

@@ -29,7 +29,7 @@ block content %}
       <td>{{ stylist.name }}</td>
       <td>{{ stylist.specialization }}</td>
       <td>
-        <a href="#" class="btn btn-edit">Edit</a>
+        <a href="{{ url_for('edit_stylist', stylist_id=stylist.id) }}" class="btn btn-edit">Edit</a>
         <form style="display: inline">
           <button class="delete-button" type="submit" class="btn btn-delete">
             Delete
