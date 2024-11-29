@@ -4,5 +4,34 @@
 
 {% block content %}
     <h1>Edit Appointment</h1>
-
+    <form action="{{ url_for('edit_appointment', appointment_id=appointment.id) }}" method="post">
+        <label for="customer_name">Name:</label>
+        <input type="text" id="customer_name" name="customer_name" value="{{ appointment.customer_name }}" required>
+        
+        <label for="service_id">Service:</label>
+        <select id="service_id" name="service_id" required>
+            {% for service in services %}
+                <option value="{{ service.id }}" {% if service.id == appointment.service_id %}selected{% endif %}>
+                    {{ service.name }} - ${{ service.price }}
+                </option>
+            {% endfor %}
+        </select>
+        
+        <label for="stylist_id">Stylist:</label>
+        <select id="stylist_id" name="stylist_id" required>
+            {% for stylist in stylists %}
+                <option value="{{ stylist.id }}" {% if stylist.id == appointment.stylist_id %}selected{% endif %}>
+                    {{ stylist.name }} - {{ stylist.specialization }}
+                </option>
+            {% endfor %}
+        </select>
+        
+        <label for="date">Date:</label>
+        <input type="date" id="date" name="date" value="{{ appointment.appointment_date }}" required>
+        
+        <label for="time">Time:</label>
+        <input type="time" id="time" name="time" value="{{ appointment.appointment_time }}" required>
+        
+        <button type="submit">Update Appointment</button>
+    </form>
 {% endblock %}

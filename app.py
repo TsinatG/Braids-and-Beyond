@@ -2,7 +2,7 @@ import os
 from flask import Flask, render_template, request, redirect, url_for, flash
 from utils import (
     delete_appointment, read_csv, write_csv, get_available_times, get_services, get_stylists, get_available_times, 
-    book_appointment, get_appointments, update_appointment,
+    book_appointment, get_appointments, update_appointment, add_service
 
 )
 import csv
@@ -76,6 +76,20 @@ def available_times():
     stylist_id = request.args.get('stylist_id')
     times = get_available_times(date, stylist_id)
     return {'times': times}
+
+@app.route('/services', methods=['GET', 'POST'])
+def manage_services():
+    
+    if request.method == 'POST':
+        name = request.form['name']
+        duration = request.form['duration']
+        price = request.form['price']
+        add_service(name, duration, price)
+        flash('Service added successfully!', 'success')
+        return redirect(url_for('manage_services'))
+    
+    services = get_services()
+    return render_template('manage_services.html', services=services)
 
 if __name__ == '__main__':
     app.run(debug=True)

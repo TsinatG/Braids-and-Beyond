@@ -1,10 +1,15 @@
-{% extends "base.html" %} {% block title %}Book Appointment{% endblock %} {%
-block content %}
+{% extends "base.html" %} 
+{% block title %}Book Appointment{% endblock %} 
+{% block content %}
 <h1>Book Appointment</h1>
+
+<!-- Form for booking an appointment -->
 <form action="{{ url_for('book_appointment_route') }}" method="post">
+  <!-- Input for customer name -->
   <label for="customer_name">Name:</label>
   <input type="text" id="customer_name" name="customer_name" required />
 
+  <!-- Dropdown for selecting a service -->
   <label for="service_id">Service:</label>
   <select id="service_id" name="service_id" required>
     {% for service in services %}
@@ -14,6 +19,7 @@ block content %}
     {% endfor %}
   </select>
 
+  <!-- Dropdown for selecting a stylist -->
   <label for="stylist_id">Stylist:</label>
   <select id="stylist_id" name="stylist_id" required>
     {% for stylist in stylists %}
@@ -23,17 +29,21 @@ block content %}
     {% endfor %}
   </select>
 
+  <!-- Input for selecting a date -->
   <label for="date">Date:</label>
   <input type="date" id="date" name="date" required />
 
+  <!-- Dropdown for selecting a time -->
   <label for="time">Time:</label>
   <select id="time" name="time" required>
     <option value="">Select a date and stylist first</option>
   </select>
 
+  <!-- Submit button for booking the appointment -->
   <button type="submit">Book Appointment</button>
 </form>
 
+<!-- JavaScript to update available times based on selected date and stylist -->
 <script>
   const dateInput = document.getElementById("date");
   const stylistInput = document.getElementById("stylist_id");
