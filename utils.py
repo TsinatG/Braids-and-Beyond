@@ -139,3 +139,11 @@ def update_stylist(stylist_id, name, specialization):
             })
             break
     write_csv('stylists.csv', stylists[0].keys(), stylists)
+    
+def delete_stylist(stylist_id):
+    stylists = get_stylists()
+    stylists = [stylist for stylist in stylists if stylist['id'] != stylist_id]
+    if stylists:
+        write_csv('stylists.csv', stylists[0].keys(), stylists)
+    else:
+        write_csv('stylists.csv', ['id', 'name', 'specialization'], [])

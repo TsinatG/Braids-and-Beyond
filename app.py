@@ -3,7 +3,7 @@ import os
 from flask import Flask, render_template, request, redirect, url_for, flash
 from utils import (
     delete_appointment, read_csv, write_csv, get_available_times, get_services, get_stylists, get_available_times, 
-    book_appointment, get_appointments, update_appointment, add_service, update_service, delete_service, add_stylist, update_stylist
+    book_appointment, get_appointments, update_appointment, add_service, update_service, delete_service, add_stylist, update_stylist, delete_stylist
 
 )
 import csv
@@ -147,6 +147,12 @@ def edit_stylist(stylist_id):
     
     return render_template('edit_stylist.html', stylist=stylist)
 
+@app.route('/stylists/delete/<stylist_id>', methods=['POST'])
+def delete_stylist_route(stylist_id):
+    
+    delete_stylist(stylist_id)
+    flash('Stylist deleted successfully!', 'success')
+    return redirect(url_for('manage_stylists'))
 
 if __name__ == '__main__':
     app.run(debug=True)
