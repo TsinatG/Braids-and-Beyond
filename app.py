@@ -1,8 +1,9 @@
+#comments
 import os
 from flask import Flask, render_template, request, redirect, url_for, flash
 from utils import (
     delete_appointment, read_csv, write_csv, get_available_times, get_services, get_stylists, get_available_times, 
-    book_appointment, get_appointments, update_appointment, add_service
+    book_appointment, get_appointments, update_appointment, add_service, update_service,
 
 )
 import csv
@@ -90,6 +91,24 @@ def manage_services():
     
     services = get_services()
     return render_template('manage_services.html', services=services)
+
+@app.route('/services/edit/<service_id>', methods=['GET', 'POST'])
+def edit_service(service_id):
+    
+    if request.method == 'POST':
+        name = request.form['name']
+        duration = request.form['duration']
+        price = request.form['price']
+        update_service(service_id, name, duration, price)
+        flash('Service updated successfully!', 'success')
+        return redirect(url_for('manage_services'))
+    
+    service = next((s for s in get_services() if s['id'] == service_id), None)
+    if not service:
+        flash('Service not found', 'error')
+        return redirect(url_for('manage_services'))
+    
+    return render_template('edit_service.html', service=service)
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -97,3 +97,15 @@ def add_service(name, duration, price):
     }
     services.append(new_service)
     write_csv('services.csv', new_service.keys(), services)
+    
+def update_service(service_id, name, duration, price):
+    services = get_services()
+    for service in services:
+        if service['id'] == service_id:
+            service.update({
+                'name': name,
+                'duration': duration,
+                'price': price
+            })
+            break
+    write_csv('services.csv', services[0].keys(), services)

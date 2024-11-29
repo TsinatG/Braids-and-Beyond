@@ -34,7 +34,7 @@ block content %}
       <td>{{ service.duration }} minutes</td>
       <td>${{ service.price }}</td>
       <td>
-        <a href="#" class="btn btn-edit">Edit</a>
+        <a href="{{ url_for('edit_service', service_id=service.id)}}" class="btn btn-edit">Edit</a>
 
         <button class="delete-button" class="btn btn-delete">Delete</button>
       </td>
