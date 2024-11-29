@@ -109,3 +109,11 @@ def update_service(service_id, name, duration, price):
             })
             break
     write_csv('services.csv', services[0].keys(), services)
+
+def delete_service(service_id):
+    services = get_services()
+    services = [service for service in services if service['id'] != service_id]
+    if services:
+        write_csv('services.csv', services[0].keys(), services)
+    else:
+        write_csv('services.csv', ['id', 'name', 'duration', 'price'], [])
