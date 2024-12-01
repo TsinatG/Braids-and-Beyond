@@ -1,6 +1,21 @@
 {% extends "base.html" %} {% block title %}Manage Appointments{% endblock %} {%
 block content %}
 <h1>Manage Appointments</h1>
+
+
+<!-- Search Form -->
+<form method="post" action="{{ url_for('manage_appointments') }}">
+  <div class="search-form">
+  <input
+    type="text"
+    name="search"
+    placeholder="Search by customer name"
+    value="{{ search_query }}"
+  />
+  <button class="search-button" type="submit">Search</button>
+</div>
+</form>
+
 {% if appointments %}
 <table>
   <thead>

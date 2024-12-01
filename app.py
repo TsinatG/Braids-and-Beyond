@@ -33,13 +33,19 @@ def book_appointment_route():
     stylists = get_stylists()
     return render_template('book_appointment.html', services=services, stylists=stylists)
 
-@app.route('/appointments')
+@app.route('/appointments', methods=['GET', 'POST'])
 def manage_appointments():
-    
+
+    search_query = request.form.get('search', '')
+
     appointments = get_appointments()
     services = {service['id']: service['name'] for service in get_services()}
     stylists = {stylist['id']: stylist['name'] for stylist in get_stylists()}
-    return render_template('manage_appointments.html', appointments=appointments, services=services, stylists=stylists)
+
+    if search_query:
+        appointments = [appt for appt in appointments if search_query.lower() in appt['customer_name'].lower()]
+
+    return render_template('manage_appointments.html', appointments=appointments, services=services, stylists=stylists, search_query=search_query)
 
 @app.route('/appointments/edit/<appointment_id>', methods=['GET', 'POST'])
 def edit_appointment(appointment_id):
