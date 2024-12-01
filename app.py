@@ -87,7 +87,9 @@ def available_times():
 @app.route('/services', methods=['GET', 'POST'])
 def manage_services():
     
-    if request.method == 'POST':
+    search_query = request.form.get('search', '')
+
+    if request.method == 'POST' and 'name' in request.form:
         name = request.form['name']
         duration = request.form['duration']
         price = request.form['price']
@@ -96,7 +98,10 @@ def manage_services():
         return redirect(url_for('manage_services'))
     
     services = get_services()
-    return render_template('manage_services.html', services=services)
+    if search_query:
+        services = [service for service in services if search_query.lower() in service['name'].lower()]
+    
+    return render_template('manage_services.html', services=services, search_query=search_query)
 
 @app.route('/services/edit/<service_id>', methods=['GET', 'POST'])
 def edit_service(service_id):
@@ -123,10 +128,13 @@ def delete_service_route(service_id):
     flash('Service deleted successfully!', 'success')
     return redirect(url_for('manage_services'))
 
+
 @app.route('/stylists', methods=['GET', 'POST'])
 def manage_stylists():
     
-    if request.method == 'POST':
+    search_query = request.form.get('search', '')
+
+    if request.method == 'POST' and 'name' in request.form:
         name = request.form['name']
         specialization = request.form['specialization']
         add_stylist(name, specialization)
@@ -134,7 +142,11 @@ def manage_stylists():
         return redirect(url_for('manage_stylists'))
     
     stylists = get_stylists()
-    return render_template('manage_stylists.html', stylists=stylists)
+    if search_query:
+        stylists = [stylist for stylist in stylists if search_query.lower() in stylist['name'].lower()]
+    
+    return render_template('manage_stylists.html', stylists=stylists, search_query=search_query)
+
 
 @app.route('/stylists/edit/<stylist_id>', methods=['GET', 'POST'])
 def edit_stylist(stylist_id):

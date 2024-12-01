@@ -12,7 +12,20 @@ block content %}
   <button type="submit">Add Stylist</button>
 </form>
 
-<h2>Existing Stylists</h2>
+<h2 style="margin: 15px 8px; padding-top: 10px">Existing Stylists</h2>
+<!-- Search Form -->
+<form method="post" action="{{ url_for('manage_stylists') }}">
+  <div class="search-form">
+    <input
+      type="text"
+      name="search"
+      placeholder="Search by staylists name"
+      value="{{ search_query }}"
+    />
+    <button class="search-button" type="submit">Search</button>
+  </div>
+</form>
+
 <table>
   <thead>
     <tr>
