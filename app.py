@@ -113,7 +113,7 @@ def edit_service(service_id):
 @app.route('/services/delete/<service_id>', methods=['POST'])
 def delete_service_route(service_id):
     
-    delete_service, add_stylist(service_id)
+    delete_service(service_id)
     flash('Service deleted successfully!', 'success')
     return redirect(url_for('manage_services'))
 
