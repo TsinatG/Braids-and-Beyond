@@ -37,7 +37,24 @@ def write_user(email, username, password):
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    
+    services = [
+        {"name": "Haircut", "price": "$60+"},
+        {"name": "Color", "price": "$80+"},
+        {"name": "Highlights", "price": "$120+"},
+        {"name": "Balayage", "price": "$150+"},
+        {"name": "Blowout", "price": "$45+"},
+        {"name": "Updo", "price": "$75+"},
+    ]
+    
+    testimonials = [
+        {"name": "Sarah M.", "text": "Amber is amazing! She always knows exactly what I want and delivers every time."},
+        {"name": "John D.", "text": "Best haircut I've ever had. The attention to detail is unmatched."},
+        {"name": "Emily R.", "text": "I love coming to Styled. The atmosphere is so welcoming, and Amber is a true artist."},
+    ]
+    
+
+    return render_template('index.html', testimonials=testimonials, services=services)
 
 
 @app.route('/register', methods=['GET', 'POST'])

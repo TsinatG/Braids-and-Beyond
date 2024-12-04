@@ -1,5 +1,24 @@
 {% extends "base.html" %} {% block title %}STYLED - Your Premier Hair Salon{%
-endblock %} {% block content %}
+endblock %} {% block extra_head %}
+<script src="https://cdn.tailwindcss.com"></script>
+<script
+  defer
+  src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+></script>
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css"
+/>
+<script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
+<style>
+  [x-cloak] {
+    display: none !important;
+  }
+  .swiper-pagination-bullet-active {
+    background-color: #be185d !important;
+  }
+</style>
+{% endblock %}{% block content %}
 <div class="landing-page">
   <section class="hero">
     <div class="hero-content">
@@ -37,46 +56,165 @@ endblock %} {% block content %}
     </div>
   </section>
 
-  <section class="business-info">
-    <div class="hours-section">
-      <h2>HOURS</h2>
-      <ul>
-        <li><span>TUESDAY-FRIDAY</span>10:00 AM - 6:00 PM</li>
-        <li><span>SATURDAY</span>9:00 AM - 4:00 PM</li>
-        <li><span>SUNDAY-MONDAY</span>CLOSED</li>
-      </ul>
-    </div>
-
-    <div class="contact-section">
-      <h2>CONTACT INFO</h2>
-      <ul>
-        <li>(123) 456-7890</li>
-        <li>info@styled.com</li>
-        <li>@styled.instagram</li>
-      </ul>
+  <section
+    id="services"
+    class="py-20 bg-rose-50 text-black"
+    x-data="{ activeTab: 'all' }"
+  >
+    <div class="container mx-auto px-4">
+      <h2 class="text-3xl font-bold text-rose-800 mb-8 text-center">
+        OUR SERVICES
+      </h2>
+      <div class="flex justify-center mb-8">
+        <button
+          @click="activeTab = 'all'"
+          :class="{ 'bg-rose-600 text-white': activeTab === 'all', 'bg-white text-rose-600': activeTab !== 'all' }"
+          class="px-4 py-2 rounded-l-lg font-semibold border border-rose-600"
+        >
+          All
+        </button>
+        <button
+          @click="activeTab = 'hair'"
+          :class="{ 'bg-rose-600 text-white': activeTab === 'hair', 'bg-white text-rose-600': activeTab !== 'hair' }"
+          class="px-4 py-2 font-semibold border-t border-b border-rose-600"
+        >
+          Hair
+        </button>
+        <button
+          @click="activeTab = 'color'"
+          :class="{ 'bg-rose-600 text-white': activeTab === 'color', 'bg-white text-rose-600': activeTab !== 'color' }"
+          class="px-4 py-2 rounded-r-lg font-semibold border border-rose-600"
+        >
+          Color
+        </button>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {% for service in services %}
+        <div
+          x-show="activeTab === 'all' || activeTab === '{{ 'color' if 'Color' in service.name or 'Balayage' in service.name else 'hair' }}'"
+          x-transition:enter="transition ease-out duration-300"
+          x-transition:enter-start="opacity-0 transform scale-90"
+          x-transition:enter-end="opacity-100 transform scale-100"
+          class="bg-white rounded-lg shadow-md p-6"
+        >
+          <h3 class="text-xl font-semibold text-rose-700 mb-2">
+            {{ service.name }}
+          </h3>
+          <p class="text-gray-600 mb-4">{{ service.description }}</p>
+          <p class="text-lg font-bold text-rose-600">{{ service.price }}</p>
+        </div>
+        {% endfor %}
+      </div>
     </div>
   </section>
 
-  <section class="booking-policies">
-    <h2>BOOKING POLICIES</h2>
-    <div class="policy-grid">
-      <div class="policy-item">
-        <span class="policy-icon">📅</span>
-        <p>24-hour notice required for scheduling</p>
+  <section class="business-info py-20">
+    <div class="container mx-auto px-4">
+      <div class="grid md:grid-cols-2 gap-12">
+        <div class="hours-section text-center">
+          <h2 class="text-3xl font-bold text-rose-800 mb-6">HOURS</h2>
+          <ul class="space-y-4">
+            <li class="text-lg">
+              <span class="font-semibold block">TUESDAY-FRIDAY</span>
+              10:00 AM - 6:00 PM
+            </li>
+            <li class="text-lg">
+              <span class="font-semibold block">SATURDAY</span>
+              9:00 AM - 4:00 PM
+            </li>
+            <li class="text-lg">
+              <span class="font-semibold block">SUNDAY-MONDAY</span>
+              CLOSED
+            </li>
+          </ul>
+        </div>
+        <div class="contact-section text-center">
+          <h2 class="text-3xl font-bold text-rose-800 mb-6">CONTACT INFO</h2>
+          <ul class="space-y-4">
+            <li class="text-lg">(123) 456-7890</li>
+            <li class="text-lg">info@styled.com</li>
+            <li class="text-lg">@styled.instagram</li>
+          </ul>
+        </div>
       </div>
-      <div class="policy-item">
-        <span class="policy-icon">💳</span>
-        <p>Deposit required for new clients</p>
+    </div>
+  </section>
+
+  <section class="booking-policies py-20 bg-rose-50">
+    <div class="container mx-auto px-4">
+      <h2 class="text-3xl font-bold text-rose-800 mb-12 text-center">
+        BOOKING POLICIES
+      </h2>
+      <div
+        class="policy-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
+      >
+        <div class="policy-item bg-white rounded-lg shadow-md p-6 text-center">
+          <span class="policy-icon text-4xl mb-4 block">📅</span>
+          <p class="text-gray-700">24-hour notice required for scheduling</p>
+        </div>
+        <div class="policy-item bg-white rounded-lg shadow-md p-6 text-center">
+          <span class="policy-icon text-4xl mb-4 block">💳</span>
+          <p class="text-gray-700">Deposit required for new clients</p>
+        </div>
+        <div class="policy-item bg-white rounded-lg shadow-md p-6 text-center">
+          <span class="policy-icon text-4xl mb-4 block">⏰</span>
+          <p class="text-gray-700">15-minute grace period</p>
+        </div>
+        <div class="policy-item bg-white rounded-lg shadow-md p-6 text-center">
+          <span class="policy-icon text-4xl mb-4 block">❌</span>
+          <p class="text-gray-700">24-hour cancellation policy</p>
+        </div>
       </div>
-      <div class="policy-item">
-        <span class="policy-icon">⏰</span>
-        <p>15-minute grace period</p>
-      </div>
-      <div class="policy-item">
-        <span class="policy-icon">❌</span>
-        <p>24-hour cancellation policy</p>
+    </div>
+  </section>
+
+  <section id="testimonials" class="py-20">
+    <div class="container mx-auto px-4">
+      <h2 class="text-3xl font-bold text-rose-800 mb-12 text-center">
+        WHAT OUR CLIENTS SAY
+      </h2>
+      <div class="swiper testimonialSwiper">
+        <div class="swiper-wrapper">
+          {% for testimonial in testimonials %}
+          <div class="swiper-slide">
+            <div class="bg-rose-50 rounded-lg shadow-md p-6 text-center">
+              <p class="text-gray-700 mb-4 italic">"{{ testimonial.text }}"</p>
+              <p class="text-rose-600 font-semibold">
+                - {{ testimonial.name }}
+              </p>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        <div class="swiper-pagination"></div>
       </div>
     </div>
   </section>
 </div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    new Swiper(".testimonialSwiper", {
+      slidesPerView: 1,
+      spaceBetween: 30,
+      loop: true,
+      autoplay: {
+        delay: 5000,
+        disableOnInteraction: false,
+      },
+      pagination: {
+        el: ".swiper-pagination",
+        clickable: true,
+      },
+      breakpoints: {
+        640: {
+          slidesPerView: 2,
+        },
+        1024: {
+          slidesPerView: 3,
+        },
+      },
+    });
+  });
+</script>
 {% endblock %}
