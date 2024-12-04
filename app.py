@@ -1,10 +1,11 @@
 #comments
 import os
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 from utils import (
-    delete_appointment, read_csv, write_csv, get_available_times, get_services, get_stylists, get_available_times, 
-    book_appointment, get_appointments, update_appointment, add_service, update_service, delete_service, add_stylist, update_stylist, delete_stylist
-
+     delete_appointment, delete_service, delete_stylist, read_csv, write_csv, get_available_times, get_services, get_stylists,
+    book_appointment, get_appointments, update_appointment,
+    add_service, update_service,
+    add_stylist, update_stylist
 )
 import csv
 
@@ -12,12 +13,64 @@ import csv
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', 'fallback_secret_key') # Change this to a secure random key
 
+
+USER_FILE = os.path.join(os.path.dirname(__file__), 'data', 'users.csv')
+
+def read_users():
+    users = {}
+    if os.path.exists(USER_FILE):
+        with open(USER_FILE, mode='r') as file:
+            reader = csv.DictReader(file)
+            for row in reader:
+                users[row['email']] = {'username': row['username'], 'password': row['password']}
+    return users
+
+
+def write_user(email, username, password):
+    file_exists = os.path.exists(USER_FILE)
+    with open(USER_FILE, mode='a', newline='') as file:
+        writer = csv.writer(file)
+        if not file_exists:
+            writer.writerow(['email', 'username', 'password'])  # Add headers if file is new
+        writer.writerow([email, username, password])
+
+
 @app.route('/')
 def index():
     return render_template('index.html')
 
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        email = request.form['email']
+        username = request.form['username']
+        password = request.form['password']
+        confirm_password = request.form['confirm-password']
+        
+        if password != confirm_password:
+            flash('Passwords do not match!', 'error')
+            return redirect(url_for('register'))
+        
+        users = read_users()
+        if email in users:
+            flash('User already exists!', 'error')
+            return redirect(url_for('register'))
+        
+        write_user(email, username, password)  # Store plain password
+        flash('User registered successfully!', 'success')
+        return redirect(url_for('login'))
+    
+    return render_template('register.html')
+
+
+
+
 @app.route('/book', methods=['GET', 'POST'])
 def book_appointment_route():
+    if 'username' not in session:
+        flash('Please log in to book an appointment', 'error')
+        return redirect(url_for('login'))
        
     if request.method == 'POST':
         customer_name = request.form['customer_name']

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Create Account</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #ff69b4;
+            --background-color: #000000;
+            --text-color: #ffffff;
+            --accent-color: #ff69b4;
+            --font-heading: "Playfair Display", serif;
+            --font-body: "Poppins", sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--background-color);
+            background-image: radial-gradient(circle at center, rgba(255, 105, 180, 0.15) 0%, transparent 70%);
+            padding: 2rem;
+            font-family: var(--font-body);
+            color: var(--text-color);
+        }
+
+        .register-container {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 3rem;
+            border-radius: 1rem;
+            box-shadow: 0 0 30px rgba(255, 105, 180, 0.2);
+            width: 100%;
+            max-width: 420px;
+            border: 1px solid rgba(255, 105, 180, 0.2);
+            backdrop-filter: blur(10px);
+            transform: translateY(0);
+            transition: all 0.3s ease;
+        }
+
+        .register-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 40px rgba(255, 105, 180, 0.3);
+        }
+
+        h1 {
+            color: var(--text-color);
+            text-align: center;
+            margin-bottom: 0.5rem;
+            font-size: 2.5rem;
+            font-family: var(--font-heading);
+            font-weight: 600;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 2.5rem;
+            font-size: 0.95rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.8rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.8rem;
+            color: var(--text-color);
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.9rem 1.2rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 105, 180, 0.2);
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            color: var(--text-color);
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .form-group input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(255, 105, 180, 0.1);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .register-button {
+            width: 100%;
+            padding: 1rem;
+            background: var(--primary-color);
+            border: none;
+            border-radius: 0.5rem;
+            color: var(--text-color);
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 1rem;
+        }
+
+        .register-button:hover {
+            background: #ff4da6;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 105, 180, 0.4);
+        }
+
+        .register-button:active {
+            transform: translateY(1px);
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 2rem;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        .login-link a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            opacity: 0.8;
+        }
+
+        .login-link a:hover {
+            opacity: 1;
+            text-shadow: 0 0 10px rgba(255, 105, 180, 0.5);
+        }
+
+        .terms {
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .terms a {
+            color: var(--primary-color);
+            text-decoration: none;
+            opacity: 0.8;
+            transition: all 0.3s ease;
+        }
+
+        .terms a:hover {
+            opacity: 1;
+            text-shadow: 0 0 10px rgba(255, 105, 180, 0.5);
+        }
+
+        @media (max-width: 480px) {
+            .register-container {
+                padding: 2rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <h1>Create Account</h1>
+        <p class="subtitle">Join us by creating your account</p>
+        
+        <form method="post" action="{{ url_for('register') }}">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input 
+                    type="email" 
+                    id="email" 
+                    name="email" 
+                    placeholder="Enter your email"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input 
+                    type="text" 
+                    id="username" 
+                    name="username" 
+                    placeholder="Choose a username"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input 
+                    type="password" 
+                    id="password" 
+                    name="password" 
+                    placeholder="Create a password"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="confirm-password">Confirm Password</label>
+                <input 
+                    type="password" 
+                    id="confirm-password" 
+                    name="confirm-password" 
+                    placeholder="Confirm your password"
+                    required
+                >
+            </div>
+
+            <button type="submit" class="register-button">
+                Create Account
+            </button>
+        </form>
+
+        <div class="terms">
+            By creating an account, you agree to our<br>
+            <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+        </div>
+
+        <div class="login-link">
+            Already have an account? <a href="{{ url_for('login') }}">Sign in</a>
+        </div>
+    </div>
+</body>
+</html>
