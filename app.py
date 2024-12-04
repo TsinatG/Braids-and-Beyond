@@ -63,8 +63,31 @@ def register():
     
     return render_template('register.html')
 
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        users = read_users()
+
+        # Search by username and verify plain password
+        for user_email, user_data in users.items():
+            if user_data['username'] == username and user_data['password'] == password:
+                session['username'] = username
+                flash('Logged in successfully!', 'success')
+                return redirect(url_for('index'))
+
+        flash('Invalid credentials!', 'error')
+        return redirect(url_for('login'))
+
+    return render_template('login.html')
 
 
+@app.route('/logout')
+def logout():
+    session.pop('username', None)
+    flash('Logged out successfully!', 'success')
+    return redirect(url_for('index'))
 
 @app.route('/book', methods=['GET', 'POST'])
 def book_appointment_route():
