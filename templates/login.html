@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Welcome Back</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #ff69b4;
+            --background-color: #000000;
+            --text-color: #ffffff;
+            --accent-color: #ff69b4;
+            --font-heading: "Playfair Display", serif;
+            --font-body: "Poppins", sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--background-color);
+            background-image: radial-gradient(circle at center, rgba(255, 105, 180, 0.15) 0%, transparent 70%);
+            padding: 2rem;
+            font-family: var(--font-body);
+            color: var(--text-color);
+        }
+
+        .login-container {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 3rem;
+            border-radius: 1rem;
+            box-shadow: 0 0 30px rgba(255, 105, 180, 0.2);
+            width: 100%;
+            max-width: 420px;
+            border: 1px solid rgba(255, 105, 180, 0.2);
+            backdrop-filter: blur(10px);
+            transform: translateY(0);
+            transition: all 0.3s ease;
+        }
+
+        .login-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 40px rgba(255, 105, 180, 0.3);
+        }
+
+        h1 {
+            color: var(--text-color);
+            text-align: center;
+            margin-bottom: 0.5rem;
+            font-size: 2.5rem;
+            font-family: var(--font-heading);
+            font-weight: 600;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 2.5rem;
+            font-size: 0.95rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.8rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.8rem;
+            color: var(--text-color);
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.9rem 1.2rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 105, 180, 0.2);
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            color: var(--text-color);
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .form-group input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(255, 105, 180, 0.1);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .remember-forgot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        .remember-me input[type="checkbox"] {
+            accent-color: var(--primary-color);
+        }
+
+        .forgot-password {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+            opacity: 0.8;
+        }
+
+        .forgot-password:hover {
+            opacity: 1;
+            text-shadow: 0 0 10px rgba(255, 105, 180, 0.5);
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 1rem;
+            background: var(--primary-color);
+            border: none;
+            border-radius: 0.5rem;
+            color: var(--text-color);
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .login-button:hover {
+            background: #ff4da6;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 105, 180, 0.4);
+        }
+
+        .login-button:active {
+            transform: translateY(1px);
+        }
+
+        .signup-link {
+            text-align: center;
+            margin-top: 2rem;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        .signup-link a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            opacity: 0.8;
+        }
+
+        .signup-link a:hover {
+            opacity: 1;
+            text-shadow: 0 0 10px rgba(255, 105, 180, 0.5);
+        }
+
+        .flash-message {
+            text-align: center;
+            margin-bottom: 1rem;
+            color: #ff4da6;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 2rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h1>Welcome</h1>
+        <p class="subtitle">Enter your details to sign in</p>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-message">
+                    {% for category, message in messages %}
+                        <p class="{{ category }}">{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        
+        <form method="post" action="{{ url_for('login') }}">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input 
+                    type="text" 
+                    id="username" 
+                    name="username" 
+                    placeholder="Enter your username"
+                    required
+                >
+            </div>
+        
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input 
+                    type="password" 
+                    id="password" 
+                    name="password" 
+                    placeholder="Enter your password"
+                    required
+                >
+            </div>
+        
+            <button type="submit" class="login-button">
+                Sign In
+            </button>
+        </form>
+        
+
+        <div class="signup-link">
+            Don't have an account? <a href="{{ url_for('register') }}">Sign up</a>
+        </div>
+    </div>
+</body>
+</html>
