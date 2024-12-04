@@ -11,32 +11,46 @@
   </head>
   <body>
     <header>
+      {% if session['username'] %}
+      <h3 style="position: absolute; left: 20px">
+        Welcome, {{ session['username'] }}!
+      </h3>
+      {% endif %}
       <nav>
         <ul>
           <li><a href="{{ url_for('index') }}">Home</a></li>
           {% if session['username'] %}
-            <li><a href="{{ url_for('book_appointment_route') }}">Book Appointment</a></li>
-            <li><a href="{{ url_for('manage_appointments') }}">Manage Appointments</a></li>
-            <li><a href="{{ url_for('manage_services') }}">Manage Services</a></li>
-            <li><a href="{{ url_for('manage_stylists') }}">Manage Stylists</a></li>
-            <li><a href="{{ url_for('logout') }}">Logout</a></li>
+
+          <li>
+            <a href="{{ url_for('book_appointment_route') }}"
+              >Book Appointment</a
+            >
+          </li>
+          <li>
+            <a href="{{ url_for('manage_appointments') }}"
+              >Manage Appointments</a
+            >
+          </li>
+          <li>
+            <a href="{{ url_for('manage_services') }}">Manage Services</a>
+          </li>
+          <li>
+            <a href="{{ url_for('manage_stylists') }}">Manage Stylists</a>
+          </li>
+          <li><a href="{{ url_for('logout') }}">Logout</a></li>
           {% else %}
-            <li><a href="{{ url_for('login') }}">Login</a></li>
-            <li><a href="{{ url_for('register') }}">Register</a></li>
+          <li><a href="{{ url_for('login') }}">Login</a></li>
+          <li><a href="{{ url_for('register') }}">Register</a></li>
           {% endif %}
         </ul>
       </nav>
     </header>
 
     <main>
-      {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-          {% for category, message in messages %}
-            <div class="flash-message {{ category }}">{{ message }}</div>
-          {% endfor %}
-        {% endif %}
-      {% endwith %}
-      {% block content %}{% endblock %}
+      {% with messages = get_flashed_messages(with_categories=true) %} {% if
+      messages %} {% for category, message in messages %}
+      <div class="flash-message {{ category }}">{{ message }}</div>
+      {% endfor %} {% endif %} {% endwith %} {% block content %}{% endblock %}
     </main>
 
     <footer>
