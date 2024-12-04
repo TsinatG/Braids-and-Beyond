@@ -111,6 +111,9 @@ def book_appointment_route():
 
 @app.route('/appointments', methods=['GET', 'POST'])
 def manage_appointments():
+    if 'username' not in session:
+        flash('Please log in to book an appointment', 'error')
+        return redirect(url_for('login'))
 
     search_query = request.form.get('search', '')
 
@@ -125,6 +128,9 @@ def manage_appointments():
 
 @app.route('/appointments/edit/<appointment_id>', methods=['GET', 'POST'])
 def edit_appointment(appointment_id):
+    if 'username' not in session:
+        flash('Please log in to book an appointment', 'error')
+        return redirect(url_for('login'))
     
     if request.method == 'POST':
         customer_name = request.form['customer_name']
@@ -148,6 +154,9 @@ def edit_appointment(appointment_id):
 
 @app.route('/appointments/delete/<appointment_id>', methods=['POST'])
 def delete_appointment_route(appointment_id):
+    if 'username' not in session:
+        flash('Please log in to book an appointment', 'error')
+        return redirect(url_for('login'))
     
     delete_appointment(appointment_id)
     flash('Appointment deleted successfully!', 'success')
@@ -162,6 +171,9 @@ def available_times():
 
 @app.route('/services', methods=['GET', 'POST'])
 def manage_services():
+    if 'username' not in session:
+        flash('Please log in to book an appointment', 'error')
+        return redirect(url_for('login'))
     
     search_query = request.form.get('search', '')
 
@@ -181,6 +193,9 @@ def manage_services():
 
 @app.route('/services/edit/<service_id>', methods=['GET', 'POST'])
 def edit_service(service_id):
+    if 'username' not in session:
+        flash('Please log in to book an appointment', 'error')
+        return redirect(url_for('login'))
     
     if request.method == 'POST':
         name = request.form['name']
@@ -199,6 +214,9 @@ def edit_service(service_id):
 
 @app.route('/services/delete/<service_id>', methods=['POST'])
 def delete_service_route(service_id):
+    if 'username' not in session:
+        flash('Please log in to book an appointment', 'error')
+        return redirect(url_for('login'))
     
     delete_service(service_id)
     flash('Service deleted successfully!', 'success')
@@ -207,6 +225,9 @@ def delete_service_route(service_id):
 
 @app.route('/stylists', methods=['GET', 'POST'])
 def manage_stylists():
+    if 'username' not in session:
+        flash('Please log in to book an appointment', 'error')
+        return redirect(url_for('login'))
     
     search_query = request.form.get('search', '')
 
@@ -226,6 +247,9 @@ def manage_stylists():
 
 @app.route('/stylists/edit/<stylist_id>', methods=['GET', 'POST'])
 def edit_stylist(stylist_id):
+    if 'username' not in session:
+        flash('Please log in to book an appointment', 'error')
+        return redirect(url_for('login'))
     
     if request.method == 'POST':
         name = request.form['name']
@@ -243,6 +267,9 @@ def edit_stylist(stylist_id):
 
 @app.route('/stylists/delete/<stylist_id>', methods=['POST'])
 def delete_stylist_route(stylist_id):
+    if 'username' not in session:
+        flash('Please log in to book an appointment', 'error')
+        return redirect(url_for('login'))
     
     delete_stylist(stylist_id)
     flash('Stylist deleted successfully!', 'success')
