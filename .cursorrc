@@ -1,0 +1,131 @@
+{
+  "project": {
+    "name": "Hair Salon Website",
+    "description": "A web application for a hair salon with booking functionality, stylist profiles, and administrative features",
+    "requirements": {
+      "code_quality": {
+        "description": "Well written, neat and reasonably commented code",
+        "guidelines": [
+          "Use meaningful variable and function names",
+          "Add comments for complex logic and functionality",
+          "Maintain consistent indentation and code style",
+          "Organize code into logical sections",
+          "Follow PEP 8 standards for Python code"
+        ]
+      },
+      "templates": {
+        "description": "Several HTML templates and at least one base template",
+        "guidelines": [
+          "Create a base.html template with common elements (header, footer, navigation)",
+          "Extend base template for all pages",
+          "Include templates for: home, stylist profile, booking, services, admin views",
+          "Use template inheritance for consistent layout"
+        ]
+      },
+      "css": {
+        "description": "Use of a CSS library (e.g., Bootstrap) and some coded CSS",
+        "guidelines": [
+          "Continue using custom CSS in style.css",
+          "Consider integrating Bootstrap for responsive components",
+          "Maintain the existing color scheme and typography",
+          "Ensure responsive design for all screen sizes"
+        ]
+      },
+      "flask_routing": {
+        "description": "Complete Flask routing for page end-points",
+        "guidelines": [
+          "Create routes for all pages (home, booking, profile, services, etc.)",
+          "Implement proper error handling (404, 500 pages)",
+          "Use appropriate HTTP methods (GET, POST) for forms",
+          "Implement authentication routes if needed"
+        ]
+      },
+      "database": {
+        "description": "A database with at least one model",
+        "guidelines": [
+          "Create models for: Appointments, Clients, Services, Stylist",
+          "Implement proper relationships between models",
+          "Use SQLAlchemy for ORM",
+          "Include CRUD operations for each model"
+        ]
+      },
+      "javascript": {
+        "description": "Some JavaScript functionality",
+        "guidelines": [
+          "Add form validation for booking forms",
+          "Implement interactive calendar for appointment selection",
+          "Add dynamic content loading where appropriate",
+          "Consider AJAX for form submissions"
+        ]
+      },
+      "design": {
+        "description": "Adherence to good web design standards",
+        "guidelines": [
+          "Maintain consistent styling across all pages",
+          "Ensure accessibility standards are met",
+          "Optimize for mobile and desktop viewing",
+          "Use appropriate contrast for readability"
+        ]
+      },
+      "content": {
+        "description": "Populated with enough content to demonstrate functionality clearly",
+        "guidelines": [
+          "Add realistic salon services and pricing",
+          "Include stylist bio and credentials",
+          "Provide business hours and contact information",
+          "Create sample appointments and client data for testing"
+        ]
+      }
+    },
+    "assessment_criteria": {
+      "site_functionality": {
+        "weight": "30%",
+        "criteria": [
+          "No bugs or errors",
+          "Works as intended according to README",
+          "Well-designed with consistent aesthetic",
+          "Functionality of reasonable complexity"
+        ]
+      },
+      "content_coverage": {
+        "weight": "25%",
+        "criteria": [
+          "Applies all requirements",
+          "Utilizes several templates/pages",
+          "Makes appropriate use of models"
+        ]
+      },
+      "code_quality": {
+        "weight": "20%",
+        "criteria": [
+          "Well-written code with useful variable names",
+          "Appropriate comments",
+          "Well-spaced and aligned code"
+        ]
+      },
+      "documentation": {
+        "weight": "5%",
+        "criteria": [
+          "README with accurate description of functionality",
+          "Accurate installation and setup instructions",
+          "Complete requirements file"
+        ]
+      }
+    },
+    "tech_stack": {
+      "backend": ["Python", "Flask", "SQLAlchemy"],
+      "frontend": ["HTML", "CSS", "JavaScript"],
+      "database": ["SQLite (development)", "PostgreSQL (production)"],
+      "deployment": ["Heroku"]
+    },
+    "file_structure": {
+      "templates/": "HTML templates",
+      "static/": "CSS, JavaScript, and images",
+      "models/": "Database models",
+      "routes/": "Flask routes",
+      "app.py": "Main application file",
+      "requirements.txt": "Project dependencies",
+      "Procfile": "Heroku deployment configuration"
+    }
+  }
+} 

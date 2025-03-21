@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="booking-form-page">
+    <h1>Complete Your Booking</h1>
+    
+    <section class="booking-form-container">
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+            
+            <div class="form-group">
+                <label>{{ form.service.label }}</label>
+                {{ form.service(class="form-control") }}
+                {% if form.service.errors %}
+                    <div class="error-message">
+                        {% for error in form.service.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label>{{ form.stylist.label }}</label>
+                {{ form.stylist(class="form-control") }}
+                {% if form.stylist.errors %}
+                    <div class="error-message">
+                        {% for error in form.stylist.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label>{{ form.date.label }}</label>
+                {{ form.date(class="form-control") }}
+                {% if form.date.errors %}
+                    <div class="error-message">
+                        {% for error in form.date.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label>{{ form.time.label }}</label>
+                {{ form.time(class="form-control") }}
+                {% if form.time.errors %}
+                    <div class="error-message">
+                        {% for error in form.time.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label>{{ form.notes.label }}</label>
+                {{ form.notes(class="form-control", rows=4) }}
+            </div>
+            
+            <div class="booking-policies-reminder">
+                <h3>Booking Policies</h3>
+                <ul>
+                    <li>Please arrive 10 minutes before your scheduled appointment.</li>
+                    <li>We require 24 hours notice for cancellations.</li>
+                    <li>Late cancellations may incur a 50% service fee.</li>
+                </ul>
+                <p>By booking an appointment, you agree to our policies.</p>
+            </div>
+            
+            <div class="form-group">
+                {{ form.submit(class="cta-button") }}
+            </div>
+        </form>
+    </section>
+</div>
+{% endblock %}
+
+{% block additional_scripts %}
+<script src="{{ url_for('static', filename='js/booking.js') }}"></script>
+{% endblock %} 

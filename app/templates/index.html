@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="landing-page">
+    <section class="hero">
+        <div class="hero-content">
+            <h1>GLAM</h1>
+            <div class="hero-linker">
+                <p class="subtitle">Premium Hair Salon Experience</p>
+                <p class="location">DOWNTOWN | NEW YORK CITY</p>
+                <a href="{{ url_for('booking.calendar') }}" class="cta-button">Book Now</a>
+            </div>
+            <img src="{{ url_for('static', filename='img/hero-image.jpg') }}" alt="Stylist at work">
+        </div>
+    </section>
+
+    <section class="stylist-intro">
+        <div class="profile-image">
+            <img src="{{ url_for('static', filename='img/stylist.jpg') }}" alt="Lead Stylist">
+        </div>
+        <div class="intro-content">
+            <h2>Meet Our Lead Stylist</h2>
+            <p>With over 10 years of experience in the industry, our lead stylist has worked with celebrities and fashion icons to create stunning, trend-setting looks.</p>
+            <p>Specializing in color transformations and precision cuts, they bring a unique vision and personalized approach to every client.</p>
+            <p>Book your appointment today and experience the difference that expertise and passion can make for your hair.</p>
+        </div>
+    </section>
+
+    <section class="business-info">
+        <div class="hours-section">
+            <h2>Business Hours</h2>
+            <ul>
+                <li><span>Monday - Friday</span> 9:00 AM - 7:00 PM</li>
+                <li><span>Saturday</span> 10:00 AM - 6:00 PM</li>
+                <li><span>Sunday</span> Closed</li>
+            </ul>
+        </div>
+        <div class="contact-section">
+            <h2>Contact Us</h2>
+            <ul>
+                <li>123 Fashion Avenue</li>
+                <li>New York, NY 10001</li>
+                <li>Phone: (212) 555-GLAM</li>
+                <li>Email: info@glamsalon.com</li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="booking-policies">
+        <h2>Our Booking Policies</h2>
+        <div class="policy-grid">
+            <div class="policy-item">
+                <span class="policy-icon">⏰</span>
+                <h3>Punctuality</h3>
+                <p>Please arrive 10 minutes before your scheduled appointment. Late arrivals may result in reduced service time.</p>
+            </div>
+            <div class="policy-item">
+                <span class="policy-icon">❌</span>
+                <h3>Cancellations</h3>
+                <p>We require 24 hours notice for cancellations. Late cancellations may incur a 50% service fee.</p>
+            </div>
+            <div class="policy-item">
+                <span class="policy-icon">💳</span>
+                <h3>Payment</h3>
+                <p>We accept all major credit cards, cash, and mobile payments. A credit card is required to secure your booking.</p>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %} 

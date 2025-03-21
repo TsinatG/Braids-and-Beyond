@@ -1,53 +1,86 @@
-# Braids and beyond
+# GLAM Hair Salon Website
 
-# GitHub Repository
-The source code for this project is available on GitHub: https://github.com/TsinatG/Braids-and-Beyond.
+A web application for a hair salon with booking functionality, stylist profiles, and administrative features.
 
-## Identification
-- **Name:** 
-- **P-number:** 
-- **Course code:** 
+## Features
 
-## Declaration of Own Work
-I confirm that this assignment is my own work.
-Where I have referred to academic sources, I have provided in-text citations and included the sources in the final reference list.
+- **Client-facing features**:
+  - Browse salon services and pricing
+  - View stylist profiles and specializations
+  - Book appointments online
+  - Manage existing appointments
+  - User registration and authentication
 
-## Introduction
-This code represents a simple implementation of a hair salon management system using the Flask library. The application allows users to book appointments, manage services, and view stylists at a hair salon. This project provides a user-friendly interface for both customers and salon staff.
+- **Administrative features**:
+  - Dashboard with key metrics
+  - Appointment management
+  - Client management
+  - Service management
+  - Stylist management
 
-## Installation
-To run the application, ensure you have Python installed, and then install the required dependencies from the `requirements.txt` file using the following command:
-```bash
-pip install -r requirements.txt
-```
+## Technology Stack
 
-## How to Use
-- Book appointments
-- Manage existing appointments
-- View and manage services offered by the salon
-- View and manage stylists working at the salon
+- **Backend**: Python, Flask, SQLAlchemy
+- **Frontend**: HTML, CSS, JavaScript
+- **Database**: MySQL
+- **Deployment**: Heroku
 
-### Running the Application
-```python
-python app.py
-```
+## Installation and Setup
 
-### Running Unit Tests
-```python
-python UnitTest.py
-```
+1. Clone the repository:
+   ```
+   git clone https://github.com/yourusername/hair-salon-website.git
+   cd hair-salon-website
+   ```
 
-## Application Elements
-- Appointment booking and management
-- Service management
-- Stylist management
+2. Create a virtual environment:
+   ```
+   python -m venv venv
+   ```
 
-## Libraries Used
-The following libraries are used in this project:
-- Flask
-- xxyy
+3. Activate the virtual environment:
+   - Windows: `venv\Scripts\activate`
+   - macOS/Linux: `source venv/bin/activate`
+
+4. Install dependencies:
+   ```
+   pip install -r requirements.txt
+   ```
+
+5. Set up environment variables in `.env` file:
+   ```
+   SECRET_KEY=your_secret_key
+   DATABASE_URL=mysql+pymysql://username:password@localhost/hair_salon_db
+   FLASK_APP=run.py
+   FLASK_ENV=development
+   DEBUG=True
+   ```
+
+6. Create the MySQL database:
+   ```
+   mysql -u root -p
+   CREATE DATABASE hair_salon_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+   CREATE USER 'salon_user'@'localhost' IDENTIFIED BY 'your_password';
+   GRANT ALL PRIVILEGES ON hair_salon_db.* TO 'salon_user'@'localhost';
+   FLUSH PRIVILEGES;
+   ```
+
+7. Initialize the database:
+   ```
+   flask db init
+   flask db migrate -m "Initial migration"
+   flask db upgrade
+   ```
+
+8. Run the application:
+   ```
+   flask run
+   ```
+
+9. Access the application at `http://localhost:5000`
 
 ## Project Structure
+
 ```
 hair_salon_app
 ├── templates

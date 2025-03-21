@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="admin-services">
+    <h1>Manage Services</h1>
+    
+    <div class="add-service-form">
+        <h2>Add New Service</h2>
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+            
+            <div class="form-group">
+                <label>{{ form.name.label }}</label>
+                {{ form.name(class="form-control") }}
+                {% if form.name.errors %}
+                    <div class="error-message">
+                        {% for error in form.name.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label>{{ form.description.label }}</label>
+                {{ form.description(class="form-control", rows=3) }}
+            </div>
+            
+            <div class="form-group">
+                <label>{{ form.price.label }}</label>
+                {{ form.price(class="form-control") }}
+                {% if form.price.errors %}
+                    <div class="error-message">
+                        {% for error in form.price.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label>{{ form.duration.label }}</label>
+                {{ form.duration(class="form-control") }}
+                {% if form.duration.errors %}
+                    <div class="error-message">
+                        {% for error in form.duration.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                {{ form.submit(class="cta-button") }}
+            </div>
+        </form>
+    </div>
+    
+    <div class="services-list">
+        <h2>Current Services</h2>
+        
+        {% if services %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Price</th>
+                        <th>Duration</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for service in services %}
+                    <tr>
+                        <td>{{ service.name }}</td>
+                        <td>{{ service.description or 'N/A' }}</td>
+                        <td>${{ service.price }}</td>
+                        <td>{{ service.duration }} minutes</td>
+                        <td>
+                            <a href="#" class="btn btn-edit">Edit</a>
+                            <a href="#" class="btn btn-delete">Delete</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No services found.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %} 

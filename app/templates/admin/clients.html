@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="admin-clients">
+    <h1>Manage Clients</h1>
+    
+    <div class="search-form">
+        <input type="text" id="client-search" placeholder="Search by name or email...">
+        <button class="search-button">Search</button>
+    </div>
+    
+    {% if clients %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Joined</th>
+                    <th>Appointments</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for client in clients %}
+                <tr>
+                    <td>{{ client.name }}</td>
+                    <td>{{ client.email }}</td>
+                    <td>{{ client.phone or 'N/A' }}</td>
+                    <td>{{ client.created_at.strftime('%B %d, %Y') }}</td>
+                    <td>{{ client.appointments|length }}</td>
+                    <td>
+                        <a href="#" class="btn btn-edit">Edit</a>
+                        <a href="#" class="btn btn-delete">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No clients found.</p>
+    {% endif %}
+</div>
+{% endblock %} 

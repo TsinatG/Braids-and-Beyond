@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="admin-appointments">
+    <h1>Manage Appointments</h1>
+    
+    <div class="search-form">
+        <input type="text" id="appointment-search" placeholder="Search by client name...">
+        <button class="search-button">Search</button>
+    </div>
+    
+    {% if appointments %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Client</th>
+                    <th>Service</th>
+                    <th>Stylist</th>
+                    <th>Duration</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for appointment in appointments %}
+                <tr>
+                    <td>{{ appointment.date.strftime('%B %d, %Y') }}</td>
+                    <td>{{ appointment.time.strftime('%I:%M %p') }}</td>
+                    <td>{{ appointment.client.name }}</td>
+                    <td>{{ appointment.service.name }}</td>
+                    <td>{{ appointment.stylist.name }}</td>
+                    <td>{{ appointment.duration }} minutes</td>
+                    <td>
+                        <a href="#" class="btn btn-edit">Edit</a>
+                        <a href="#" class="btn btn-delete">Cancel</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No appointments found.</p>
+    {% endif %}
+</div>
+{% endblock %} 
