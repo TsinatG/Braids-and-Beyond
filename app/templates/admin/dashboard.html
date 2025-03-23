@@ -60,5 +60,28 @@
             <p>No upcoming appointments.</p>
         {% endif %}
     </div>
+
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card bg-dark h-100">
+            <div class="card-body">
+                <h5 class="card-title"><i class="fas fa-user-tie text-primary-custom me-2"></i> Stylists</h5>
+                <p class="card-text">Manage your salon's stylists, their profiles, and availability.</p>
+                <a href="{{ url_for('stylists.manage_stylists') }}" class="btn btn-outline-primary">Manage Stylists</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card bg-dark h-100">
+            <div class="card-body">
+                <h5 class="card-title"><i class="far fa-calendar-alt text-primary-custom me-2"></i> Appointments</h5>
+                <p class="card-text">Manage appointments, view the calendar, and track bookings.</p>
+                <div class="d-flex gap-2">
+                    <a href="{{ url_for('booking.admin_appointments') }}" class="btn btn-outline-primary">List View</a>
+                    <a href="{{ url_for('booking.admin_calendar') }}" class="btn btn-outline-primary">Calendar</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %} 

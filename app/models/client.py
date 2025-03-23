@@ -1,4 +1,4 @@
-from app import db, login_manager
+from app import db, login_manager, bcrypt
 from flask_login import UserMixin
 from datetime import datetime
 
@@ -15,6 +15,19 @@ class Client(db.Model, UserMixin):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     
     # Relationship with appointments is defined in the Appointment model
+    
+    @classmethod
+    def create(cls, name, email, password):
+        """Create a new client with hashed password"""
+        hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+        client = cls(name=name, email=email, password=hashed_password)
+        db.session.add(client)
+        db.session.commit()
+        return client
+    
+    def check_password(self, password):
+        """Check if provided password matches the stored hash"""
+        return bcrypt.check_password_hash(self.password, password)
     
     def __repr__(self):
         return f"Client('{self.name}', '{self.email}')" 

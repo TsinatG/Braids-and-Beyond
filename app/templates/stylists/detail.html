@@ -1,0 +1,200 @@
+{% extends "base.html" %}
+
+{% block additional_head %}
+<style>
+    .stylist-profile-image {
+        max-height: 500px;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+    
+    .stylist-info {
+        background: rgba(0, 0, 0, 0.5);
+        border-radius: 10px;
+        padding: 2rem;
+    }
+    
+    .stylist-name {
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+    }
+    
+    .stylist-meta {
+        margin-bottom: 1.5rem;
+    }
+    
+    .meta-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0.5rem;
+    }
+    
+    .meta-icon {
+        color: var(--primary-color);
+        width: 25px;
+        margin-right: 10px;
+    }
+    
+    .social-links {
+        margin-top: 1.5rem;
+    }
+    
+    .social-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: rgba(155, 89, 182, 0.2);
+        color: var(--primary-color);
+        margin-right: 10px;
+        transition: all 0.3s ease;
+    }
+    
+    .social-icon:hover {
+        background-color: var(--primary-color);
+        color: white;
+        transform: translateY(-3px);
+    }
+    
+    .portfolio-image {
+        height: 200px;
+        object-fit: cover;
+        border-radius: 5px;
+        transition: transform 0.3s ease;
+    }
+    
+    .portfolio-image:hover {
+        transform: scale(1.05);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="stylist-detail-page">
+    <section class="page-header bg-dark text-white py-5 mb-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h1 class="display-4">{{ stylist.name }}</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center">
+                            <li class="breadcrumb-item"><a href="{{ url_for('main.home') }}">Home</a></li>
+                            <li class="breadcrumb-item"><a href="{{ url_for('stylists.list_stylists') }}">Stylists</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">{{ stylist.name }}</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-5 mb-4 mb-lg-0">
+                {% if stylist.image_file %}
+                    <img src="{{ url_for('static', filename='img/stylists/' + stylist.image_file) }}" 
+                         class="stylist-profile-image img-fluid" alt="{{ stylist.name }}">
+                {% else %}
+                    <img src="{{ url_for('static', filename='img/stylists/default-stylist.jpg') }}" 
+                         class="stylist-profile-image img-fluid" alt="{{ stylist.name }}">
+                {% endif %}
+            </div>
+            
+            <div class="col-lg-7">
+                <div class="stylist-info">
+                    <h2 class="stylist-name">{{ stylist.name }}</h2>
+                    
+                    <div class="stylist-meta">
+                        {% if stylist.specialization %}
+                            <div class="meta-item">
+                                <i class="fas fa-star meta-icon"></i>
+                                <span>{{ stylist.specialization }}</span>
+                            </div>
+                        {% endif %}
+                        
+                        {% if stylist.experience_years %}
+                            <div class="meta-item">
+                                <i class="fas fa-calendar-alt meta-icon"></i>
+                                <span>{{ stylist.experience_years }} years of experience</span>
+                            </div>
+                        {% endif %}
+                        
+                        {% if stylist.email %}
+                            <div class="meta-item">
+                                <i class="fas fa-envelope meta-icon"></i>
+                                <span>{{ stylist.email }}</span>
+                            </div>
+                        {% endif %}
+                        
+                        {% if stylist.phone %}
+                            <div class="meta-item">
+                                <i class="fas fa-phone meta-icon"></i>
+                                <span>{{ stylist.phone }}</span>
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    {% if stylist.bio %}
+                        <div class="stylist-bio">
+                            <h3 class="h5 mb-3">About {{ stylist.name }}</h3>
+                            <p>{{ stylist.bio }}</p>
+                        </div>
+                    {% endif %}
+                    
+                    <div class="social-links">
+                        {% if stylist.instagram %}
+                            <a href="https://instagram.com/{{ stylist.instagram }}" target="_blank" class="social-icon">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                        {% endif %}
+                        
+                        {% if stylist.email %}
+                            <a href="mailto:{{ stylist.email }}" class="social-icon">
+                                <i class="fas fa-envelope"></i>
+                            </a>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="booking-section mt-4">
+                        <a href="{{ url_for('booking.calendar') }}" class="btn btn-primary">Book with {{ stylist.name }}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Portfolio section - you can add this later when you have portfolio images -->
+        <div class="row mt-5">
+            <div class="col-12">
+                <h3 class="text-primary-custom mb-4">{{ stylist.name }}'s Work</h3>
+                <p class="mb-4">Here are some examples of {{ stylist.name }}'s beautiful braiding styles:</p>
+                
+                <!-- Placeholder for portfolio images -->
+                <div class="row g-3">
+                    <div class="col-6 col-md-4 col-lg-3">
+                        <img src="{{ url_for('static', filename='img/portfolio/portfolio-1.jpg') }}" class="portfolio-image w-100" alt="Portfolio">
+                    </div>
+                    <div class="col-6 col-md-4 col-lg-3">
+                        <img src="{{ url_for('static', filename='img/portfolio/portfolio-2.jpg') }}" class="portfolio-image w-100" alt="Portfolio">
+                    </div>
+                    <div class="col-6 col-md-4 col-lg-3">
+                        <img src="{{ url_for('static', filename='img/portfolio/portfolio-3.jpg') }}" class="portfolio-image w-100" alt="Portfolio">
+                    </div>
+                    <div class="col-6 col-md-4 col-lg-3">
+                        <img src="{{ url_for('static', filename='img/portfolio/portfolio-4.jpg') }}" class="portfolio-image w-100" alt="Portfolio">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row mt-5 mb-5">
+            <div class="col-12 text-center">
+                <h3 class="text-primary-custom mb-4">Ready to Book with {{ stylist.name }}?</h3>
+                <a href="{{ url_for('booking.calendar') }}" class="btn btn-primary btn-lg">Book Your Appointment</a>
+                <a href="{{ url_for('stylists.list_stylists') }}" class="btn btn-outline-light btn-lg ms-3">View All Stylists</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -57,22 +57,7 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--primary-color) !important;
 }
 
-/* Buttons */
-.btn-primary {
-    background-color: var(--primary-color);
-    border-color: var(--primary-color);
-}
-
-.btn-primary:hover, .btn-primary:focus {
-    background-color: var(--primary-dark);
-    border-color: var(--primary-dark);
-}
-
-.btn-outline-light:hover {
-    color: var(--dark-text);
-}
-
-/* Hero section */
+/* Hero section enhancements */
 .hero {
     position: relative;
     min-height: 90vh;
@@ -84,53 +69,60 @@ h1, h2, h3, h4, h5, h6 {
     padding: 5rem 0;
 }
 
-.hero h1 {
-    font-size: 5rem;
+.hero-content h1 {
+    font-size: 4rem;
     font-weight: 700;
-    color: var(--primary-color);
     margin-bottom: 1rem;
-    letter-spacing: 4px;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    color: var(--primary-color);
 }
 
-.hero-content {
-    position: relative;
-    z-index: 2;
-}
-
-.hero-image {
-    position: absolute;
-    top: 0;
-    right: 0;
-    height: 100%;
-    z-index: 1;
-    max-height: 90vh;
-    object-fit: cover;
-    border-radius: 10px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-}
-
-.subtitle {
+.hero-content .subtitle {
     font-size: 1.5rem;
-    color: var(--light-text);
     margin-bottom: 0.5rem;
 }
 
-.location {
-    font-size: 0.9rem;
+.hero-content .location {
+    font-size: 1rem;
     letter-spacing: 3px;
-    color: var(--light-text);
     margin-bottom: 2rem;
+    opacity: 0.8;
+}
+
+.hero-image {
+    max-width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    transition: transform 0.5s ease;
+}
+
+.hero-image:hover {
+    transform: scale(1.02);
+}
+
+/* Button styles */
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-dark);
+    border-color: var(--primary-dark);
+}
+
+.btn-outline-light:hover {
+    color: var(--primary-color);
 }
 
 /* Service cards */
 .service-card {
     background-color: rgba(255, 255, 255, 0.05);
-    border-radius: 8px;
-    padding: 2rem;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 10px;
+    padding: 1.5rem;
     height: 100%;
-    border: 1px solid rgba(155, 89, 182, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--light-text);
 }
 
 .service-card:hover {
@@ -148,142 +140,25 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .service-price {
+    font-size: 1.25rem;
     color: var(--primary-color);
     font-weight: 600;
+    margin-bottom: 1rem;
 }
 
-.service-duration {
-    color: var(--light-text);
-    font-size: 0.9rem;
+/* Policy items */
+.policy-item {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Stylist cards */
-.stylist-card {
-    background-color: rgba(255, 255, 255, 0.05);
-    border-radius: 8px;
-    overflow: hidden;
-    transition: transform 0.3s ease;
-    height: 100%;
-}
-
-.stylist-card:hover {
+.policy-item:hover {
     transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
 }
 
-.stylist-card img {
-    width: 100%;
-    height: 250px;
-    object-fit: cover;
-}
-
-.stylist-info {
-    padding: 1.5rem;
-}
-
-.stylist-specialization {
+.policy-icon {
+    font-size: 2.5rem;
     color: var(--primary-color);
-    font-size: 0.9rem;
-}
-
-/* Forms */
-.form-control {
-    background-color: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: var(--light-text);
-}
-
-.form-control:focus {
-    background-color: rgba(255, 255, 255, 0.15);
-    border-color: var(--primary-color);
-    color: var(--light-text);
-    box-shadow: 0 0 0 0.25rem rgba(255, 105, 180, 0.25);
-}
-
-.form-control::placeholder {
-    color: rgba(255, 255, 255, 0.5);
-}
-
-/* Footer */
-footer {
-    background-color: #111 !important;
-}
-
-.footer-logo .logo-text {
-    font-size: 2rem;
-}
-
-.social-links a {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 36px;
-    height: 36px;
-    background-color: rgba(255, 255, 255, 0.1);
-    border-radius: 50%;
-    transition: background-color 0.3s ease;
-}
-
-.social-links a:hover {
-    background-color: var(--primary-color);
-}
-
-/* Responsive adjustments */
-@media (max-width: 992px) {
-    .hero h1 {
-        font-size: 3.5rem;
-    }
-}
-
-@media (max-width: 768px) {
-    .hero h1 {
-        font-size: 2.5rem;
-    }
-    
-    .hero {
-        text-align: center;
-    }
-}
-
-/* Dark mode adjustments for Bootstrap components */
-.card {
-    background-color: #222;
-    color: var(--light-text);
-    border: none;
-}
-
-.table {
-    color: var(--light-text);
-}
-
-.modal-content {
-    background-color: #222;
-    color: var(--light-text);
-}
-
-.dropdown-menu {
-    background-color: #222;
-}
-
-.dropdown-item {
-    color: var(--light-text);
-}
-
-.dropdown-item:hover {
-    background-color: #333;
-    color: var(--primary-color);
-}
-
-/* Custom utility classes */
-.text-primary-custom {
-    color: var(--primary-color) !important;
-}
-
-.bg-dark-custom {
-    background-color: #111 !important;
-}
-
-.section-padding {
-    padding: 5rem 0;
 }
 
 /* Animation classes */
@@ -317,4 +192,126 @@ footer {
     background-position: center;
     background-attachment: fixed;
     padding: 5rem 0;
+}
+
+/* Footer styles */
+.site-footer {
+    background-color: #111;
+}
+
+.footer-logo .logo-text {
+    font-size: 2rem;
+}
+
+.footer-logo .logo-tagline {
+    font-size: 1rem;
+}
+
+.social-links {
+    display: flex;
+    gap: 1rem;
+}
+
+.social-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--light-text);
+    transition: all 0.3s ease;
+}
+
+.social-link:hover {
+    background-color: var(--primary-color);
+    color: white;
+    transform: translateY(-3px);
+}
+
+.footer-links a {
+    color: var(--light-text);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.contact-info li {
+    margin-bottom: 0.5rem;
+}
+
+.contact-info i {
+    color: var(--primary-color);
+}
+
+/* Background colors */
+.bg-dark-custom {
+    background-color: #0a0a0a;
+}
+
+/* Text colors */
+.text-primary-custom {
+    color: var(--primary-color) !important;
+}
+
+/* Section padding */
+.section-padding {
+    padding: 5rem 0;
+}
+
+/* Service Cards */
+.service-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.service-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.service-price {
+    font-weight: 600;
+    color: var(--primary-color);
+    font-size: 1.1rem;
+}
+
+.service-duration {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+}
+
+/* Service Categories */
+.service-category h2 {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 2rem;
+}
+
+.service-category h2:after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 50px;
+    height: 3px;
+    background-color: var(--primary-color);
+}
+
+/* Booking CTA */
+.booking-cta {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 1rem;
+    padding: 3rem !important;
+    margin-top: 2rem;
+    border: 1px solid rgba(155, 89, 182, 0.2);
+}
+
+.booking-cta h3 {
+    color: var(--light-text);
+    margin-bottom: 1.5rem;
 }

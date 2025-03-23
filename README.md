@@ -1,6 +1,6 @@
-# GLAM Hair Salon Website
+# Braids & Beyond - Hair Styling Website
 
-A web application for a hair salon with booking functionality, stylist profiles, and administrative features.
+A web application for a hair salon specializing in braids and natural hair styling, with booking functionality, stylist profiles, and administrative features.
 
 ## Features
 
@@ -21,99 +21,70 @@ A web application for a hair salon with booking functionality, stylist profiles,
 ## Technology Stack
 
 - **Backend**: Python, Flask, SQLAlchemy
-- **Frontend**: HTML, CSS, JavaScript
+- **Frontend**: HTML, CSS, JavaScript, Bootstrap
 - **Database**: MySQL
 - **Deployment**: Heroku
 
-## Installation and Setup
+## Setup Instructions
+
+### Prerequisites
+
+- Python 3.8+
+- MySQL Server
+- pip (Python package manager)
+
+### Installation
 
 1. Clone the repository:
    ```
-   git clone https://github.com/yourusername/hair-salon-website.git
-   cd hair-salon-website
+   git clone https://github.com/yourusername/braids-and-beyond.git
+   cd braids-and-beyond
    ```
 
-2. Create a virtual environment:
+2. Create and activate a virtual environment:
    ```
    python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
    ```
 
-3. Activate the virtual environment:
-   - Windows: `venv\Scripts\activate`
-   - macOS/Linux: `source venv/bin/activate`
-
-4. Install dependencies:
+3. Install dependencies:
    ```
    pip install -r requirements.txt
    ```
 
-5. Set up environment variables in `.env` file:
+4. Create a `.env` file in the project root with the following content:
    ```
    SECRET_KEY=your_secret_key
-   DATABASE_URL=mysql+pymysql://username:password@localhost/hair_salon_db
    FLASK_APP=run.py
    FLASK_ENV=development
    DEBUG=True
+   DATABASE_URL=mysql+pymysql://username:password@localhost/braids_beyond_db
+   ```
+   Replace `username` and `password` with your MySQL credentials.
+
+5. Set up the database:
+   ```
+   python setup_db.py
    ```
 
-6. Create the MySQL database:
+6. Initialize the database with tables and sample data:
    ```
-   mysql -u root -p
-   CREATE DATABASE hair_salon_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-   CREATE USER 'salon_user'@'localhost' IDENTIFIED BY 'your_password';
-   GRANT ALL PRIVILEGES ON hair_salon_db.* TO 'salon_user'@'localhost';
-   FLUSH PRIVILEGES;
+   python init_db.py
    ```
 
-7. Initialize the database:
-   ```
-   flask db init
-   flask db migrate -m "Initial migration"
-   flask db upgrade
-   ```
-
-8. Run the application:
+7. Run the application:
    ```
    flask run
    ```
 
-9. Access the application at `http://localhost:5000`
+8. Access the website at http://localhost:5000
 
-## Project Structure
+## Admin Access
 
-```
-hair_salon_app
-├── templates
-│   ├── base.html
-│   ├── index.html
-│   ├── book_appointment.html
-│   ├── manage_appointments.html
-│   ├── manage_services.html
-│   └── manage_stylists.html
-├── static
-│   └── css
-│       └── style.css
-├── data
-│   ├── appointments.csv
-│   ├── services.csv
-│   └── stylists.csv
-├── app.py
-├── utils.py
-└── README.md
-```
-
-## Unit Tests (optional)
-The project includes unit tests to ensure the functionality of the application.
-
-To run the unit tests, navigate to the project directory and execute the following command:
-```python
-python UnitTest.py
-```
-
-This will run all the test cases defined in the `UnitTest.py` file.
-
-## Contributing
-Feel free to submit issues or pull requests to improve the application. 
+After initializing the database, you can log in as an admin with:
+- Email: admin@braidsandbeyond.com
+- Password: adminpassword
 
 ## License
+
 This project is licensed under the MIT License.

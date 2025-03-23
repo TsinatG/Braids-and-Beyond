@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField, SelectField, FloatField, IntegerField, DateField, TimeField
-from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
+from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, Optional
 from app.models.client import Client
 
 class RegistrationForm(FlaskForm):
@@ -40,4 +40,26 @@ class StylistForm(FlaskForm):
     name = StringField('Stylist Name', validators=[DataRequired(), Length(min=2, max=100)])
     bio = TextAreaField('Bio')
     specialization = StringField('Specialization', validators=[Length(max=100)])
-    submit = SubmitField('Add Stylist') 
+    submit = SubmitField('Add Stylist')
+
+class AppointmentStatusForm(FlaskForm):
+    status = SelectField('Status', choices=[
+        ('scheduled', 'Scheduled'),
+        ('completed', 'Completed'),
+        ('cancelled', 'Cancelled'),
+        ('no-show', 'No-Show')
+    ], validators=[DataRequired()])
+    submit = SubmitField('Update Status')
+
+class AppointmentSearchForm(FlaskForm):
+    start_date = StringField('Start Date', validators=[DataRequired()])
+    end_date = StringField('End Date', validators=[DataRequired()])
+    stylist = SelectField('Stylist', coerce=int, validators=[Optional()], default='')
+    status = SelectField('Status', choices=[
+        ('', 'All Statuses'),
+        ('scheduled', 'Scheduled'),
+        ('completed', 'Completed'),
+        ('cancelled', 'Cancelled'),
+        ('no-show', 'No-Show')
+    ], default='')
+    submit = SubmitField('Search') 

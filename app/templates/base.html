@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="GLAM Hair Salon - Premium hair styling services in New York City">
+    <meta name="description" content="Braids & Beyond - Premium hair braiding and styling services">
     
-    <title>{% if title %}{{ title }} - GLAM Salon{% else %}GLAM Hair Salon{% endif %}</title>
+    <title>{% if title %}{{ title }} - Braids & Beyond{% else %}Braids & Beyond{% endif %}</title>
     
     <!-- Favicon -->
     <link rel="icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
@@ -44,56 +44,56 @@
                 <div class="collapse navbar-collapse" id="navbarMain">
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link {{ 'active' if request.endpoint == 'main.home' else '' }}" href="{{ url_for('main.home') }}">Home</a>
+                            <a class="nav-link {% if request.endpoint == 'main.home' %}active{% endif %}" href="{{ url_for('main.home') }}">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {{ 'active' if request.endpoint == 'main.about' else '' }}" href="{{ url_for('main.about') }}">About</a>
+                            <a class="nav-link {% if request.endpoint == 'main.about' %}active{% endif %}" href="{{ url_for('main.about') }}">About</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {{ 'active' if request.endpoint == 'main.services' else '' }}" href="{{ url_for('main.services') }}">Services</a>
+                            <a class="nav-link {% if request.endpoint == 'main.services' %}active{% endif %}" href="{{ url_for('main.services') }}">Services</a>
                         </li>
+                        {% if current_user.is_authenticated %}
+                            <li class="nav-item">
+                                <a class="nav-link {% if request.endpoint == 'booking.calendar' %}active{% endif %}" href="{{ url_for('booking.calendar') }}">Book</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {% if request.endpoint == 'booking.appointments' %}active{% endif %}" href="{{ url_for('booking.appointments') }}">My Appointments</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    {{ current_user.name }}
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                    {% if current_user.id == 1 %}
+                                        <li><a class="dropdown-item" href="{{ url_for('admin.dashboard') }}">Admin Dashboard</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                    {% endif %}
+                                    <li><a class="dropdown-item" href="{{ url_for('auth.logout') }}">Logout</a></li>
+                                </ul>
+                            </li>
+                        {% else %}
+                            <li class="nav-item">
+                                <a class="nav-link {% if request.endpoint == 'auth.login' %}active{% endif %}" href="{{ url_for('auth.login') }}">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {% if request.endpoint == 'auth.register' %}active{% endif %}" href="{{ url_for('auth.register') }}">Register</a>
+                            </li>
+                        {% endif %}
                         <li class="nav-item">
-                            <a class="nav-link {{ 'active' if request.endpoint and request.endpoint.startswith('booking.') else '' }}" href="{{ url_for('booking.calendar') }}">Book Now</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link {{ 'active' if request.endpoint == 'main.contact' else '' }}" href="{{ url_for('main.contact') }}">Contact</a>
+                            <a class="nav-link {% if request.endpoint == 'main.contact' %}active{% endif %}" href="{{ url_for('main.contact') }}">Contact</a>
                         </li>
                     </ul>
-                    
-                    <div class="ms-lg-3 mt-3 mt-lg-0">
-                        {% if current_user.is_authenticated %}
-                            <div class="dropdown">
-                                <button class="btn btn-outline-light dropdown-toggle" type="button" id="userMenu" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="fas fa-user-circle me-1"></i>
-                                    {{ current_user.name.split()[0] }}
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
-                                    <li><a class="dropdown-item" href="{{ url_for('booking.appointments') }}"><i class="fas fa-calendar-alt me-2"></i> My Appointments</a></li>
-                                    {% if current_user.id == 1 %}
-                                        <li><a class="dropdown-item" href="{{ url_for('admin.dashboard') }}"><i class="fas fa-tachometer-alt me-2"></i> Admin Dashboard</a></li>
-                                    {% endif %}
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="{{ url_for('auth.logout') }}"><i class="fas fa-sign-out-alt me-2"></i> Logout</a></li>
-                                </ul>
-                            </div>
-                        {% else %}
-                            <div class="d-flex">
-                                <a href="{{ url_for('auth.login') }}" class="btn btn-outline-light me-2">Login</a>
-                                <a href="{{ url_for('auth.register') }}" class="btn btn-primary">Sign Up</a>
-                            </div>
-                        {% endif %}
-                    </div>
                 </div>
             </div>
         </nav>
     </header>
 
     <!-- Flash Messages -->
-    <div class="container mt-4">
+    <div class="flash-messages">
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}
-                    <div class="alert alert-{{ category if category != 'error' else 'danger' }} alert-dismissible fade show" role="alert">
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
                         {{ message }}
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
@@ -103,57 +103,45 @@
     </div>
 
     <!-- Main Content -->
-    <main class="py-5">
-        <div class="container">
-            {% block content %}{% endblock %}
-        </div>
+    <main>
+        {% block content %}{% endblock %}
     </main>
 
     <!-- Footer -->
-    <footer class="bg-dark text-white py-5">
+    <footer class="site-footer bg-dark text-white py-5">
         <div class="container">
             <div class="row">
-                <div class="col-lg-4 mb-4 mb-lg-0">
+                <div class="col-md-4 mb-4 mb-md-0">
                     <div class="footer-logo mb-3">
                         <span class="logo-text">Braids</span>
                         <span class="logo-tagline">& Beyond</span>
                     </div>
-                    <p class="mb-3">Premium hair styling services in the heart of New York City.</p>
-                    <div class="social-links">
-                        <a href="#" class="me-2 text-white" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" class="me-2 text-white" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                        <a href="#" class="me-2 text-white" aria-label="Pinterest"><i class="fab fa-pinterest-p"></i></a>
-                        <a href="#" class="text-white" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <p>Premium hair braiding and styling services by Tsinat Gezahegne. Creating beautiful, personalized styles that make you feel confident and beautiful.</p>
+                    <div class="social-links mt-3">
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-tiktok"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-pinterest-p"></i></a>
                     </div>
                 </div>
                 
-                <div class="col-lg-2 col-md-4 mb-4 mb-md-0">
+                <div class="col-md-4 mb-4 mb-md-0">
                     <h5 class="mb-3">Quick Links</h5>
-                    <ul class="list-unstyled">
-                        <li class="mb-2"><a href="{{ url_for('main.home') }}" class="text-white text-decoration-none">Home</a></li>
-                        <li class="mb-2"><a href="{{ url_for('main.about') }}" class="text-white text-decoration-none">About Us</a></li>
-                        <li class="mb-2"><a href="{{ url_for('main.services') }}" class="text-white text-decoration-none">Services</a></li>
-                        <li class="mb-2"><a href="{{ url_for('booking.calendar') }}" class="text-white text-decoration-none">Book Appointment</a></li>
-                        <li><a href="{{ url_for('main.contact') }}" class="text-white text-decoration-none">Contact Us</a></li>
+                    <ul class="list-unstyled footer-links">
+                        <li class="mb-2"><a href="{{ url_for('main.home') }}">Home</a></li>
+                        <li class="mb-2"><a href="{{ url_for('main.about') }}">About Us</a></li>
+                        <li class="mb-2"><a href="{{ url_for('main.services') }}">Services</a></li>
+                        <li class="mb-2"><a href="{{ url_for('booking.calendar') }}">Book Appointment</a></li>
+                        <li><a href="{{ url_for('main.contact') }}">Contact Us</a></li>
                     </ul>
                 </div>
                 
-                <div class="col-lg-2 col-md-4 mb-4 mb-md-0">
-                    <h5 class="mb-3">Services</h5>
-                    <ul class="list-unstyled">
-                        <li class="mb-2"><a href="{{ url_for('main.services') }}#haircuts" class="text-white text-decoration-none">Haircuts & Styling</a></li>
-                        <li class="mb-2"><a href="{{ url_for('main.services') }}#color" class="text-white text-decoration-none">Hair Coloring</a></li>
-                        <li class="mb-2"><a href="{{ url_for('main.services') }}#treatments" class="text-white text-decoration-none">Hair Treatments</a></li>
-                        <li><a href="{{ url_for('main.services') }}#special" class="text-white text-decoration-none">Special Occasions</a></li>
-                    </ul>
-                </div>
-                
-                <div class="col-lg-4 col-md-4">
+                <div class="col-md-4">
                     <h5 class="mb-3">Contact Info</h5>
                     <ul class="list-unstyled contact-info">
-                        <li class="mb-2"><i class="fas fa-map-marker-alt me-2"></i> 123 Fashion Avenue, New York, NY 10001</li>
-                        <li class="mb-2"><i class="fas fa-phone-alt me-2"></i> (212) 555-GLAM</li>
-                        <li class="mb-2"><i class="fas fa-envelope me-2"></i> info@glamsalon.com</li>
+                        <li class="mb-2"><i class="fas fa-map-marker-alt me-2"></i> 123 Styling Avenue, London, UK</li>
+                        <li class="mb-2"><i class="fas fa-phone-alt me-2"></i> +44 20 1234 5678</li>
+                        <li class="mb-2"><i class="fas fa-envelope me-2"></i> info@braidsandbeyond.com</li>
                         <li><i class="fas fa-clock me-2"></i> Mon-Fri: 9AM-7PM, Sat: 10AM-6PM</li>
                     </ul>
                 </div>
@@ -163,7 +151,7 @@
             
             <div class="row align-items-center">
                 <div class="col-md-6 text-center text-md-start">
-                    <p class="mb-md-0">&copy; <span class="current-year">2023</span> GLAM Hair Salon. All rights reserved.</p>
+                    <p class="mb-md-0">&copy; <span class="current-year">2023</span> Braids & Beyond. All rights reserved.</p>
                 </div>
                 <div class="col-md-6 text-center text-md-end">
                     <a href="#" class="text-white text-decoration-none me-3">Privacy Policy</a>

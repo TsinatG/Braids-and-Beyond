@@ -1,70 +1,240 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="landing-page">
-    <section class="hero">
-        <div class="hero-content">
-            <h1>GLAM</h1>
-            <div class="hero-linker">
-                <p class="subtitle">Premium Hair Salon Experience</p>
-                <p class="location">DOWNTOWN | NEW YORK CITY</p>
-                <a href="{{ url_for('booking.calendar') }}" class="cta-button">Book Now</a>
+<!-- Hero Section -->
+<section class="hero">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 hero-content">
+                <h1 class="animate-on-scroll">Braids & Beyond</h1>
+                <p class="subtitle animate-on-scroll">By Tsinat Gezahegne</p>
+                <p class="location animate-on-scroll">BASED IN LONDON</p>
+                <div class="hero-buttons animate-on-scroll">
+                    <a href="{{ url_for('booking.calendar') }}" class="btn btn-primary btn-lg me-3">SCHEDULE NOW</a>
+                    <a href="{{ url_for('main.services') }}" class="btn btn-outline-light btn-lg">Our Services</a>
+                </div>
             </div>
-            <img src="{{ url_for('static', filename='img/hero-image.jpg') }}" alt="Stylist at work">
+            <div class="col-lg-6 position-relative d-none d-lg-block">
+                <img src="{{ url_for('static', filename='img/head_pic.png') }}" alt="Beautiful braided hairstyle" class="hero-image animate-on-scroll">
+            </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <section class="stylist-intro">
-        <div class="profile-image">
-            <img src="{{ url_for('static', filename='img/stylist.jpg') }}" alt="Lead Stylist">
+<!-- Stylist Intro Section -->
+<section class="stylist-intro py-5 bg-dark">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-5 mb-4 mb-lg-0">
+                <img src="{{ url_for('static', filename='img/hair_pic.png') }}" alt="Professional Hair Stylist" class="img-fluid rounded animate-on-scroll">
+            </div>
+            <div class="col-lg-7 ps-lg-5 text-white">
+                <h2 class="display-4 text-primary-custom mb-4 animate-on-scroll">HAIR STYLIST</h2>
+                <p class="lead animate-on-scroll">
+                    Hey there! I'm Tsinat Gezahegne (Certified Professional), and I specialize in creating stunning, personalized hairstyles that make you feel confident and beautiful. With over 7 years of experience, I'm dedicated to providing top-notch service and ensuring you leave my chair feeling amazing.
+                </p>
+            </div>
         </div>
-        <div class="intro-content">
-            <h2>Meet Our Lead Stylist</h2>
-            <p>With over 10 years of experience in the industry, our lead stylist has worked with celebrities and fashion icons to create stunning, trend-setting looks.</p>
-            <p>Specializing in color transformations and precision cuts, they bring a unique vision and personalized approach to every client.</p>
-            <p>Book your appointment today and experience the difference that expertise and passion can make for your hair.</p>
-        </div>
-    </section>
+    </div>
+</section>
 
-    <section class="business-info">
-        <div class="hours-section">
-            <h2>Business Hours</h2>
-            <ul>
-                <li><span>Monday - Friday</span> 9:00 AM - 7:00 PM</li>
-                <li><span>Saturday</span> 10:00 AM - 6:00 PM</li>
-                <li><span>Sunday</span> Closed</li>
-            </ul>
+<!-- Services Section -->
+<section class="services-section py-5 bg-dark-custom">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-4 text-primary-custom">OUR SERVICES</h2>
+            <p class="lead text-white">Discover our most popular braiding and styling options</p>
         </div>
-        <div class="contact-section">
-            <h2>Contact Us</h2>
-            <ul>
-                <li>123 Fashion Avenue</li>
-                <li>New York, NY 10001</li>
-                <li>Phone: (212) 555-GLAM</li>
-                <li>Email: info@glamsalon.com</li>
-            </ul>
+        
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="service-card animate-on-scroll">
+                    <img src="{{ url_for('static', filename='img/box-braids.jpg') }}" alt="Box Braids" class="img-fluid rounded mb-3">
+                    <h3>Box Braids</h3>
+                    <p class="service-price">$150+</p>
+                    <p>Classic box braids in various sizes, perfect for any occasion with long-lasting protection for your natural hair.</p>
+                    <a href="{{ url_for('booking.calendar') }}" class="btn btn-outline-primary mt-2">Book Now</a>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="service-card animate-on-scroll">
+                    <img src="{{ url_for('static', filename='img/goddess-braids.jpg') }}" alt="Goddess Braids" class="img-fluid rounded mb-3">
+                    <h3>Goddess Braids</h3>
+                    <p class="service-price">$180+</p>
+                    <p>Elegant and sophisticated goddess braids that create a stunning crown-like appearance with beautiful curly ends.</p>
+                    <a href="{{ url_for('booking.calendar') }}" class="btn btn-outline-primary mt-2">Book Now</a>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="service-card animate-on-scroll">
+                    <img src="{{ url_for('static', filename='img/faux-locs.jpg') }}" alt="Faux Locs" class="img-fluid rounded mb-3">
+                    <h3>Faux Locs</h3>
+                    <p class="service-price">$200+</p>
+                    <p>Beautiful and natural-looking faux locs that give you the loc aesthetic without the commitment.</p>
+                    <a href="{{ url_for('booking.calendar') }}" class="btn btn-outline-primary mt-2">Book Now</a>
+                </div>
+            </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <section class="booking-policies">
-        <h2>Our Booking Policies</h2>
-        <div class="policy-grid">
-            <div class="policy-item">
-                <span class="policy-icon">⏰</span>
-                <h3>Punctuality</h3>
-                <p>Please arrive 10 minutes before your scheduled appointment. Late arrivals may result in reduced service time.</p>
+<!-- Booking Policies Section -->
+<section class="booking-policies py-5">
+    <div class="container">
+        <h2 class="text-center display-4 text-primary-custom mb-5">Our Booking Policies</h2>
+        <div class="row g-4">
+            <div class="col-md-3">
+                <div class="policy-item text-center p-4 bg-dark rounded animate-on-scroll">
+                    <span class="policy-icon display-4 mb-3 d-block">📅</span>
+                    <h3 class="h5 text-white">Scheduling</h3>
+                    <p class="text-light">24-hour notice required for scheduling</p>
+                </div>
             </div>
-            <div class="policy-item">
-                <span class="policy-icon">❌</span>
-                <h3>Cancellations</h3>
-                <p>We require 24 hours notice for cancellations. Late cancellations may incur a 50% service fee.</p>
+            <div class="col-md-3">
+                <div class="policy-item text-center p-4 bg-dark rounded animate-on-scroll">
+                    <span class="policy-icon display-4 mb-3 d-block">💳</span>
+                    <h3 class="h5 text-white">Deposits</h3>
+                    <p class="text-light">Deposit required for new clients</p>
+                </div>
             </div>
-            <div class="policy-item">
-                <span class="policy-icon">💳</span>
-                <h3>Payment</h3>
-                <p>We accept all major credit cards, cash, and mobile payments. A credit card is required to secure your booking.</p>
+            <div class="col-md-3">
+                <div class="policy-item text-center p-4 bg-dark rounded animate-on-scroll">
+                    <span class="policy-icon display-4 mb-3 d-block">⏰</span>
+                    <h3 class="h5 text-white">Punctuality</h3>
+                    <p class="text-light">15-minute grace period</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="policy-item text-center p-4 bg-dark rounded animate-on-scroll">
+                    <span class="policy-icon display-4 mb-3 d-block">❌</span>
+                    <h3 class="h5 text-white">Cancellations</h3>
+                    <p class="text-light">24-hour cancellation policy</p>
+                </div>
             </div>
         </div>
-    </section>
-</div>
+    </div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="testimonials py-5 bg-dark-custom">
+    <div class="container">
+        <h2 class="text-center display-4 text-primary-custom mb-5">WHAT OUR CLIENTS SAY</h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 animate-on-scroll">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="{{ url_for('static', filename='img/client-1.jpg') }}" alt="Client" class="rounded-circle me-3" width="60" height="60">
+                            <div>
+                                <h5 class="mb-0">Sarah M.</h5>
+                                <small class="text-primary-custom">Box Braids</small>
+                            </div>
+                        </div>
+                        <p class="card-text">"I've been coming to Braids & Beyond for over a year now, and I'm always impressed with their attention to detail. My box braids always last longer than anywhere else!"</p>
+                        <div class="text-primary-custom">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card h-100 animate-on-scroll">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="{{ url_for('static', filename='img/client-2.jpg') }}" alt="Client" class="rounded-circle me-3" width="60" height="60">
+                            <div>
+                                <h5 class="mb-0">John D.</h5>
+                                <small class="text-primary-custom">Faux Locs</small>
+                            </div>
+                        </div>
+                        <p class="card-text">"The stylists at Braids & Beyond are true artists. They took my ideas and created a style that exceeded my expectations. The compliments haven't stopped!"</p>
+                        <div class="text-primary-custom">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card h-100 animate-on-scroll">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="{{ url_for('static', filename='img/client-3.jpg') }}" alt="Client" class="rounded-circle me-3" width="60" height="60">
+                            <div>
+                                <h5 class="mb-0">Emily R.</h5>
+                                <small class="text-primary-custom">Goddess Braids</small>
+                            </div>
+                        </div>
+                        <p class="card-text">"I was nervous about trying a new style, but the team at Braids & Beyond made me feel comfortable and gave me the most beautiful goddess braids I've ever had!"</p>
+                        <div class="text-primary-custom">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section py-5 text-center">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <h2 class="display-4 text-primary-custom mb-4 animate-on-scroll">Ready for a New Look?</h2>
+                <p class="lead text-white mb-4 animate-on-scroll">Book your appointment today and experience the Braids & Beyond difference.</p>
+                <a href="{{ url_for('booking.calendar') }}" class="btn btn-primary btn-lg animate-on-scroll">Book Now</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block additional_scripts %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // Initialize animation on scroll
+    animateOnScroll();
+    
+    // Add swiper functionality if needed
+    if (typeof Swiper !== 'undefined') {
+      new Swiper(".testimonialSwiper", {
+        slidesPerView: 1,
+        spaceBetween: 30,
+        loop: true,
+        autoplay: {
+          delay: 5000,
+          disableOnInteraction: false,
+        },
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true,
+        },
+        breakpoints: {
+          640: {
+            slidesPerView: 2,
+          },
+          1024: {
+            slidesPerView: 3,
+          },
+        },
+      });
+    }
+  });
+</script>
 {% endblock %} 

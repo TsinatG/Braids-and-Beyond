@@ -6,7 +6,9 @@ load_dotenv(os.path.join(basedir, '.env'))
 
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'your_very_secure_secret_key_for_production'
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'sqlite:///' + os.path.join(basedir, 'app.db')
+    
+    # MySQL Database Configuration
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'mysql+pymysql://braids_user:your_secure_password@localhost/braids_beyond_db'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     
     # Mail settings

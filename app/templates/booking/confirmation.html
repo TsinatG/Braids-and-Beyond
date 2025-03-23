@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block additional_head %}
+<style>
+    .confirmation-container {
+        background: rgba(0, 0, 0, 0.7);
+        border-radius: 10px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+    
+    .confirmation-icon {
+        font-size: 5rem;
+        color: var(--primary-color);
+        margin-bottom: 1.5rem;
+    }
+    
+    .appointment-details {
+        background: rgba(0, 0, 0, 0.5);
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin: 2rem auto;
+        max-width: 500px;
+        text-align: left;
+    }
+    
+    .detail-item {
+        display: flex;
+        margin-bottom: 1rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding-bottom: 1rem;
+    }
+    
+    .detail-item:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+        padding-bottom: 0;
+    }
+    
+    .detail-label {
+        width: 120px;
+        color: rgba(255, 255, 255, 0.7);
+        font-weight: 600;
+    }
+    
+    .detail-value {
+        flex: 1;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="confirmation-page">
+    <section class="page-header bg-dark text-white py-5 mb-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h1 class="display-4">Booking Confirmed!</h1>
+                    <p class="lead">Your appointment has been successfully scheduled</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="confirmation-container">
+                    <div class="confirmation-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h2 class="mb-3">Thank You for Your Booking</h2>
+                    <p class="mb-4">We're looking forward to seeing you soon! Below are your appointment details.</p>
+                    
+                    <div class="appointment-details">
+                        <div class="detail-item">
+                            <div class="detail-label">Service:</div>
+                            <div class="detail-value">{{ appointment.service.name }}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Stylist:</div>
+                            <div class="detail-value">{{ appointment.stylist.name }}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Date:</div>
+                            <div class="detail-value">{{ appointment.formatted_date }}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Time:</div>
+                            <div class="detail-value">{{ appointment.formatted_time }} - {{ appointment.formatted_end_time }}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Duration:</div>
+                            <div class="detail-value">{{ appointment.duration }} minutes</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Price:</div>
+                            <div class="detail-value">${{ appointment.service.price }}</div>
+                        </div>
+                    </div>
+                    
+                    <p class="mb-4">A confirmation email has been sent to your registered email address.</p>
+                    
+                    <div class="d-flex justify-content-center gap-3">
+                        <a href="{{ url_for('booking.appointments') }}" class="btn btn-primary">
+                            View My Appointments
+                        </a>
+                        <a href="{{ url_for('main.home') }}" class="btn btn-outline-light">
+                            Return to Home
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

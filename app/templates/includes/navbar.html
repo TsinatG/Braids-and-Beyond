@@ -1,0 +1,19 @@
+<!-- Add this item to your navigation menu -->
+<li class="nav-item">
+    <a class="nav-link {{ 'active' if request.endpoint and request.endpoint.startswith('stylists.') else '' }}" 
+       href="{{ url_for('stylists.list_stylists') }}">Stylists</a>
+</li>
+
+<!-- Add this item to your navigation menu for logged-in users -->
+{% if current_user.is_authenticated %}
+    <li class="nav-item">
+        <a class="nav-link {{ 'active' if request.endpoint == 'booking.appointments' else '' }}" 
+           href="{{ url_for('booking.appointments') }}">My Appointments</a>
+    </li>
+{% endif %}
+
+<!-- Add this to your navigation menu -->
+<li class="nav-item">
+    <a class="nav-link {{ 'active' if request.endpoint == 'main.contact' else '' }}" 
+       href="{{ url_for('main.contact') }}">Contact</a>
+</li> 

@@ -31,11 +31,15 @@ def create_app(config_class=Config):
     from app.routes.auth import auth
     from app.routes.booking import booking
     from app.routes.admin import admin
+    from app.routes.services import services
+    from app.routes.stylists import stylists
     
     app.register_blueprint(main)
     app.register_blueprint(auth)
     app.register_blueprint(booking)
     app.register_blueprint(admin)
+    app.register_blueprint(services)
+    app.register_blueprint(stylists)
     
     # Register error handlers
     from app.routes import init_error_handlers

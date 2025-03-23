@@ -1,78 +1,554 @@
 {% extends "base.html" %}
 
 {% block additional_head %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/calendar.css') }}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+<style>
+    .booking-container {
+        background: rgba(0, 0, 0, 0.7);
+        border-radius: 10px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+    }
+    
+    .date-picker-container {
+        margin-bottom: 2rem;
+    }
+    
+    .time-slots {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 10px;
+        margin-top: 1rem;
+    }
+    
+    .time-slot {
+        padding: 10px;
+        text-align: center;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background: rgba(255, 255, 255, 0.1);
+    }
+    
+    .time-slot:hover {
+        background: rgba(155, 89, 182, 0.3);
+    }
+    
+    .time-slot.selected {
+        background: var(--primary-color);
+        color: white;
+    }
+    
+    .time-slot.booked {
+        background: rgba(220, 53, 69, 0.2);
+        color: #dc3545;
+        cursor: not-allowed;
+        text-decoration: line-through;
+    }
+    
+    .service-card, .stylist-card {
+        background: rgba(0, 0, 0, 0.5);
+        border-radius: 8px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+    }
+    
+    .service-card:hover, .stylist-card:hover {
+        background: rgba(0, 0, 0, 0.7);
+    }
+    
+    .service-card.selected, .stylist-card.selected {
+        border-color: var(--primary-color);
+        background: rgba(155, 89, 182, 0.2);
+    }
+    
+    .service-price {
+        color: var(--primary-color);
+        font-weight: 600;
+    }
+    
+    .service-duration {
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.7);
+    }
+    
+    .stylist-image {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+    
+    .booking-steps {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 2rem;
+        position: relative;
+    }
+    
+    .booking-steps::before {
+        content: '';
+        position: absolute;
+        top: 25px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: rgba(255, 255, 255, 0.2);
+        z-index: 1;
+    }
+    
+    .step {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+        z-index: 2;
+    }
+    
+    .step-number {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .step.active .step-number {
+        background: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+    
+    .step-label {
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.7);
+    }
+    
+    .step.active .step-label {
+        color: var(--primary-color);
+        font-weight: 600;
+    }
+    
+    .booking-section {
+        display: none;
+    }
+    
+    .booking-section.active {
+        display: block;
+    }
+    
+    .booking-nav {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 2rem;
+    }
+    
+    .confirmation-details {
+        background: rgba(0, 0, 0, 0.5);
+        border-radius: 8px;
+        padding: 1.5rem;
+    }
+    
+    .confirmation-row {
+        display: flex;
+        margin-bottom: 1rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding-bottom: 1rem;
+    }
+    
+    .confirmation-label {
+        width: 120px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.7);
+    }
+    
+    .confirmation-value {
+        flex: 1;
+        color: white;
+    }
+</style>
 {% endblock %}
 
 {% block content %}
 <div class="booking-page">
-    <h1>Book Your Appointment</h1>
-    
-    <section class="booking-intro">
-        <p>Select your preferred service, stylist, date, and time to schedule your appointment at GLAM Salon.</p>
+    <section class="page-header bg-dark text-white py-5 mb-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h1 class="display-4">Book Your Appointment</h1>
+                    <p class="lead">Schedule your hair braiding session in just a few simple steps</p>
+                </div>
+            </div>
+        </div>
     </section>
-    
-    <section class="booking-selection">
-        <div class="service-selection">
-            <h2>Choose a Service</h2>
-            <div class="service-grid">
-                {% for service in services %}
-                <div class="service-card" data-service-id="{{ service.id }}" data-duration="{{ service.duration }}">
-                    <h3>{{ service.name }}</h3>
-                    <p class="service-price">${{ service.price }}</p>
-                    <p class="service-duration">{{ service.duration }} minutes</p>
-                    <p class="service-description">{{ service.description }}</p>
-                    <button class="select-service-btn">Select</button>
+
+    <div class="container">
+        <div class="booking-container">
+            <div class="booking-steps">
+                <div class="step active" id="step1">
+                    <div class="step-number">1</div>
+                    <div class="step-label">Select Service</div>
                 </div>
-                {% endfor %}
-            </div>
-        </div>
-        
-        <div class="stylist-selection">
-            <h2>Choose a Stylist</h2>
-            <div class="stylist-grid">
-                {% for stylist in stylists %}
-                <div class="stylist-card" data-stylist-id="{{ stylist.id }}">
-                    <img src="{{ url_for('static', filename='img/' + stylist.image_file) }}" alt="{{ stylist.name }}">
-                    <h3>{{ stylist.name }}</h3>
-                    <p class="stylist-specialization">{{ stylist.specialization }}</p>
-                    <button class="select-stylist-btn">Select</button>
+                <div class="step" id="step2">
+                    <div class="step-number">2</div>
+                    <div class="step-label">Choose Stylist</div>
                 </div>
-                {% endfor %}
+                <div class="step" id="step3">
+                    <div class="step-number">3</div>
+                    <div class="step-label">Pick Date & Time</div>
+                </div>
+                <div class="step" id="step4">
+                    <div class="step-number">4</div>
+                    <div class="step-label">Confirm Details</div>
+                </div>
             </div>
-        </div>
-        
-        <div class="date-time-selection">
-            <h2>Choose Date & Time</h2>
-            <div id="calendar-container">
-                <!-- Calendar will be generated by JavaScript -->
-                <div id="calendar"></div>
+            
+            <form id="bookingForm" action="{{ url_for('booking.form') }}" method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <input type="hidden" name="service" id="serviceInput">
+                <input type="hidden" name="stylist" id="stylistInput">
+                <input type="hidden" name="date" id="dateInput">
+                <input type="hidden" name="time" id="timeInput">
                 
-                <div id="time-slots">
-                    <h3>Available Times</h3>
-                    <div id="time-slots-container">
-                        <!-- Time slots will be generated by JavaScript -->
-                        <p>Please select a date to see available times</p>
+                <!-- Step 1: Select Service -->
+                <div class="booking-section active" id="serviceSection">
+                    <h3 class="mb-4 text-primary-custom">Select a Service</h3>
+                    
+                    <div class="row g-3">
+                        {% for service in services %}
+                            <div class="col-md-6 col-lg-4">
+                                <div class="service-card" data-service-id="{{ service.id }}" data-service-duration="{{ service.duration }}">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <h4 class="h5 mb-2">{{ service.name }}</h4>
+                                            <p class="small mb-2">{{ service.description|truncate(80) }}</p>
+                                        </div>
+                                        {% if service.image_file %}
+                                            <img src="{{ url_for('static', filename='img/services/' + service.image_file) }}" 
+                                                 class="ms-2" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;" 
+                                                 alt="{{ service.name }}">
+                                        {% endif %}
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center mt-2">
+                                        <span class="service-price">${{ service.price }}</span>
+                                        <span class="service-duration">{{ service.duration }} mins</span>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="booking-nav">
+                        <div></div>
+                        <button type="button" class="btn btn-primary next-step" data-next="stylistSection" disabled>
+                            Next: Choose Stylist <i class="fas fa-arrow-right ms-2"></i>
+                        </button>
                     </div>
                 </div>
-            </div>
-        </div>
-        
-        <div class="booking-summary">
-            <h2>Booking Summary</h2>
-            <div id="summary-container">
-                <p id="selected-service">Service: <span>Not selected</span></p>
-                <p id="selected-stylist">Stylist: <span>Not selected</span></p>
-                <p id="selected-date">Date: <span>Not selected</span></p>
-                <p id="selected-time">Time: <span>Not selected</span></p>
                 
-                <a href="{{ url_for('booking.form') }}" id="continue-booking" class="cta-button disabled">Continue to Booking</a>
-            </div>
+                <!-- Step 2: Choose Stylist -->
+                <div class="booking-section" id="stylistSection">
+                    <h3 class="mb-4 text-primary-custom">Choose a Stylist</h3>
+                    
+                    <div class="row g-3">
+                        {% for stylist in stylists %}
+                            <div class="col-md-6 col-lg-4">
+                                <div class="stylist-card" data-stylist-id="{{ stylist.id }}">
+                                    <div class="d-flex align-items-center">
+                                        {% if stylist.image_file %}
+                                            <img src="{{ url_for('static', filename='img/stylists/' + stylist.image_file) }}" 
+                                                 class="stylist-image me-3" alt="{{ stylist.name }}">
+                                        {% else %}
+                                            <img src="{{ url_for('static', filename='img/stylists/default-stylist.jpg') }}" 
+                                                 class="stylist-image me-3" alt="{{ stylist.name }}">
+                                        {% endif %}
+                                        <div>
+                                            <h4 class="h5 mb-1">{{ stylist.name }}</h4>
+                                            {% if stylist.specialization %}
+                                                <p class="small mb-0">{{ stylist.specialization }}</p>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="booking-nav">
+                        <button type="button" class="btn btn-outline-light prev-step" data-prev="serviceSection">
+                            <i class="fas fa-arrow-left me-2"></i> Back: Select Service
+                        </button>
+                        <button type="button" class="btn btn-primary next-step" data-next="dateTimeSection" disabled>
+                            Next: Pick Date & Time <i class="fas fa-arrow-right ms-2"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Step 3: Pick Date & Time -->
+                <div class="booking-section" id="dateTimeSection">
+                    <h3 class="mb-4 text-primary-custom">Select Date & Time</h3>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <label class="form-label">Select Date</label>
+                            <input type="text" id="datePicker" class="form-control" placeholder="Click to select date">
+                        </div>
+                    </div>
+                    
+                    <div id="timeSlotContainer" style="display: none;">
+                        <label class="form-label">Select Time</label>
+                        <div class="time-slots" id="timeSlots"></div>
+                    </div>
+                    
+                    <div class="booking-nav mt-4">
+                        <button type="button" class="btn btn-outline-light prev-step" data-prev="stylistSection">
+                            <i class="fas fa-arrow-left me-2"></i> Back: Choose Stylist
+                        </button>
+                        <button type="button" class="btn btn-primary next-step" data-next="confirmationSection" disabled>
+                            Next: Confirm Details <i class="fas fa-arrow-right ms-2"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Step 4: Confirm Details -->
+                <div class="booking-section" id="confirmationSection">
+                    <h3 class="mb-4 text-primary-custom">Confirm Your Appointment</h3>
+                    
+                    <div class="confirmation-details">
+                        <div class="confirmation-row">
+                            <div class="confirmation-label">Service:</div>
+                            <div class="confirmation-value" id="confirmService"></div>
+                        </div>
+                        <div class="confirmation-row">
+                            <div class="confirmation-label">Stylist:</div>
+                            <div class="confirmation-value" id="confirmStylist"></div>
+                        </div>
+                        <div class="confirmation-row">
+                            <div class="confirmation-label">Date:</div>
+                            <div class="confirmation-value" id="confirmDate"></div>
+                        </div>
+                        <div class="confirmation-row">
+                            <div class="confirmation-label">Time:</div>
+                            <div class="confirmation-value" id="confirmTime"></div>
+                        </div>
+                        <div class="confirmation-row">
+                            <div class="confirmation-label">Duration:</div>
+                            <div class="confirmation-value" id="confirmDuration"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <label class="form-label">Special Requests or Notes (Optional)</label>
+                        <textarea name="notes" class="form-control" rows="3" placeholder="Any special requests or notes for your stylist?"></textarea>
+                    </div>
+                    
+                    <div class="booking-nav">
+                        <button type="button" class="btn btn-outline-light prev-step" data-prev="dateTimeSection">
+                            <i class="fas fa-arrow-left me-2"></i> Back: Pick Date & Time
+                        </button>
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-check me-2"></i> Confirm Booking
+                        </button>
+                    </div>
+                </div>
+            </form>
         </div>
-    </section>
+    </div>
 </div>
-{% endblock %}
 
-{% block additional_scripts %}
-<script src="{{ url_for('static', filename='js/booking.js') }}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        let selectedService = null;
+        let selectedStylist = null;
+        let selectedDate = null;
+        let selectedTime = null;
+        let serviceDuration = 0;
+        
+        // Service selection
+        document.querySelectorAll('.service-card').forEach(card => {
+            card.addEventListener('click', function() {
+                document.querySelectorAll('.service-card').forEach(c => c.classList.remove('selected'));
+                this.classList.add('selected');
+                selectedService = this.dataset.serviceId;
+                serviceDuration = parseInt(this.dataset.serviceDuration);
+                document.getElementById('serviceInput').value = selectedService;
+                document.querySelector('#serviceSection .next-step').removeAttribute('disabled');
+                
+                // Update confirmation
+                document.getElementById('confirmService').textContent = this.querySelector('h4').textContent;
+                document.getElementById('confirmDuration').textContent = serviceDuration + ' minutes';
+            });
+        });
+        
+        // Stylist selection
+        document.querySelectorAll('.stylist-card').forEach(card => {
+            card.addEventListener('click', function() {
+                document.querySelectorAll('.stylist-card').forEach(c => c.classList.remove('selected'));
+                this.classList.add('selected');
+                selectedStylist = this.dataset.stylistId;
+                document.getElementById('stylistInput').value = selectedStylist;
+                document.querySelector('#stylistSection .next-step').removeAttribute('disabled');
+                
+                // Update confirmation
+                document.getElementById('confirmStylist').textContent = this.querySelector('h4').textContent;
+            });
+        });
+        
+        // Date picker initialization
+        const datePicker = flatpickr('#datePicker', {
+            minDate: 'today',
+            dateFormat: 'Y-m-d',
+            disable: [
+                function(date) {
+                    // Disable Sundays (0 is Sunday)
+                    return date.getDay() === 0;
+                }
+            ],
+            onChange: function(selectedDates, dateStr) {
+                selectedDate = dateStr;
+                document.getElementById('dateInput').value = selectedDate;
+                
+                // Update confirmation
+                const formattedDate = new Date(selectedDate).toLocaleDateString('en-US', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+                document.getElementById('confirmDate').textContent = formattedDate;
+                
+                // Fetch available time slots
+                fetchTimeSlots(selectedDate, selectedStylist);
+            }
+        });
+        
+        // Navigation between steps
+        document.querySelectorAll('.next-step').forEach(button => {
+            button.addEventListener('click', function() {
+                const currentSection = this.closest('.booking-section');
+                const nextSectionId = this.dataset.next;
+                
+                currentSection.classList.remove('active');
+                document.getElementById(nextSectionId).classList.add('active');
+                
+                // Update steps
+                document.querySelectorAll('.step').forEach(step => step.classList.remove('active'));
+                document.getElementById('step' + nextSectionId.charAt(0)).classList.add('active');
+            });
+        });
+        
+        document.querySelectorAll('.prev-step').forEach(button => {
+            button.addEventListener('click', function() {
+                const currentSection = this.closest('.booking-section');
+                const prevSectionId = this.dataset.prev;
+                
+                currentSection.classList.remove('active');
+                document.getElementById(prevSectionId).classList.add('active');
+                
+                // Update steps
+                document.querySelectorAll('.step').forEach(step => step.classList.remove('active'));
+                document.getElementById('step' + prevSectionId.charAt(0)).classList.add('active');
+            });
+        });
+        
+        // Fetch available time slots
+        function fetchTimeSlots(date, stylistId) {
+            fetch('{{ url_for("booking.check_availability") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': document.querySelector('input[name="csrf_token"]').value
+                },
+                body: JSON.stringify({
+                    date: date,
+                    stylist_id: stylistId
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    generateTimeSlots(data.booked_slots);
+                } else {
+                    console.error('Error:', data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+        
+        // Generate time slots
+        function generateTimeSlots(bookedSlots) {
+            const timeSlotsContainer = document.getElementById('timeSlots');
+            timeSlotsContainer.innerHTML = '';
+            document.getElementById('timeSlotContainer').style.display = 'block';
+            
+            // Business hours: 9 AM to 6 PM
+            const startHour = 9;
+            const endHour = 18;
+            
+            // Generate slots in 30-minute intervals
+            for (let hour = startHour; hour < endHour; hour++) {
+                for (let minute = 0; minute < 60; minute += 30) {
+                    const timeString = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+                    
+                    // Check if this slot is booked
+                    const isBooked = bookedSlots.includes(timeString);
+                    
+                    // Check if there's enough time for the service before closing
+                    const slotHour = parseInt(timeString.split(':')[0]);
+                    const slotMinute = parseInt(timeString.split(':')[1]);
+                    const slotEndHour = slotHour + Math.floor((slotMinute + serviceDuration) / 60);
+                    const slotEndMinute = (slotMinute + serviceDuration) % 60;
+                    
+                    const isEnoughTime = (slotEndHour < endHour) || (slotEndHour === endHour && slotEndMinute === 0);
+                    
+                    // Create time slot element
+                    const timeSlot = document.createElement('div');
+                    timeSlot.className = 'time-slot';
+                    timeSlot.textContent = formatTime(timeString);
+                    timeSlot.dataset.time = timeString;
+                    
+                    if (isBooked) {
+                        timeSlot.classList.add('booked');
+                    } else if (!isEnoughTime) {
+                        timeSlot.classList.add('booked');
+                        timeSlot.title = 'Not enough time for this service before closing';
+                    } else {
+                        timeSlot.addEventListener('click', function() {
+                            document.querySelectorAll('.time-slot').forEach(slot => slot.classList.remove('selected'));
+                            this.classList.add('selected');
+                            selectedTime = this.dataset.time;
+                            document.getElementById('timeInput').value = selectedTime;
+                            document.querySelector('#dateTimeSection .next-step').removeAttribute('disabled');
+                            
+                            // Update confirmation
+                            document.getElementById('confirmTime').textContent = formatTime(selectedTime);
+                        });
+                    }
+                    
+                    timeSlotsContainer.appendChild(timeSlot);
+                }
+            }
+        }
+        
+        // Format time for display
+        function formatTime(timeString) {
+            const [hour, minute] = timeString.split(':');
+            const hourInt = parseInt(hour);
+            const ampm = hourInt >= 12 ? 'PM' : 'AM';
+            const hour12 = hourInt % 12 || 12;
+            return `${hour12}:${minute} ${ampm}`;
+        }
+    });
+</script>
 {% endblock %} 
