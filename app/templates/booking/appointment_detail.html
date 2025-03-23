@@ -1,0 +1,193 @@
+{% extends "base.html" %}
+
+{% block additional_head %}
+<style>
+    .appointment-detail-container {
+        background: rgba(0, 0, 0, 0.7);
+        border-radius: 10px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+    }
+    
+    .appointment-header {
+        margin-bottom: 2rem;
+        position: relative;
+    }
+    
+    .appointment-status {
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
+    
+    .detail-section {
+        background: rgba(0, 0, 0, 0.5);
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .detail-section h3 {
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+        font-size: 1.2rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding-bottom: 0.5rem;
+    }
+    
+    .detail-item {
+        display: flex;
+        margin-bottom: 1rem;
+    }
+    
+    .detail-item:last-child {
+        margin-bottom: 0;
+    }
+    
+    .detail-label {
+        width: 140px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.7);
+    }
+    
+    .detail-value {
+        flex: 1;
+    }
+    
+    .action-buttons {
+        margin-top: 2rem;
+        display: flex;
+        gap: 1rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="appointment-detail-page">
+    <section class="page-header bg-dark text-white py-4 mb-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h1>Appointment Details</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{ url_for('main.home') }}">Home</a></li>
+                            <li class="breadcrumb-item"><a href="{{ url_for('booking.appointments') }}">My Appointments</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Details</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-10 mx-auto">
+                <div class="appointment-detail-container">
+                    <div class="appointment-header">
+                        <h2>Appointment #{{ appointment.id }}</h2>
+                        <div class="appointment-status">
+                            <span class="badge {{ appointment.status_badge_class }}">{{ appointment.status|title }}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="detail-section">
+                        <h3><i class="far fa-calendar-alt me-2"></i> Date & Time</h3>
+                        <div class="detail-item">
+                            <div class="detail-label">Date:</div>
+                            <div class="detail-value">{{ appointment.formatted_date }}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Time:</div>
+                            <div class="detail-value">{{ appointment.formatted_time }} - {{ appointment.formatted_end_time }}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Duration:</div>
+                            <div class="detail-value">{{ appointment.duration }} minutes</div>
+                        </div>
+                    </div>
+                    
+                    <div class="detail-section">
+                        <h3><i class="fas fa-spa me-2"></i> Service Details</h3>
+                        <div class="detail-item">
+                            <div class="detail-label">Service:</div>
+                            <div class="detail-value">{{ appointment.service.name }}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Description:</div>
+                            <div class="detail-value">{{ appointment.service.description or 'No description available' }}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Price:</div>
+                            <div class="detail-value">${{ appointment.service.price }}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="detail-section">
+                        <h3><i class="fas fa-user-tie me-2"></i> Stylist Information</h3>
+                        <div class="detail-item">
+                            <div class="detail-label">Stylist:</div>
+                            <div class="detail-value">{{ appointment.stylist.name }}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Specialization:</div>
+                            <div class="detail-value">{{ appointment.stylist.specialization or 'Various Services' }}</div>
+                        </div>
+                    </div>
+                    
+                    {% if appointment.notes %}
+                    <div class="detail-section">
+                        <h3><i class="fas fa-sticky-note me-2"></i> Notes</h3>
+                        <p>{{ appointment.notes }}</p>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="action-buttons">
+                        {% if appointment.is_upcoming and appointment.status == 'scheduled' %}
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#cancelModal">
+                                <i class="fas fa-times-circle me-2"></i> Cancel Appointment
+                            </button>
+                            
+                            <a href="{{ url_for('booking.edit_appointment', appointment_id=appointment.id) }}" class="btn btn-primary">
+                                <i class="fas fa-edit me-2"></i> Reschedule
+                            </a>
+                        {% endif %}
+                        
+                        <a href="{{ url_for('booking.appointments') }}" class="btn btn-outline-light">
+                            <i class="fas fa-arrow-left me-2"></i> Back to Appointments
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Cancel Modal -->
+{% if appointment.is_upcoming and appointment.status == 'scheduled' %}
+<div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark text-white">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cancelModalLabel">Cancel Appointment</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to cancel this appointment?</p>
+                <p><strong>Date:</strong> {{ appointment.formatted_date }}</p>
+                <p><strong>Time:</strong> {{ appointment.formatted_time }}</p>
+                <p><strong>Service:</strong> {{ appointment.service.name }}</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <form action="{{ url_for('booking.cancel_appointment', appointment_id=appointment.id) }}" method="POST">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit" class="btn btn-danger">Cancel Appointment</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %} 

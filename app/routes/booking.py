@@ -8,7 +8,7 @@ from app.models.client import Client
 from app.forms import BookingForm, AppointmentStatusForm, AppointmentSearchForm
 from datetime import datetime, timedelta, time
 import json
-import calendar
+import calendar as cal
 
 booking = Blueprint('booking', __name__)
 
@@ -19,10 +19,16 @@ def calendar():
     active_services = Service.get_active_services()
     active_stylists = Stylist.get_active_stylists()
     
+    # Create a form for CSRF protection
+    form = BookingForm()
+    form.service.choices = [(s.id, s.name) for s in active_services]
+    form.stylist.choices = [(s.id, s.name) for s in active_stylists]
+    
     return render_template('booking/calendar.html', 
                           title='Book Appointment',
                           services=active_services,
-                          stylists=active_stylists)
+                          stylists=active_stylists,
+                          form=form)
 
 @booking.route('/booking/availability', methods=['POST'])
 def check_availability():
@@ -112,21 +118,17 @@ def form():
 @login_required
 def appointments():
     """Display the current user's appointments"""
-    # Get the current user's client record
-    client = Client.query.filter_by(user_id=current_user.id).first()
-    
-    if not client:
-        flash('Your profile is not complete. Please update your profile first.', 'warning')
-        return redirect(url_for('auth.profile'))
+    # The current user is the client
+    client_id = current_user.id
     
     # Get upcoming and past appointments
     today = datetime.now().date()
     
-    upcoming_appointments = Appointment.query.filter_by(client_id=client.id).filter(
+    upcoming_appointments = Appointment.query.filter_by(client_id=client_id).filter(
         Appointment.date >= today
     ).order_by(Appointment.date, Appointment.time).all()
     
-    past_appointments = Appointment.query.filter_by(client_id=client.id).filter(
+    past_appointments = Appointment.query.filter_by(client_id=client_id).filter(
         Appointment.date < today
     ).order_by(Appointment.date.desc(), Appointment.time.desc()).limit(5).all()
     
@@ -157,8 +159,7 @@ def cancel_appointment(appointment_id):
     appointment = Appointment.query.get_or_404(appointment_id)
     
     # Check if this appointment belongs to the current user
-    client = Client.query.filter_by(user_id=current_user.id).first()
-    if not client or appointment.client_id != client.id:
+    if appointment.client_id != current_user.id and current_user.id != 1:
         flash('You do not have permission to cancel this appointment.', 'danger')
         return redirect(url_for('booking.appointments'))
     
@@ -289,7 +290,7 @@ def admin_calendar():
     # Get the current month's appointments
     today = datetime.now()
     first_day = datetime(today.year, today.month, 1)
-    last_day = datetime(today.year, today.month, calendar.monthrange(today.year, today.month)[1])
+    last_day = datetime(today.year, today.month, cal.monthrange(today.year, today.month)[1])
     
     appointments = Appointment.query.filter(
         Appointment.date.between(first_day.date(), last_day.date())
@@ -309,9 +310,13 @@ def admin_calendar():
             'className': f"appointment-{appointment.status}"
         })
     
+    # Create a form for CSRF protection
+    form = AppointmentStatusForm()
+    
     return render_template('admin/calendar.html', 
                           title='Appointment Calendar',
                           stylists=stylists,
+                          form=form,
                           calendar_data=json.dumps(calendar_data))
 
 @booking.route('/admin/appointments/<int:appointment_id>/edit', methods=['GET', 'POST'])

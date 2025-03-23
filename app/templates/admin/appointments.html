@@ -150,14 +150,14 @@
                     
                     {% if not search_mode %}
                         <div class="date-nav">
-                            <a href="{{ url_for('booking.admin_appointments', date=(current_date|dateadd(-1, 'days')) }}" 
+                            <a href="{{ url_for('booking.admin_appointments', date=(current_date|dateadd(-1, 'days'))) }}" 
                                class="date-nav-btn">
                                 <i class="fas fa-chevron-left me-2"></i> Previous Day
                             </a>
                             <div class="date-nav-current">
                                 {{ current_date|datetime('%A, %B %d, %Y') }}
                             </div>
-                            <a href="{{ url_for('booking.admin_appointments', date=(current_date|dateadd(1, 'days')) }}" 
+                            <a href="{{ url_for('booking.admin_appointments', date=(current_date|dateadd(1, 'days'))) }}" 
                                class="date-nav-btn">
                                 Next Day <i class="fas fa-chevron-right ms-2"></i>
                             </a>

@@ -208,7 +208,7 @@
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form id="statusForm" action="" method="POST">
-                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <input type="hidden" name="csrf_token" value="{{ form.csrf_token._value() if form else '' }}">
                 <div class="modal-body">
                     <div class="mb-3">
                         <label for="statusSelect" class="form-label">Status</label>

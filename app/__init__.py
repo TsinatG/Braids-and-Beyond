@@ -5,6 +5,7 @@ from flask_login import LoginManager
 from flask_bcrypt import Bcrypt
 from config import Config
 import os
+from datetime import datetime, timedelta
 
 # Initialize extensions
 db = SQLAlchemy()
@@ -25,6 +26,21 @@ def create_app(config_class=Config):
     migrate.init_app(app, db)
     login_manager.init_app(app)
     bcrypt.init_app(app)
+    
+    # Custom Jinja filters
+    @app.template_filter('dateadd')
+    def dateadd_filter(date, days, unit='days'):
+        if isinstance(date, str):
+            date = datetime.strptime(date, '%Y-%m-%d').date()
+        if unit == 'days':
+            return date + timedelta(days=days)
+        return date
+        
+    @app.template_filter('datetime')
+    def datetime_filter(date, format='%Y-%m-%d'):
+        if isinstance(date, datetime) or hasattr(date, 'strftime'):
+            return date.strftime(format)
+        return date
     
     # Register blueprints
     from app.routes.main import main

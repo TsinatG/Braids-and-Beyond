@@ -1,4 +1,5 @@
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileAllowed
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField, SelectField, FloatField, IntegerField, DateField, TimeField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, Optional
 from app.models.client import Client
@@ -40,6 +41,12 @@ class StylistForm(FlaskForm):
     name = StringField('Stylist Name', validators=[DataRequired(), Length(min=2, max=100)])
     bio = TextAreaField('Bio')
     specialization = StringField('Specialization', validators=[Length(max=100)])
+    experience_years = IntegerField('Years of Experience', validators=[Optional()])
+    email = StringField('Email', validators=[Optional(), Email()])
+    phone = StringField('Phone', validators=[Optional()])
+    instagram = StringField('Instagram Handle', validators=[Optional()])
+    is_active = BooleanField('Active', default=True)
+    image = FileField('Profile Image', validators=[Optional(), FileAllowed(['jpg', 'png', 'jpeg'])])
     submit = SubmitField('Add Stylist')
 
 class AppointmentStatusForm(FlaskForm):

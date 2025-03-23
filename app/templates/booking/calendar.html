@@ -213,7 +213,7 @@
             </div>
             
             <form id="bookingForm" action="{{ url_for('booking.form') }}" method="POST">
-                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <input type="hidden" name="csrf_token" value="{{ form.csrf_token._value() if form else '' }}">
                 <input type="hidden" name="service" id="serviceInput">
                 <input type="hidden" name="stylist" id="stylistInput">
                 <input type="hidden" name="date" id="dateInput">
