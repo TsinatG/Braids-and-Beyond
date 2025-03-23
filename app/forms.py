@@ -35,6 +35,9 @@ class ServiceForm(FlaskForm):
     description = TextAreaField('Description')
     price = FloatField('Price', validators=[DataRequired()])
     duration = IntegerField('Duration (minutes)', validators=[DataRequired()])
+    category = StringField('Category', validators=[Optional()])
+    is_active = BooleanField('Active', default=True)
+    image = FileField('Service Image', validators=[Optional(), FileAllowed(['jpg', 'png', 'jpeg'])])
     submit = SubmitField('Add Service')
 
 class StylistForm(FlaskForm):
@@ -69,4 +72,20 @@ class AppointmentSearchForm(FlaskForm):
         ('cancelled', 'Cancelled'),
         ('no-show', 'No-Show')
     ], default='')
-    submit = SubmitField('Search') 
+    submit = SubmitField('Search')
+
+class ClientEditForm(FlaskForm):
+    name = StringField('Full Name', validators=[DataRequired(), Length(min=2, max=100)])
+    email = StringField('Email Address', validators=[DataRequired(), Email()])
+    phone = StringField('Phone Number', validators=[Optional()])
+    submit = SubmitField('Update Client')
+    
+    def __init__(self, original_email=None, *args, **kwargs):
+        super(ClientEditForm, self).__init__(*args, **kwargs)
+        self.original_email = original_email
+        
+    def validate_email(self, email):
+        if email.data != self.original_email:
+            client = Client.query.filter_by(email=email.data).first()
+            if client:
+                raise ValidationError('That email is already registered. Please choose a different one.') 

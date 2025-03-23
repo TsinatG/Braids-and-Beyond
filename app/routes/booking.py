@@ -85,15 +85,12 @@ def form():
                 flash('Cannot book appointments in the past.', 'danger')
                 return render_template('booking/form.html', title='Book Appointment', form=form)
             
-            # Get the client record for the current user
-            client = Client.query.filter_by(user_id=current_user.id).first()
-            if not client:
-                flash('Your profile is not complete. Please update your profile first.', 'warning')
-                return redirect(url_for('auth.profile'))
+            # The current user is the client - use current_user.id directly
+            # No need to query for client by user_id since the Client model is the user
             
             # Create new appointment
             new_appointment = Appointment(
-                client_id=client.id,
+                client_id=current_user.id,
                 service_id=form.service.data,
                 stylist_id=form.stylist.data,
                 date=date_obj,
@@ -402,8 +399,8 @@ def confirmation(appointment_id):
     appointment = Appointment.query.get_or_404(appointment_id)
     
     # Check if this appointment belongs to the current user
-    client = Client.query.filter_by(user_id=current_user.id).first()
-    if not client or appointment.client_id != client.id:
+    # The current user is the client, so we don't need to query by user_id
+    if appointment.client_id != current_user.id:
         flash('You do not have permission to view this confirmation.', 'danger')
         return redirect(url_for('booking.appointments'))
     
@@ -415,17 +412,12 @@ def confirmation(appointment_id):
 @login_required
 def appointment_history():
     """Display all past appointments for the current user"""
-    # Get the current user's client record
-    client = Client.query.filter_by(user_id=current_user.id).first()
-    
-    if not client:
-        flash('Your profile is not complete. Please update your profile first.', 'warning')
-        return redirect(url_for('auth.profile'))
+    # The current user is the client, so directly use current_user.id
     
     # Get all past appointments
     today = datetime.now().date()
     
-    past_appointments = Appointment.query.filter_by(client_id=client.id).filter(
+    past_appointments = Appointment.query.filter_by(client_id=current_user.id).filter(
         Appointment.date < today
     ).order_by(Appointment.date.desc(), Appointment.time.desc()).all()
     
@@ -437,27 +429,23 @@ def appointment_history():
 @login_required
 def debug_appointments():
     """Debug route to check appointment rendering"""
-    # Get the current user's client record
-    client = Client.query.filter_by(user_id=current_user.id).first()
-    
-    if not client:
-        return "No client profile found for this user."
+    # The current user is the client, so directly use current_user.id
     
     # Get upcoming and past appointments
     today = datetime.now().date()
     
-    upcoming_appointments = Appointment.query.filter_by(client_id=client.id).filter(
+    upcoming_appointments = Appointment.query.filter_by(client_id=current_user.id).filter(
         Appointment.date >= today
     ).order_by(Appointment.date, Appointment.time).all()
     
-    past_appointments = Appointment.query.filter_by(client_id=client.id).filter(
+    past_appointments = Appointment.query.filter_by(client_id=current_user.id).filter(
         Appointment.date < today
     ).order_by(Appointment.date.desc(), Appointment.time.desc()).limit(5).all()
     
     # Return debug info
     debug_info = f"""
     <h1>Debug Appointments</h1>
-    <p>Client: {client.name} (ID: {client.id})</p>
+    <p>Client: {current_user.name} (ID: {current_user.id})</p>
     <p>Upcoming Appointments: {len(upcoming_appointments)}</p>
     <p>Past Appointments: {len(past_appointments)}</p>
     <p>Current Template Path: app/templates/booking/appointments.html</p>

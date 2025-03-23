@@ -24,7 +24,7 @@ def save_service_image(form_image):
     
     return image_filename
 
-@services.route('/services')
+@services.route('/services/list')
 def list_services():
     """Display all services to customers"""
     categories = Service.get_service_categories()

@@ -5,7 +5,7 @@ from app.models.appointment import Appointment
 from app.models.client import Client
 from app.models.service import Service
 from app.models.stylist import Stylist
-from app.forms import ServiceForm, StylistForm
+from app.forms import ServiceForm, StylistForm, ClientEditForm
 from datetime import datetime
 
 admin = Blueprint('admin', __name__)
@@ -51,12 +51,61 @@ def appointments():
     return render_template('admin/appointments.html', title='Manage Appointments', 
                           appointments=appointments)
 
-@admin.route('/admin/clients')
+@admin.route('/admin/clients', methods=['GET', 'POST'])
 @admin_required
 def clients():
+    # Initialize variables
+    edit_client = None
+    edit_form = None
+    
+    # Check for edit parameter
+    edit_id = request.args.get('edit')
+    if edit_id:
+        edit_client = Client.query.get_or_404(edit_id)
+        edit_form = ClientEditForm(original_email=edit_client.email)
+        
+        # Pre-populate the form
+        if request.method == 'GET':
+            edit_form.name.data = edit_client.name
+            edit_form.email.data = edit_client.email
+            edit_form.phone.data = edit_client.phone
+        
+        # Process edit form submission
+        if edit_form.validate_on_submit():
+            try:
+                edit_client.name = edit_form.name.data
+                edit_client.email = edit_form.email.data
+                edit_client.phone = edit_form.phone.data
+                db.session.commit()
+                flash(f'Client {edit_client.name} has been updated successfully!', 'success')
+                return redirect(url_for('admin.clients'))
+            except Exception as e:
+                db.session.rollback()
+                flash(f'An error occurred: {str(e)}', 'danger')
+    
+    # Check for delete request
+    if request.method == 'POST' and request.args.get('delete'):
+        client_id = request.args.get('delete')
+        client = Client.query.get_or_404(client_id)
+        
+        try:
+            # Delete associated appointments first (cascading delete)
+            Appointment.query.filter_by(client_id=client.id).delete()
+            
+            # Then delete the client
+            db.session.delete(client)
+            db.session.commit()
+            flash(f'Client {client.name} has been deleted.', 'success')
+        except Exception as e:
+            db.session.rollback()
+            flash(f'An error occurred: {str(e)}', 'danger')
+            
+        return redirect(url_for('admin.clients'))
+    
     clients = Client.query.all()
     return render_template('admin/clients.html', title='Manage Clients', 
-                          clients=clients)
+                          clients=clients, today=datetime.now(), 
+                          edit_client=edit_client, edit_form=edit_form)
 
 @admin.route('/admin/services', methods=['GET', 'POST'])
 @admin_required
