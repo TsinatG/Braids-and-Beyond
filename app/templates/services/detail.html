@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+
+{% block additional_head %}
+<style>
+    .service-detail-image {
+        max-height: 400px;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+    
+    .service-meta {
+        display: flex;
+        gap: 2rem;
+        margin: 1.5rem 0;
+    }
+    
+    .meta-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .meta-icon {
+        color: var(--primary-color);
+        font-size: 1.2rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="service-detail-page">
+    <section class="page-header bg-dark text-white py-5 mb-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h1 class="display-4">{{ service.name }}</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center">
+                            <li class="breadcrumb-item"><a href="{{ url_for('main.home') }}">Home</a></li>
+                            <li class="breadcrumb-item"><a href="{{ url_for('services.list_services') }}">Services</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">{{ service.name }}</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                {% if service.image_file %}
+                    <img src="{{ url_for('static', filename='img/services/' + service.image_file) }}" 
+                         class="service-detail-image img-fluid" alt="{{ service.name }}">
+                {% else %}
+                    <img src="{{ url_for('static', filename='img/services/default-service.jpg') }}" 
+                         class="service-detail-image img-fluid" alt="{{ service.name }}">
+                {% endif %}
+            </div>
+            
+            <div class="col-lg-6">
+                <h2 class="text-primary-custom">{{ service.name }}</h2>
+                
+                <div class="service-meta">
+                    <div class="meta-item">
+                        <i class="fas fa-tag meta-icon"></i>
+                        <span>${{ service.price }}</span>
+                    </div>
+                    
+                    <div class="meta-item">
+                        <i class="fas fa-clock meta-icon"></i>
+                        <span>{{ service.duration }} minutes</span>
+                    </div>
+                    
+                    {% if service.category %}
+                    <div class="meta-item">
+                        <i class="fas fa-folder meta-icon"></i>
+                        <span>{{ service.category }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <div class="service-description mb-4">
+                    <h3 class="h5">Description</h3>
+                    <p>{{ service.description }}</p>
+                </div>
+                
+                <div class="booking-section">
+                    <a href="{{ url_for('booking.calendar') }}" class="btn btn-primary btn-lg">Book This Service</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row mt-5">
+            <div class="col-12">
+                <h3 class="text-primary-custom mb-4">What to Expect</h3>
+                <div class="row">
+                    <div class="col-md-4 mb-4">
+                        <div class="card bg-dark text-white h-100">
+                            <div class="card-body">
+                                <h4 class="h5 card-title"><i class="fas fa-comments me-2 text-primary-custom"></i> Consultation</h4>
+                                <p class="card-text">We'll start with a thorough consultation to understand your preferences and hair needs.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4 mb-4">
+                        <div class="card bg-dark text-white h-100">
+                            <div class="card-body">
+                                <h4 class="h5 card-title"><i class="fas fa-hand-sparkles me-2 text-primary-custom"></i> Professional Service</h4>
+                                <p class="card-text">Our experienced stylists will create your desired look with precision and care.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4 mb-4">
+                        <div class="card bg-dark text-white h-100">
+                            <div class="card-body">
+                                <h4 class="h5 card-title"><i class="fas fa-info-circle me-2 text-primary-custom"></i> Aftercare Advice</h4>
+                                <p class="card-text">We'll provide you with detailed aftercare instructions to maintain your new style.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row mt-4 mb-5">
+            <div class="col-12 text-center">
+                <h3 class="text-primary-custom mb-4">Ready to Transform Your Look?</h3>
+                <a href="{{ url_for('booking.calendar') }}" class="btn btn-primary btn-lg">Book Your Appointment</a>
+                <a href="{{ url_for('services.list_services') }}" class="btn btn-outline-light btn-lg ms-3">View All Services</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

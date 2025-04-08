@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h1 class="display-4 text-primary-custom fw-bold">Our Services</h1>
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <p class="lead text-secondary">At Braids & Beyond, we offer a comprehensive range of braiding and styling services designed to transform, enhance, and maintain your unique look. Each service includes a consultation and styling.</p>
+            </div>
+        </div>
+    </div>
+    
+    <section class="mb-5">
+        <h2 class="h2 mb-4 text-center fw-bold">Braiding Services</h2>
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 shadow-sm border-0 animate-on-scroll">
+                    <div class="card-body">
+                        <h3 class="h5 mb-3 fw-bold">Box Braids</h3>
+                        <p class="card-text text-muted mb-3">Precision box braids tailored to your style preferences, includes consultation and styling.</p>
+                        <p class="h5 text-primary-custom mb-2">$150+</p>
+                        <p class="small text-muted"><i class="far fa-clock me-1"></i> 3-5 hours</p>
+                    </div>
+                    <div class="card-footer bg-transparent border-0 pt-0">
+                        <a href="{{ url_for('booking.calendar') }}" class="btn btn-sm btn-outline-primary">Book Now</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 shadow-sm border-0 animate-on-scroll">
+                    <div class="card-body">
+                        <h3 class="h5 mb-3 fw-bold">Goddess Braids</h3>
+                        <p class="card-text text-muted mb-3">Elegant and sophisticated goddess braids that create a stunning crown-like appearance.</p>
+                        <p class="h5 text-primary-custom mb-2">$180+</p>
+                        <p class="small text-muted"><i class="far fa-clock me-1"></i> 3-4 hours</p>
+                    </div>
+                    <div class="card-footer bg-transparent border-0 pt-0">
+                        <a href="{{ url_for('booking.calendar') }}" class="btn btn-sm btn-outline-primary">Book Now</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 shadow-sm border-0 animate-on-scroll">
+                    <div class="card-body">
+                        <h3 class="h5 mb-3 fw-bold">Faux Locs</h3>
+                        <p class="card-text text-muted mb-3">Beautiful and natural-looking faux locs that give you the loc aesthetic without commitment.</p>
+                        <p class="h5 text-primary-custom mb-2">$200+</p>
+                        <p class="small text-muted"><i class="far fa-clock me-1"></i> 4-6 hours</p>
+                    </div>
+                    <div class="card-footer bg-transparent border-0 pt-0">
+                        <a href="{{ url_for('booking.calendar') }}" class="btn btn-sm btn-outline-primary">Book Now</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 shadow-sm border-0 animate-on-scroll">
+                    <div class="card-body">
+                        <h3 class="h5 mb-3 fw-bold">Knotless Braids</h3>
+                        <p class="card-text text-muted mb-3">Comfortable, natural-looking braids with less tension at the roots for a seamless finish.</p>
+                        <p class="h5 text-primary-custom mb-2">$180+</p>
+                        <p class="small text-muted"><i class="far fa-clock me-1"></i> 4-6 hours</p>
+                    </div>
+                    <div class="card-footer bg-transparent border-0 pt-0">
+                        <a href="{{ url_for('booking.calendar') }}" class="btn btn-sm btn-outline-primary">Book Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="mb-5">
+        <h2 class="h2 mb-4 text-center fw-bold">Styling Services</h2>
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 shadow-sm border-0 animate-on-scroll">
+                    <div class="card-body">
+                        <h3 class="h5 mb-3 fw-bold">Cornrows</h3>
+                        <p class="card-text text-muted mb-3">Classic or creative cornrow patterns tailored to your preferences and style.</p>
+                        <p class="h5 text-primary-custom mb-2">$120+</p>
+                        <p class="small text-muted"><i class="far fa-clock me-1"></i> 2-3 hours</p>
+                    </div>
+                    <div class="card-footer bg-transparent border-0 pt-0">
+                        <a href="{{ url_for('booking.calendar') }}" class="btn btn-sm btn-outline-primary">Book Now</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 shadow-sm border-0 animate-on-scroll">
+                    <div class="card-body">
+                        <h3 class="h5 mb-3 fw-bold">Passion Twists</h3>
+                        <p class="card-text text-muted mb-3">Elegant twisted style that combines the look of goddess locs and Senegalese twists.</p>
+                        <p class="h5 text-primary-custom mb-2">$160+</p>
+                        <p class="small text-muted"><i class="far fa-clock me-1"></i> 3-5 hours</p>
+                    </div>
+                    <div class="card-footer bg-transparent border-0 pt-0">
+                        <a href="{{ url_for('booking.calendar') }}" class="btn btn-sm btn-outline-primary">Book Now</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 shadow-sm border-0 animate-on-scroll">
+                    <div class="card-body">
+                        <h3 class="h5 mb-3 fw-bold">Feed-in Braids</h3>
+                        <p class="card-text text-muted mb-3">Seamless braided look achieved by gradually adding hair for a natural appearance.</p>
+                        <p class="h5 text-primary-custom mb-2">$150+</p>
+                        <p class="small text-muted"><i class="far fa-clock me-1"></i> 2-4 hours</p>
+                    </div>
+                    <div class="card-footer bg-transparent border-0 pt-0">
+                        <a href="{{ url_for('booking.calendar') }}" class="btn btn-sm btn-outline-primary">Book Now</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 shadow-sm border-0 animate-on-scroll">
+                    <div class="card-body">
+                        <h3 class="h5 mb-3 fw-bold">Custom Styles</h3>
+                        <p class="card-text text-muted mb-3">Specialized braiding or styling service based on your unique requirements.</p>
+                        <p class="h5 text-primary-custom mb-2">Consultation required</p>
+                        <p class="small text-muted"><i class="far fa-clock me-1"></i> Varies</p>
+                    </div>
+                    <div class="card-footer bg-transparent border-0 pt-0">
+                        <a href="{{ url_for('booking.calendar') }}" class="btn btn-sm btn-outline-primary">Book Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="text-center p-5 bg-dark-custom rounded-3 mt-5 shadow-sm animate-on-scroll">
+        <h2 class="h3 text-white mb-4">Ready to transform your look?</h2>
+        <a href="{{ url_for('booking.calendar') }}" class="btn btn-primary btn-lg px-4 fw-bold">Book Your Appointment</a>
+    </section>
+</div>
+{% endblock %} 

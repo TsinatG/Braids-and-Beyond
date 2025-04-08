@@ -1,0 +1,716 @@
+{% extends "base.html" %}
+
+{% block additional_head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+    .admin-dashboard {
+        padding: 2rem 0;
+    }
+    
+    .dashboard-header {
+        background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
+        border-radius: 10px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .dashboard-header::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url('/static/img/pattern.png');
+        opacity: 0.05;
+    }
+    
+    .dashboard-title {
+        font-size: 2.2rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        position: relative;
+    }
+    
+    .dashboard-subtitle {
+        font-size: 1.1rem;
+        opacity: 0.8;
+        position: relative;
+    }
+    
+    .dashboard-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+    
+    .stat-card {
+        background: rgba(0, 0, 0, 0.5);
+        border-radius: 10px;
+        padding: 1.5rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        border-left: 4px solid #9b59b6;
+        position: relative;
+        overflow: hidden;
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    
+    .stat-card::after {
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        background: linear-gradient(135deg, rgba(155, 89, 182, 0.1) 0%, transparent 100%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+    }
+    
+    .stat-card:hover::after {
+        opacity: 1;
+    }
+    
+    .stat-card h3 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+    }
+    
+    .stat-icon {
+        margin-right: 0.75rem;
+        background: rgba(155, 89, 182, 0.2);
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #9b59b6;
+    }
+    
+    .stat-number {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin: 1rem 0;
+        color: #fff;
+    }
+    
+    .stat-link {
+        margin-top: auto;
+        color: #9b59b6;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        font-weight: 600;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+    }
+    
+    .stat-link i {
+        margin-left: 0.5rem;
+        transition: transform 0.3s ease;
+    }
+    
+    .stat-link:hover {
+        color: #8e44ad;
+    }
+    
+    .stat-link:hover i {
+        transform: translateX(3px);
+    }
+    
+    .dashboard-sections {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+    
+    @media (max-width: 992px) {
+        .dashboard-sections {
+            grid-template-columns: 1fr;
+        }
+    }
+    
+    .dashboard-card {
+        background: rgba(0, 0, 0, 0.5);
+        border-radius: 10px;
+        padding: 1.5rem;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        height: 100%;
+    }
+    
+    .dashboard-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .dashboard-card-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin: 0;
+        display: flex;
+        align-items: center;
+    }
+    
+    .dashboard-card-title i {
+        margin-right: 0.75rem;
+        color: #9b59b6;
+    }
+    
+    .dashboard-table {
+        width: 100%;
+    }
+    
+    .dashboard-table th {
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.7);
+        padding: 0.75rem 1rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .dashboard-table td {
+        padding: 1rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        vertical-align: middle;
+    }
+    
+    .dashboard-table tr:last-child td {
+        border-bottom: none;
+    }
+    
+    .dashboard-table tbody tr {
+        transition: all 0.3s ease;
+    }
+    
+    .dashboard-table tbody tr:hover {
+        background: rgba(155, 89, 182, 0.1);
+    }
+    
+    .status-badge {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+    
+    .quick-action {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px;
+        height: 30px;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        margin-right: 0.5rem;
+        transition: all 0.3s ease;
+    }
+    
+    .quick-action:hover {
+        background: #9b59b6;
+        color: #fff;
+    }
+    
+    .activity-list {
+        padding: 0;
+        margin: 0;
+        list-style: none;
+    }
+    
+    .activity-item {
+        padding: 1rem 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        display: flex;
+        align-items: flex-start;
+    }
+    
+    .activity-item:last-child {
+        border-bottom: none;
+    }
+    
+    .activity-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 1rem;
+        flex-shrink: 0;
+    }
+    
+    .activity-icon.booking {
+        background: rgba(46, 204, 113, 0.2);
+        color: #2ecc71;
+    }
+    
+    .activity-icon.completed {
+        background: rgba(52, 152, 219, 0.2);
+        color: #3498db;
+    }
+    
+    .activity-icon.cancelled {
+        background: rgba(231, 76, 60, 0.2);
+        color: #e74c3c;
+    }
+    
+    .activity-content {
+        flex-grow: 1;
+    }
+    
+    .activity-title {
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+    }
+    
+    .activity-meta {
+        font-size: 0.85rem;
+        color: rgba(255, 255, 255, 0.6);
+    }
+    
+    .action-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2rem;
+    }
+    
+    .action-card {
+        background: rgba(0, 0, 0, 0.5);
+        border-radius: 10px;
+        padding: 1.5rem;
+        height: 100%;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .action-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+    }
+    
+    .action-card-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+    
+    .action-card-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        background: rgba(155, 89, 182, 0.2);
+        color: #9b59b6;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        margin-right: 1rem;
+    }
+    
+    .action-card-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin: 0;
+    }
+    
+    .action-card-content {
+        margin-top: 0.5rem;
+        margin-bottom: 1.5rem;
+        flex-grow: 1;
+    }
+    
+    .action-card-buttons {
+        display: flex;
+        gap: 0.75rem;
+        margin-top: auto;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="admin-dashboard">
+    <div class="container">
+        <!-- Dashboard Header -->
+        <div class="dashboard-header">
+            <h1 class="dashboard-title">Admin Dashboard</h1>
+            <p class="dashboard-subtitle">Welcome back, Admin! Here's what's happening with your salon today.</p>
+        </div>
+        
+        <!-- Statistics Cards -->
+        <div class="dashboard-stats">
+            <div class="stat-card">
+                <h3>
+                    <span class="stat-icon"><i class="fas fa-users"></i></span>
+                    Clients
+                </h3>
+                <p class="stat-number">{{ client_count }}</p>
+                <a href="{{ url_for('admin.clients') }}" class="stat-link">
+                    View Clients <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            
+            <div class="stat-card">
+                <h3>
+                    <span class="stat-icon"><i class="fas fa-spa"></i></span>
+                    Services
+                </h3>
+                <p class="stat-number">{{ service_count }}</p>
+                <a href="{{ url_for('services.manage_services') }}" class="stat-link">
+                    Manage Services <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            
+            <div class="stat-card">
+                <h3>
+                    <span class="stat-icon"><i class="fas fa-user-tie"></i></span>
+                    Stylists
+                </h3>
+                <p class="stat-number">{{ stylist_count }}</p>
+                <a href="{{ url_for('stylists.manage_stylists') }}" class="stat-link">
+                    Manage Stylists <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            
+            <div class="stat-card">
+                <h3>
+                    <span class="stat-icon"><i class="fas fa-calendar-alt"></i></span>
+                    Appointments
+                </h3>
+                <p class="stat-number">{{ appointment_count }}</p>
+                <a href="{{ url_for('booking.admin_appointments') }}" class="stat-link">
+                    View All <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+        
+        <!-- Dashboard Main Content -->
+        <div class="dashboard-sections">
+            <!-- Left Section -->
+            <div>
+                <!-- Upcoming Appointments -->
+                <div class="dashboard-card">
+                    <div class="dashboard-card-header">
+                        <h3 class="dashboard-card-title">
+                            <i class="far fa-calendar-alt"></i> Upcoming Appointments
+                        </h3>
+                        <a href="{{ url_for('booking.admin_appointments') }}" class="stat-link">
+                            View All <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                    
+                    {% if upcoming_appointments %}
+                        <div class="table-responsive">
+                            <table class="dashboard-table">
+                                <thead>
+                                    <tr>
+                                        <th>Date & Time</th>
+                                        <th>Client</th>
+                                        <th>Service</th>
+                                        <th>Stylist</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for appointment in upcoming_appointments %}
+                                    <tr>
+                                        <td>
+                                            <div>{{ appointment.date.strftime('%b %d, %Y') }}</div>
+                                            <div style="font-size: 0.85rem; color: rgba(255,255,255,0.7);">
+                                                {{ appointment.time.strftime('%I:%M %p') }}
+                                            </div>
+                                        </td>
+                                        <td>{{ appointment.client.name }}</td>
+                                        <td>{{ appointment.service.name }}</td>
+                                        <td>{{ appointment.stylist.name }}</td>
+                                        <td>
+                                            <span class="status-badge {{ appointment.status_badge_class }}">
+                                                {{ appointment.status|title }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <a href="{{ url_for('booking.appointment_detail', appointment_id=appointment.id) }}" class="quick-action" title="View">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                            <a href="{{ url_for('booking.edit_appointment', appointment_id=appointment.id) }}" class="quick-action" title="Edit">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-4">
+                            <i class="far fa-calendar-alt fa-3x mb-3" style="opacity: 0.5;"></i>
+                            <p>No upcoming appointments scheduled.</p>
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <!-- Analytics Chart -->
+                <div class="dashboard-card mt-4">
+                    <div class="dashboard-card-header">
+                        <h3 class="dashboard-card-title">
+                            <i class="fas fa-chart-line"></i> Appointment Analytics
+                        </h3>
+                    </div>
+                    <canvas id="appointmentsChart" height="200"></canvas>
+                </div>
+            </div>
+            
+            <!-- Right Section -->
+            <div>
+                <!-- Recent Activity -->
+                <div class="dashboard-card">
+                    <div class="dashboard-card-header">
+                        <h3 class="dashboard-card-title">
+                            <i class="fas fa-history"></i> Recent Activity
+                        </h3>
+                    </div>
+                    
+                    <ul class="activity-list">
+                        {% if upcoming_appointments %}
+                            {% for appointment in upcoming_appointments[:3] %}
+                                <li class="activity-item">
+                                    <div class="activity-icon booking">
+                                        <i class="fas fa-calendar-plus"></i>
+                                    </div>
+                                    <div class="activity-content">
+                                        <div class="activity-title">New Appointment Booked</div>
+                                        <div>{{ appointment.client.name }} - {{ appointment.service.name }}</div>
+                                        <div class="activity-meta">{{ appointment.date.strftime('%b %d') }} at {{ appointment.time.strftime('%I:%M %p') }}</div>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        {% else %}
+                            <li class="activity-item">
+                                <div class="activity-content text-center py-3">
+                                    <i class="fas fa-info-circle mr-2"></i> No recent activity to display
+                                </div>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+                
+                <!-- Quick Stats -->
+                <div class="dashboard-card mt-4">
+                    <div class="dashboard-card-header">
+                        <h3 class="dashboard-card-title">
+                            <i class="fas fa-tachometer-alt"></i> Quick Stats
+                        </h3>
+                    </div>
+                    
+                    <div id="statsContainer" class="pt-2">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>Today's Appointments</div>
+                            <div class="fw-bold">{{ upcoming_appointments|length }}</div>
+                        </div>
+                        <div class="progress mb-4" style="height: 8px; background: rgba(255,255,255,0.1);">
+                            <div class="progress-bar bg-primary" role="progressbar" style="width: 0%" id="appointmentsProgressBar"></div>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>Completed Appointments</div>
+                            <div class="fw-bold">{{ upcoming_appointments|selectattr('status', 'equalto', 'completed')|list|length }}</div>
+                        </div>
+                        <div class="progress mb-4" style="height: 8px; background: rgba(255,255,255,0.1);">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: 0%" id="completedProgressBar"></div>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>Available Stylists</div>
+                            <div class="fw-bold">{{ stylist_count }}</div>
+                        </div>
+                        <div class="progress" style="height: 8px; background: rgba(255,255,255,0.1);">
+                            <div class="progress-bar bg-info" role="progressbar" style="width: 100%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Action Cards -->
+        <div class="action-cards">
+            <div class="action-card">
+                <div class="action-card-header">
+                    <div class="action-card-icon">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <h3 class="action-card-title">Stylists</h3>
+                </div>
+                <div class="action-card-content">
+                    <p>Manage your salon's stylists, their profiles, and availability.</p>
+                </div>
+                <div class="action-card-buttons">
+                    <a href="{{ url_for('stylists.manage_stylists') }}" class="btn btn-outline-primary">Manage Stylists</a>
+                </div>
+            </div>
+
+            <div class="action-card">
+                <div class="action-card-header">
+                    <div class="action-card-icon">
+                        <i class="far fa-calendar-alt"></i>
+                    </div>
+                    <h3 class="action-card-title">Appointments</h3>
+                </div>
+                <div class="action-card-content">
+                    <p>Manage appointments, view the calendar, and track bookings.</p>
+                </div>
+                <div class="action-card-buttons">
+                    <a href="{{ url_for('booking.admin_appointments') }}" class="btn btn-outline-primary">View All</a>
+                    <a href="{{ url_for('booking.admin_calendar') }}" class="btn btn-outline-secondary">Calendar View</a>
+                </div>
+            </div>
+            
+            <div class="action-card">
+                <div class="action-card-header">
+                    <div class="action-card-icon">
+                        <i class="fas fa-spa"></i>
+                    </div>
+                    <h3 class="action-card-title">Services</h3>
+                </div>
+                <div class="action-card-content">
+                    <p>Manage your salon's services, prices, and categories.</p>
+                </div>
+                <div class="action-card-buttons">
+                    <a href="{{ url_for('services.manage_services') }}" class="btn btn-outline-primary">Manage Services</a>
+                </div>
+            </div>
+
+            <div class="action-card">
+                <div class="action-card-header">
+                    <div class="action-card-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 class="action-card-title">Clients</h3>
+                </div>
+                <div class="action-card-content">
+                    <p>Manage your salon's clients, their profiles, and appointments.</p>
+                </div>
+                <div class="action-card-buttons">
+                    <a href="{{ url_for('admin.clients') }}" class="btn btn-outline-primary">Manage Clients</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Store template variables before DOMContentLoaded to avoid linter errors
+    const upcomingAppointmentsCount = {% if upcoming_appointments %}{{ upcoming_appointments|length }}{% else %}0{% endif %};
+    const completedAppointmentsCount = {% if upcoming_appointments %}{{ upcoming_appointments|selectattr('status', 'equalto', 'completed')|list|length }}{% else %}0{% endif %};
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Sample data for the chart
+        var ctx = document.getElementById('appointmentsChart').getContext('2d');
+        var appointmentsChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+                datasets: [{
+                    label: 'Appointments',
+                    data: [5, 8, 6, 9, 12, 15, 0],
+                    backgroundColor: 'rgba(155, 89, 182, 0.2)',
+                    borderColor: '#9b59b6',
+                    borderWidth: 2,
+                    pointBackgroundColor: '#fff',
+                    pointBorderColor: '#9b59b6',
+                    pointRadius: 4,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.05)'
+                        },
+                        ticks: {
+                            color: 'rgba(255, 255, 255, 0.7)'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.05)'
+                        },
+                        ticks: {
+                            color: 'rgba(255, 255, 255, 0.7)'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: 'rgba(255, 255, 255, 0.7)'
+                        }
+                    }
+                }
+            }
+        });
+        
+        // Add animation to stat cards
+        const statCards = document.querySelectorAll('.stat-card');
+        statCards.forEach((card, index) => {
+            setTimeout(() => {
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, 100 * index);
+        });
+        
+        // Set progress bar widths
+        // Calculate values from the page DOM instead of using Jinja in JavaScript
+        const appointmentsProgressBar = document.getElementById('appointmentsProgressBar');
+        const completedProgressBar = document.getElementById('completedProgressBar');
+        
+        if (appointmentsProgressBar && completedProgressBar) {
+            // Get the counts from the stat card numbers
+            const statNumbers = document.querySelectorAll('.stat-number');
+            const upcomingAppointmentsCount = parseInt(statNumbers[0].textContent) || 0;
+            
+            // We'll assume completed count is a percentage of total for demo purposes
+            // This would typically come from the server
+            const completedPercent = 30; // Default 30% for demo
+            
+            // Set the appointments progress bar (max 10 appointments = 100%)
+            const appointmentsProgress = Math.min(upcomingAppointmentsCount / 10 * 100, 100);
+            appointmentsProgressBar.style.width = appointmentsProgress + '%';
+            
+            // Set the completed appointments progress bar
+            completedProgressBar.style.width = completedPercent + '%';
+        }
+    });
+</script>
+{% endblock %} 

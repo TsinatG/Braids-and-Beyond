@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+
+{% block additional_head %}
+<style>
+    .admin-form {
+        background: rgba(0, 0, 0, 0.7);
+        padding: 2rem;
+        border-radius: 0.5rem;
+        margin-bottom: 2rem;
+    }
+    
+    .current-image {
+        max-width: 200px;
+        border-radius: 4px;
+        margin-top: 10px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="edit-service-page">
+    <section class="page-header bg-dark text-white py-4 mb-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h1>Edit Service</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{ url_for('admin.dashboard') }}">Dashboard</a></li>
+                            <li class="breadcrumb-item"><a href="{{ url_for('services.manage_services') }}">Services</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Edit</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="admin-form">
+                    <h2 class="mb-4 text-primary-custom">Edit Service: {{ service.name }}</h2>
+                    <form method="POST" action="" enctype="multipart/form-data">
+                        {{ form.hidden_tag() }}
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.name.label(class="form-label") }}
+                                {{ form.name(class="form-control") }}
+                                {% if form.name.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.name.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                {{ form.category.label(class="form-label") }}
+                                {{ form.category(class="form-select") }}
+                                {% if form.category.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.category.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.price.label(class="form-label") }}
+                                {{ form.price(class="form-control") }}
+                                {% if form.price.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.price.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                {{ form.duration.label(class="form-label") }}
+                                {{ form.duration(class="form-control") }}
+                                {% if form.duration.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.duration.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            {{ form.description.label(class="form-label") }}
+                            {{ form.description(class="form-control", rows=3) }}
+                            {% if form.description.errors %}
+                                <div class="text-danger">
+                                    {% for error in form.description.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.image.label(class="form-label") }}
+                                {{ form.image(class="form-control") }}
+                                {% if form.image.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.image.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                <div class="form-text">Recommended size: 800x600 pixels</div>
+                                
+                                {% if service.image_file %}
+                                    <div class="mt-2">
+                                        <p>Current image:</p>
+                                        <img src="{{ url_for('static', filename='img/services/' + service.image_file) }}" 
+                                             class="current-image" alt="{{ service.name }}">
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <div class="form-check mt-4">
+                                    {{ form.is_active(class="form-check-input") }}
+                                    {{ form.is_active.label(class="form-check-label") }}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-3">
+                            {{ form.submit(class="btn btn-primary") }}
+                            <a href="{{ url_for('services.manage_services') }}" class="btn btn-secondary ms-2">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -8,10 +8,10 @@ from utils import (
     add_stylist, update_stylist
 )
 import csv
+from app import create_app
 
 
-app = Flask(__name__)
-app.secret_key = os.environ.get('SECRET_KEY', 'fallback_secret_key') # Change this to a secure random key
+app = create_app()
 
 
 USER_FILE = os.path.join(os.path.dirname(__file__), 'data', 'users.csv')

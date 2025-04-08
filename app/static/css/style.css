@@ -1,0 +1,259 @@
+/* Custom styles to complement Bootstrap */
+
+:root {
+    /* Color Palette */
+    --primary-color: #9b59b6; /* Purple for Braids & Beyond */
+    --primary-dark: #8e44ad;
+    --secondary-color: #333333;
+    --text-color: #ffffff;
+    --light-text: #f8f9fa;
+    --dark-text: #212529;
+    --accent-color: #f1c40f; /* Yellow accent */
+}
+
+/* Typography - Using Bootstrap fonts */
+body {
+    font-family: 'Poppins', sans-serif;
+    color: var(--dark-text);
+    background-color: #000;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', serif;
+}
+
+/* Logo styling */
+.logo-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    letter-spacing: 2px;
+}
+
+.logo-tagline {
+    font-size: 0.9rem;
+    color: var(--light-text);
+    margin-left: 0.5rem;
+}
+
+/* Custom nav link styling */
+.nav-link {
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: color 0.3s ease;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: var(--primary-color) !important;
+}
+
+/* Hero section */
+.hero {
+    position: relative;
+    min-height: 90vh;
+    background-color: #000;
+    color: var(--light-text);
+    overflow: hidden;
+    padding: 5rem 0;
+}
+
+.hero-content h1 {
+    font-size: 4rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+}
+
+.hero-content .subtitle {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.hero-content .location {
+    font-size: 1rem;
+    letter-spacing: 3px;
+    margin-bottom: 2rem;
+    opacity: 0.8;
+}
+
+.hero-image {
+    max-width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    transition: transform 0.5s ease;
+}
+
+.hero-image:hover {
+    transform: scale(1.02);
+}
+
+/* Custom button overrides */
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-dark);
+    border-color: var(--primary-dark);
+}
+
+.btn-outline-primary {
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+/* Service cards */
+.service-card {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    padding: 1.5rem;
+    height: 100%;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--light-text);
+}
+
+.service-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(155, 89, 182, 0.2);
+    border-color: var(--primary-color);
+}
+
+.service-card img {
+    transition: transform 0.5s ease;
+}
+
+.service-card:hover img {
+    transform: scale(1.05);
+}
+
+.service-price {
+    font-size: 1.25rem;
+    color: var(--primary-color);
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+/* Policy items */
+.policy-item {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.policy-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+.policy-icon {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+}
+
+/* Animation classes */
+.animate-on-scroll {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.animate-on-scroll.animated {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Custom backgrounds and text colors */
+.bg-dark-custom {
+    background-color: #0a0a0a;
+}
+
+.text-primary-custom {
+    color: var(--primary-color) !important;
+}
+
+/* Footer styles */
+.footer-logo .logo-text {
+    font-size: 2rem;
+}
+
+.footer-logo .logo-tagline {
+    font-size: 1rem;
+}
+
+.social-links {
+    display: flex;
+    gap: 1rem;
+}
+
+.social-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--light-text);
+    transition: all 0.3s ease;
+}
+
+.social-link:hover {
+    background-color: var(--primary-color);
+    color: white;
+    transform: translateY(-3px);
+}
+
+.footer-links a {
+    color: var(--light-text);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.contact-info li {
+    margin-bottom: 0.5rem;
+}
+
+.contact-info i {
+    color: var(--primary-color);
+}
+
+/* Service category header */
+.service-category h2 {
+    position: relative;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+}
+
+.service-category h2:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 60px;
+    height: 3px;
+    background-color: var(--primary-color);
+}
+
+/* Booking CTA */
+.booking-cta {
+    background: linear-gradient(90deg, var(--primary-dark), var(--primary-color));
+    padding: 2rem;
+    border-radius: 10px;
+}
+
+.booking-cta h3 {
+    margin-bottom: 1rem;
+}

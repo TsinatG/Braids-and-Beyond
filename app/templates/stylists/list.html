@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+
+{% block additional_head %}
+<style>
+    .stylist-card {
+        background: rgba(0, 0, 0, 0.5);
+        border-radius: 10px;
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        height: 100%;
+    }
+    
+    .stylist-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(155, 89, 182, 0.3);
+    }
+    
+    .stylist-image {
+        height: 300px;
+        object-fit: cover;
+    }
+    
+    .stylist-info {
+        padding: 1.5rem;
+    }
+    
+    .stylist-name {
+        color: var(--primary-color);
+        margin-bottom: 0.5rem;
+    }
+    
+    .stylist-specialization {
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.7);
+        margin-bottom: 1rem;
+    }
+    
+    .social-icon {
+        color: var(--primary-color);
+        font-size: 1.2rem;
+        margin-right: 0.5rem;
+        transition: transform 0.3s ease;
+    }
+    
+    .social-icon:hover {
+        transform: scale(1.2);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="stylists-page">
+    <section class="page-header bg-dark text-white py-5 mb-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h1 class="display-4">Our Stylists</h1>
+                    <p class="lead">Meet our talented team of hair braiding specialists</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-lg-8 mx-auto text-center">
+                <p class="lead">At Braids & Beyond, our stylists are passionate about creating beautiful, unique styles that reflect your personality. Each stylist brings their own expertise and creative vision to every appointment.</p>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            {% for stylist in stylists %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="stylist-card">
+                        {% if stylist.image_file %}
+                            <img src="{{ url_for('static', filename='img/stylists/' + stylist.image_file) }}" 
+                                 class="stylist-image w-100" alt="{{ stylist.name }}">
+                        {% else %}
+                            <img src="{{ url_for('static', filename='img/stylists/default-stylist.jpg') }}" 
+                                 class="stylist-image w-100" alt="{{ stylist.name }}">
+                        {% endif %}
+                        
+                        <div class="stylist-info">
+                            <h3 class="stylist-name h4">{{ stylist.name }}</h3>
+                            
+                            {% if stylist.specialization %}
+                                <p class="stylist-specialization">{{ stylist.specialization }}</p>
+                            {% endif %}
+                            
+                            {% if stylist.bio %}
+                                <p class="stylist-bio">{{ stylist.bio|truncate(100) }}</p>
+                            {% endif %}
+                            
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <div class="social-links">
+                                    {% if stylist.instagram %}
+                                        <a href="https://instagram.com/{{ stylist.instagram }}" target="_blank" class="social-icon">
+                                            <i class="fab fa-instagram"></i>
+                                        </a>
+                                    {% endif %}
+                                    
+                                    {% if stylist.email %}
+                                        <a href="mailto:{{ stylist.email }}" class="social-icon">
+                                            <i class="fas fa-envelope"></i>
+                                        </a>
+                                    {% endif %}
+                                </div>
+                                
+                                <a href="{{ url_for('stylists.stylist_detail', stylist_id=stylist.id) }}" class="btn btn-outline-primary btn-sm">View Profile</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        
+        <div class="booking-cta text-center py-5 mt-5">
+            <h3 class="mb-4">Ready to book with one of our talented stylists?</h3>
+            <a href="{{ url_for('booking.calendar') }}" class="btn btn-primary btn-lg">Book Your Appointment</a>
+        </div>
+    </div>
+</div>
+{% endblock %} 

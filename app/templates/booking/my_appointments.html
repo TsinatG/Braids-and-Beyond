@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block additional_head %}
+<style>
+    .appointments-container {
+        background: rgba(0, 0, 0, 0.7);
+        border-radius: 10px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+    }
+    
+    .appointment-card {
+        background: rgba(0, 0, 0, 0.5);
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+        overflow: hidden;
+        border-left: 4px solid var(--primary-color);
+        transition: transform 0.3s ease;
+    }
+    
+    .appointment-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    }
+    
+    /* Rest of your CSS styles... */
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="appointments-page">
+    <section class="page-header bg-dark text-white py-5 mb-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h1 class="display-4">My Appointments</h1>
+                    <p class="lead">View and manage your upcoming and past appointments</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-10 mx-auto">
+                <div class="appointments-container">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2 class="section-title">Upcoming Appointments</h2>
+                        <a href="{{ url_for('booking.calendar') }}" class="btn btn-primary">
+                            <i class="fas fa-plus me-2"></i> Book New Appointment
+                        </a>
+                    </div>
+                    
+                    {% if upcoming_appointments %}
+                        {% for appointment in upcoming_appointments %}
+                            <div class="appointment-card">
+                                <div class="appointment-header">
+                                    <div class="appointment-date">{{ appointment.formatted_date }}</div>
+                                    <span class="badge {{ appointment.status_badge_class }} status-badge">{{ appointment.status|title }}</span>
+                                </div>
+                                <div class="appointment-body">
+                                    <!-- Appointment details here -->
+                                    <p>THIS IS THE NEW TEMPLATE</p>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="empty-state">
+                            <div class="empty-state-icon">
+                                <i class="far fa-calendar-alt"></i>
+                            </div>
+                            <h3 class="mb-3">No Upcoming Appointments</h3>
+                            <p class="mb-4">You don't have any upcoming appointments scheduled.</p>
+                            <a href="{{ url_for('booking.calendar') }}" class="btn btn-primary btn-lg">
+                                Book Your First Appointment
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

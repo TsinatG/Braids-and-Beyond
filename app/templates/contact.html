@@ -1,0 +1,474 @@
+{% extends "base.html" %}
+
+{% block additional_head %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+<style>
+    /* Contact Page Styling */
+    .contact-hero {
+        position: relative;
+        background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                    url('/static/img/contact-hero.jpg');
+        background-size: cover;
+        background-position: center;
+        padding: 8rem 0;
+        margin-bottom: 5rem;
+    }
+    
+    .contact-container {
+        background: rgba(0, 0, 0, 0.7);
+        border-radius: 10px;
+        padding: 3rem;
+        margin-bottom: 3rem;
+    }
+    
+    .section-title {
+        position: relative;
+        display: inline-block;
+        margin-bottom: 2rem;
+        color: var(--primary-color);
+    }
+    
+    .section-title:after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: -10px;
+        width: 50px;
+        height: 3px;
+        background: var(--primary-color);
+    }
+    
+    .contact-form .form-control {
+        background: rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: white;
+        padding: 0.8rem 1rem;
+        border-radius: 5px;
+        margin-bottom: 1.5rem;
+    }
+    
+    .contact-form .form-control:focus {
+        background: rgba(0, 0, 0, 0.5);
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.25rem rgba(155, 89, 182, 0.25);
+    }
+    
+    .contact-form .form-control::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+    }
+    
+    .contact-form textarea.form-control {
+        min-height: 150px;
+        resize: vertical;
+    }
+    
+    .contact-form .btn-primary {
+        padding: 0.8rem 2rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    
+    .contact-info-card {
+        background: rgba(0, 0, 0, 0.5);
+        border-radius: 10px;
+        padding: 2rem;
+        height: 100%;
+        transition: transform 0.3s ease;
+        border-left: 3px solid var(--primary-color);
+    }
+    
+    .contact-info-card:hover {
+        transform: translateY(-10px);
+    }
+    
+    .contact-icon {
+        font-size: 2.5rem;
+        color: var(--primary-color);
+        margin-bottom: 1.5rem;
+    }
+    
+    .contact-info-title {
+        font-size: 1.2rem;
+        margin-bottom: 1rem;
+        color: white;
+    }
+    
+    .contact-info-content {
+        color: rgba(255, 255, 255, 0.7);
+    }
+    
+    .contact-info-content a {
+        color: rgba(255, 255, 255, 0.7);
+        transition: color 0.3s ease;
+    }
+    
+    .contact-info-content a:hover {
+        color: var(--primary-color);
+        text-decoration: none;
+    }
+    
+    #map {
+        height: 400px;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+    }
+    
+    .faq-section {
+        margin-top: 5rem;
+    }
+    
+    .accordion-item {
+        background: rgba(0, 0, 0, 0.5);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        margin-bottom: 1rem;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+    
+    .accordion-button {
+        background: rgba(0, 0, 0, 0.3);
+        color: white;
+        padding: 1.25rem;
+        font-weight: 600;
+        border: none;
+    }
+    
+    .accordion-button:not(.collapsed) {
+        background: var(--primary-color);
+        color: white;
+    }
+    
+    .accordion-button:focus {
+        box-shadow: none;
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .accordion-button::after {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23fff'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+    }
+    
+    .accordion-body {
+        padding: 1.25rem;
+        color: rgba(255, 255, 255, 0.7);
+    }
+    
+    .social-section {
+        margin-top: 5rem;
+    }
+    
+    .social-card {
+        background: rgba(0, 0, 0, 0.5);
+        border-radius: 10px;
+        padding: 2rem;
+        text-align: center;
+        transition: transform 0.3s ease;
+        margin-bottom: 2rem;
+    }
+    
+    .social-card:hover {
+        transform: translateY(-10px);
+    }
+    
+    .social-icon {
+        font-size: 3rem;
+        margin-bottom: 1.5rem;
+        transition: all 0.3s ease;
+    }
+    
+    .instagram-icon {
+        color: #E1306C;
+    }
+    
+    .facebook-icon {
+        color: #4267B2;
+    }
+    
+    .twitter-icon {
+        color: #1DA1F2;
+    }
+    
+    .tiktok-icon {
+        color: #EE1D52;
+    }
+    
+    .social-title {
+        font-size: 1.2rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .social-handle {
+        color: var(--primary-color);
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+    
+    .social-card .btn {
+        border-radius: 50px;
+        padding: 0.5rem 1.5rem;
+    }
+    
+    .hours-table {
+        width: 100%;
+    }
+    
+    .hours-table tr {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .hours-table tr:last-child {
+        border-bottom: none;
+    }
+    
+    .hours-table td {
+        padding: 1rem 0;
+    }
+    
+    .hours-table td:last-child {
+        text-align: right;
+        color: var(--primary-color);
+        font-weight: 600;
+    }
+    
+    .hours-table .closed {
+        color: #dc3545;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="contact-page">
+    <!-- Hero Section -->
+    <section class="contact-hero">
+        <div class="container text-center">
+            <h1 class="display-3 fw-bold text-white mb-4">Get In Touch</h1>
+            <p class="lead text-white mb-0">We'd love to hear from you! Reach out with any questions or to book an appointment.</p>
+        </div>
+    </section>
+    
+    <!-- Contact Information Section -->
+    <section class="container mb-5">
+        <div class="contact-container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <div class="contact-info-card">
+                        <div class="contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <h3 class="contact-info-title">Our Location</h3>
+                        <div class="contact-info-content">
+                            <p>123 Braiding Street<br>New York, NY 10001<br>United States</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <div class="contact-info-card">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone-alt"></i>
+                        </div>
+                        <h3 class="contact-info-title">Phone & Email</h3>
+                        <div class="contact-info-content">
+                            <p>Phone: <a href="tel:+12125551234">(212) 555-1234</a></p>
+                            <p>Email: <a href="mailto:info@braidedbeauty.com">info@braidedbeauty.com</a></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <div class="contact-info-card">
+                        <div class="contact-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <h3 class="contact-info-title">Business Hours</h3>
+                        <div class="contact-info-content">
+                            <table class="hours-table">
+                                <tr>
+                                    <td>Monday - Friday</td>
+                                    <td>9:00 AM - 7:00 PM</td>
+                                </tr>
+                                <tr>
+                                    <td>Saturday</td>
+                                    <td>10:00 AM - 6:00 PM</td>
+                                </tr>
+                                <tr>
+                                    <td>Sunday</td>
+                                    <td class="closed">Closed</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Contact Form & Map Section -->
+    <section class="container mb-5">
+        <div class="contact-container">
+            <div class="row">
+                <div class="col-lg-6 mb-5 mb-lg-0">
+                    <h2 class="section-title">Send Us a Message</h2>
+                    <p class="mb-4">Fill out the form below and we'll get back to you as soon as possible.</p>
+                    
+                    <form class="contact-form">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" placeholder="Your Name" required>
+                            </div>
+                            <div class="col-md-6">
+                                <input type="email" class="form-control" placeholder="Your Email" required>
+                            </div>
+                        </div>
+                        <input type="text" class="form-control" placeholder="Subject">
+                        <textarea class="form-control" placeholder="Your Message" required></textarea>
+                        <button type="submit" class="btn btn-primary">Send Message</button>
+                    </form>
+                </div>
+                <div class="col-lg-6">
+                    <h2 class="section-title">Find Us</h2>
+                    <p class="mb-4">We're conveniently located in the heart of the city.</p>
+                    
+                    <div id="map"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- FAQ Section -->
+    <section class="container mb-5">
+        <div class="contact-container faq-section">
+            <h2 class="section-title text-center mb-5">Frequently Asked Questions</h2>
+            
+            <div class="accordion" id="faqAccordion">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingOne">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            How far in advance should I book my appointment?
+                        </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            We recommend booking your appointment at least 1-2 weeks in advance, especially for more complex styles or during busy seasons. This ensures you get your preferred stylist and time slot. For last-minute appointments, you can always call us to check for availability.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingTwo">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            How long do braided styles typically last?
+                        </button>
+                    </h2>
+                    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            Most braided styles can last between 4-8 weeks depending on the style, your hair type, and how well you maintain them. Box braids and knotless braids typically last 6-8 weeks, while styles like cornrows may last 2-4 weeks. We'll provide you with care instructions to help your style last as long as possible.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingThree">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                            Do you provide hair extensions for braiding?
+                        </button>
+                    </h2>
+                    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            Yes, we offer high-quality hair extensions for all our braiding services. You can choose from our selection of premium synthetic and human hair options in various colors and textures. If you prefer to bring your own hair extensions, that's perfectly fine too. Just make sure they're pre-stretched and ready for installation.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingFour">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                            What's your cancellation policy?
+                        </button>
+                    </h2>
+                    <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            We understand that plans can change. We request that you notify us at least 24 hours in advance if you need to cancel or reschedule your appointment. Cancellations made less than 24 hours before your scheduled appointment may incur a cancellation fee of 25% of the service price. No-shows will be charged 50% of the service price.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingFive">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                            How should I prepare my hair before coming in for braids?
+                        </button>
+                    </h2>
+                    <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            For the best results, please come with freshly washed and deep conditioned hair. Your hair should be completely dry and detangled. Avoid using heavy oils or products before your appointment as they can make the braiding process more difficult. If you have any specific questions about preparing your hair for your chosen style, feel free to contact us before your appointment.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Social Media Section -->
+    <section class="container mb-5">
+        <div class="contact-container social-section">
+            <h2 class="section-title text-center mb-5">Connect With Us</h2>
+            
+            <div class="row">
+                <div class="col-lg-3 col-md-6">
+                    <div class="social-card">
+                        <div class="social-icon instagram-icon">
+                            <i class="fab fa-instagram"></i>
+                        </div>
+                        <h3 class="social-title">Instagram</h3>
+                        <p class="social-handle">@braidedbeauty</p>
+                        <a href="https://instagram.com" target="_blank" class="btn btn-outline-light">Follow Us</a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="social-card">
+                        <div class="social-icon facebook-icon">
+                            <i class="fab fa-facebook-f"></i>
+                        </div>
+                        <h3 class="social-title">Facebook</h3>
+                        <p class="social-handle">@braidedbeautysalon</p>
+                        <a href="https://facebook.com" target="_blank" class="btn btn-outline-light">Like Us</a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="social-card">
+                        <div class="social-icon twitter-icon">
+                            <i class="fab fa-twitter"></i>
+                        </div>
+                        <h3 class="social-title">Twitter</h3>
+                        <p class="social-handle">@braidedbeauty</p>
+                        <a href="https://twitter.com" target="_blank" class="btn btn-outline-light">Tweet Us</a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="social-card">
+                        <div class="social-icon tiktok-icon">
+                            <i class="fab fa-tiktok"></i>
+                        </div>
+                        <h3 class="social-title">TikTok</h3>
+                        <p class="social-handle">@braidedbeauty</p>
+                        <a href="https://tiktok.com" target="_blank" class="btn btn-outline-light">Follow Us</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize Leaflet map
+        var map = L.map('map').setView([40.7128, -74.0060], 13);
+        
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+        
+        // Add marker for salon location
+        var marker = L.marker([40.7128, -74.0060]).addTo(map);
+        marker.bindPopup("<b>Braided Beauty Salon</b><br>123 Braiding Street<br>New York, NY 10001").openPopup();
+    });
+</script>
+{% endblock %} 

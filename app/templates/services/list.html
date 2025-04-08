@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="services-page">
+    <section class="page-header bg-dark text-white py-5 mb-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h1 class="display-4">Our Services</h1>
+                    <p class="lead">Discover our premium hair braiding and styling services</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-lg-8 mx-auto text-center">
+                <p class="lead">At Braids & Beyond, we offer a wide range of professional hair services specializing in braids and natural hair styling. Each service includes a consultation to ensure we create the perfect look for you.</p>
+            </div>
+        </div>
+
+        {% for category in categories %}
+            <section class="service-category mb-5">
+                <h2 class="text-primary-custom mb-4">{{ category }}</h2>
+                <div class="row g-4">
+                    {% for service in services_by_category[category] %}
+                        <div class="col-md-6 col-lg-4">
+                            <div class="service-card h-100">
+                                <div class="card bg-dark text-white">
+                                    <img src="{{ url_for('static', filename='img/services/default-service.jpg') }}" 
+                                         class="card-img-top" alt="{{ service.name }}">
+                                    <div class="card-body">
+                                        <h3 class="card-title h5">{{ service.name }}</h3>
+                                        <p class="card-text small">{{ service.description }}</p>
+                                        <div class="d-flex justify-content-between align-items-center mt-3">
+                                            <span class="service-price">${{ service.price }}</span>
+                                            <span class="service-duration">{{ service.duration }} mins</span>
+                                        </div>
+                                    </div>
+                                    <div class="card-footer bg-transparent border-0">
+                                        <a href="{{ url_for('booking.calendar') }}" class="btn btn-primary btn-sm w-100">Book Now</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </section>
+        {% endfor %}
+
+        {% if 'Other' in services_by_category %}
+            <section class="service-category mb-5">
+                <h2 class="text-primary-custom mb-4">Other Services</h2>
+                <div class="row g-4">
+                    {% for service in services_by_category['Other'] %}
+                        <div class="col-md-6 col-lg-4">
+                            <div class="service-card h-100">
+                                <div class="card bg-dark text-white">
+                                    <img src="{{ url_for('static', filename='img/services/default-service.jpg') }}" 
+                                         class="card-img-top" alt="{{ service.name }}">
+                                    <div class="card-body">
+                                        <h3 class="card-title h5">{{ service.name }}</h3>
+                                        <p class="card-text small">{{ service.description }}</p>
+                                        <div class="d-flex justify-content-between align-items-center mt-3">
+                                            <span class="service-price">${{ service.price }}</span>
+                                            <span class="service-duration">{{ service.duration }} mins</span>
+                                        </div>
+                                    </div>
+                                    <div class="card-footer bg-transparent border-0">
+                                        <a href="{{ url_for('booking.calendar') }}" class="btn btn-primary btn-sm w-100">Book Now</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </section>
+        {% endif %}
+
+        <div class="booking-cta text-center py-5">
+            <h3 class="mb-4">Ready to transform your look?</h3>
+            <a href="{{ url_for('booking.calendar') }}" class="btn btn-primary btn-lg">Book Your Appointment</a>
+        </div>
+    </div>
+</div>
+{% endblock %} 

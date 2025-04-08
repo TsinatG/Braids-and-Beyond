@@ -1,0 +1,320 @@
+{% extends "base.html" %}
+
+{% block additional_head %}
+<style>
+    .appointments-container {
+        background: rgba(0, 0, 0, 0.7);
+        border-radius: 10px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+    }
+    
+    .appointment-card {
+        background: rgba(0, 0, 0, 0.5);
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+        overflow: hidden;
+        border-left: 4px solid var(--primary-color);
+        transition: transform 0.3s ease;
+    }
+    
+    .appointment-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    }
+    
+    .appointment-header {
+        padding: 1rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .appointment-date {
+        font-weight: 600;
+        color: var(--primary-color);
+        font-size: 1.1rem;
+    }
+    
+    .appointment-body {
+        padding: 1rem;
+    }
+    
+    .appointment-detail {
+        margin-bottom: 0.5rem;
+        display: flex;
+    }
+    
+    .appointment-label {
+        width: 100px;
+        color: rgba(255, 255, 255, 0.7);
+        font-weight: 500;
+    }
+    
+    .appointment-value {
+        flex: 1;
+    }
+    
+    .appointment-actions {
+        padding: 1rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.5rem;
+    }
+    
+    .status-badge {
+        padding: 0.25rem 0.5rem;
+        border-radius: 50px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .empty-state {
+        text-align: center;
+        padding: 3rem 0;
+        background: rgba(0, 0, 0, 0.5);
+        border-radius: 8px;
+    }
+    
+    .empty-state-icon {
+        font-size: 3rem;
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+        animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+        0% {
+            transform: scale(1);
+            opacity: 1;
+        }
+        50% {
+            transform: scale(1.1);
+            opacity: 0.8;
+        }
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+    
+    .section-title {
+        position: relative;
+        display: inline-block;
+        margin-bottom: 1.5rem;
+        color: var(--primary-color);
+    }
+    
+    .section-title:after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: -10px;
+        width: 50px;
+        height: 3px;
+        background: var(--primary-color);
+    }
+    
+    .past-appointments-section {
+        margin-top: 3rem;
+        padding-top: 2rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .stylist-image {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-right: 10px;
+    }
+    
+    .stylist-info {
+        display: flex;
+        align-items: center;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="appointments-page">
+    <section class="page-header bg-dark text-white py-5 mb-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h1 class="display-4">My Appointments</h1>
+                    <p class="lead">View and manage your upcoming and past appointments</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-10 mx-auto">
+                <div class="appointments-container">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2 class="section-title">Upcoming Appointments</h2>
+                        <a href="{{ url_for('booking.calendar') }}" class="btn btn-primary">
+                            <i class="fas fa-plus me-2"></i> Book New Appointment
+                        </a>
+                    </div>
+                    
+                    {% if upcoming_appointments %}
+                        {% for appointment in upcoming_appointments %}
+                            <div class="appointment-card">
+                                <div class="appointment-header">
+                                    <div class="appointment-date">{{ appointment.formatted_date }}</div>
+                                    <span class="badge {{ appointment.status_badge_class }} status-badge">{{ appointment.status|title }}</span>
+                                </div>
+                                <div class="appointment-body">
+                                    <div class="appointment-detail">
+                                        <div class="appointment-label">Time:</div>
+                                        <div class="appointment-value">{{ appointment.formatted_time }} - {{ appointment.formatted_end_time }}</div>
+                                    </div>
+                                    <div class="appointment-detail">
+                                        <div class="appointment-label">Service:</div>
+                                        <div class="appointment-value">{{ appointment.service.name }}</div>
+                                    </div>
+                                    <div class="appointment-detail">
+                                        <div class="appointment-label">Stylist:</div>
+                                        <div class="appointment-value stylist-info">
+                                            {% if appointment.stylist.image_file %}
+                                                <img src="{{ url_for('static', filename='img/stylists/' + appointment.stylist.image_file) }}" 
+                                                     class="stylist-image" alt="{{ appointment.stylist.name }}">
+                                            {% else %}
+                                                <img src="{{ url_for('static', filename='img/stylists/default-stylist.jpg') }}" 
+                                                     class="stylist-image" alt="{{ appointment.stylist.name }}">
+                                            {% endif %}
+                                            {{ appointment.stylist.name }}
+                                        </div>
+                                    </div>
+                                    <div class="appointment-detail">
+                                        <div class="appointment-label">Price:</div>
+                                        <div class="appointment-value">${{ appointment.service.price }}</div>
+                                    </div>
+                                    {% if appointment.notes %}
+                                        <div class="appointment-detail">
+                                            <div class="appointment-label">Notes:</div>
+                                            <div class="appointment-value">{{ appointment.notes }}</div>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                {% if appointment.status == 'scheduled' %}
+                                    <div class="appointment-actions">
+                                        <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" 
+                                                data-bs-target="#cancelModal{{ appointment.id }}">
+                                            <i class="fas fa-times me-1"></i> Cancel Appointment
+                                        </button>
+                                    </div>
+                                    
+                                    <!-- Cancel Modal -->
+                                    <div class="modal fade" id="cancelModal{{ appointment.id }}" tabindex="-1" 
+                                         aria-labelledby="cancelModalLabel{{ appointment.id }}" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content bg-dark text-white">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="cancelModalLabel{{ appointment.id }}">
+                                                        Confirm Cancellation
+                                                    </h5>
+                                                    <button type="button" class="btn-close btn-close-white" 
+                                                            data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>Are you sure you want to cancel your appointment on 
+                                                    <strong>{{ appointment.formatted_date }}</strong> at 
+                                                    <strong>{{ appointment.formatted_time }}</strong>?</p>
+                                                    
+                                                    <p class="text-warning">
+                                                        <i class="fas fa-exclamation-triangle me-2"></i>
+                                                        Please note that cancellations within 24 hours of your appointment 
+                                                        may incur a cancellation fee.
+                                                    </p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" 
+                                                            data-bs-dismiss="modal">Keep Appointment</button>
+                                                    <form action="{{ url_for('booking.cancel_appointment', appointment_id=appointment.id) }}" 
+                                                          method="POST" class="d-inline">
+                                                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                                        <button type="submit" class="btn btn-danger">Cancel Appointment</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="empty-state">
+                            <div class="empty-state-icon">
+                                <i class="far fa-calendar-alt"></i>
+                            </div>
+                            <h3 class="mb-3">No Upcoming Appointments</h3>
+                            <p class="mb-4">You don't have any upcoming appointments scheduled.</p>
+                            <a href="{{ url_for('booking.calendar') }}" class="btn btn-primary btn-lg">
+                                Book Your First Appointment
+                            </a>
+                        </div>
+                    {% endif %}
+                    
+                    {% if past_appointments %}
+                        <div class="past-appointments-section">
+                            <h2 class="section-title">Past Appointments</h2>
+                            
+                            {% for appointment in past_appointments %}
+                                <div class="appointment-card">
+                                    <div class="appointment-header">
+                                        <div class="appointment-date">{{ appointment.formatted_date }}</div>
+                                        <span class="badge {{ appointment.status_badge_class }} status-badge">{{ appointment.status|title }}</span>
+                                    </div>
+                                    <div class="appointment-body">
+                                        <div class="appointment-detail">
+                                            <div class="appointment-label">Time:</div>
+                                            <div class="appointment-value">{{ appointment.formatted_time }} - {{ appointment.formatted_end_time }}</div>
+                                        </div>
+                                        <div class="appointment-detail">
+                                            <div class="appointment-label">Service:</div>
+                                            <div class="appointment-value">{{ appointment.service.name }}</div>
+                                        </div>
+                                        <div class="appointment-detail">
+                                            <div class="appointment-label">Stylist:</div>
+                                            <div class="appointment-value stylist-info">
+                                                {% if appointment.stylist.image_file %}
+                                                    <img src="{{ url_for('static', filename='img/stylists/' + appointment.stylist.image_file) }}" 
+                                                         class="stylist-image" alt="{{ appointment.stylist.name }}">
+                                                {% else %}
+                                                    <img src="{{ url_for('static', filename='img/stylists/default-stylist.jpg') }}" 
+                                                         class="stylist-image" alt="{{ appointment.stylist.name }}">
+                                                {% endif %}
+                                                {{ appointment.stylist.name }}
+                                            </div>
+                                        </div>
+                                        <div class="appointment-detail">
+                                            <div class="appointment-label">Price:</div>
+                                            <div class="appointment-value">${{ appointment.service.price }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                            
+                            {% if past_appointments|length >= 5 %}
+                                <div class="text-center mt-4">
+                                    <a href="{{ url_for('booking.appointment_history') }}" class="btn btn-outline-light">
+                                        View All Past Appointments
+                                    </a>
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

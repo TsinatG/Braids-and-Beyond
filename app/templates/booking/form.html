@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+
+{% block additional_head %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<style>
+    .booking-form-container {
+        background: rgba(0, 0, 0, 0.7);
+        border-radius: 10px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="booking-form-page">
+    <section class="page-header bg-dark text-white py-5 mb-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h1 class="display-4">Book Your Appointment</h1>
+                    <p class="lead">Fill out the form below to schedule your hair braiding session</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="booking-form-container">
+                    <form method="POST" action="">
+                        {{ form.hidden_tag() }}
+                        
+                        <div class="mb-3">
+                            {{ form.service.label(class="form-label") }}
+                            {{ form.service(class="form-select") }}
+                            {% if form.service.errors %}
+                                <div class="text-danger">
+                                    {% for error in form.service.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            {{ form.stylist.label(class="form-label") }}
+                            {{ form.stylist(class="form-select") }}
+                            {% if form.stylist.errors %}
+                                <div class="text-danger">
+                                    {% for error in form.stylist.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.date.label(class="form-label") }}
+                                {{ form.date(class="form-control", id="datePicker") }}
+                                {% if form.date.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.date.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                {{ form.time.label(class="form-label") }}
+                                {{ form.time(class="form-control", id="timePicker") }}
+                                {% if form.time.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.time.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            {{ form.notes.label(class="form-label") }}
+                            {{ form.notes(class="form-control", rows=3) }}
+                            {% if form.notes.errors %}
+                                <div class="text-danger">
+                                    {% for error in form.notes.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            {{ form.submit(class="btn btn-primary btn-lg") }}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize date picker
+        flatpickr('#datePicker', {
+            minDate: 'today',
+            dateFormat: 'Y-m-d',
+            disable: [
+                function(date) {
+                    // Disable Sundays (0 is Sunday)
+                    return date.getDay() === 0;
+                }
+            ]
+        });
+        
+        // Initialize time picker
+        flatpickr('#timePicker', {
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: 'H:i',
+            minTime: '09:00',
+            maxTime: '18:00',
+            minuteIncrement: 30
+        });
+    });
+</script>
+{% endblock %} 
