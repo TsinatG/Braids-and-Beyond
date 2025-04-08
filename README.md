@@ -22,7 +22,7 @@ A web application for a hair salon specializing in braids and natural hair styli
 
 - **Backend**: Python, Flask, SQLAlchemy
 - **Frontend**: HTML, CSS, JavaScript, Bootstrap
-- **Database**: MySQL
+- **Database**: SQLite (lightweight, file-based database)
 - **Deployment**: Heroku
 
 ## Setup Instructions
@@ -30,7 +30,6 @@ A web application for a hair salon specializing in braids and natural hair styli
 ### Prerequisites
 
 - Python 3.8+
-- MySQL Server
 - pip (Python package manager)
 
 ### Installation
@@ -58,26 +57,73 @@ A web application for a hair salon specializing in braids and natural hair styli
    FLASK_APP=run.py
    FLASK_ENV=development
    DEBUG=True
-   DATABASE_URL=mysql+pymysql://username:password@localhost/braids_beyond_db
    ```
-   Replace `username` and `password` with your MySQL credentials.
 
-5. Set up the database:
+5. Initialize the database:
    ```
    python setup_db.py
-   ```
-
-6. Initialize the database with tables and sample data:
-   ```
    python init_db.py
    ```
 
-7. Run the application:
+6. Run the application:
    ```
    flask run
    ```
 
-8. Access the website at http://localhost:5000
+7. Access the website at http://localhost:5000
+
+## Database
+
+The application uses SQLite, which stores the database in a single file (`braids_beyond.db`) in the project directory. This makes setup much simpler than a traditional database server:
+
+- No database server installation required
+- No user/password configuration needed
+- Database file can be easily backed up by copying it
+- Perfect for development and small to medium applications
+
+### Database Management
+
+Since SQLite doesn't have a built-in admin panel like phpMyAdmin, we recommend installing DB Browser for SQLite:
+
+#### Installing DB Browser for SQLite:
+
+```bash
+# On Ubuntu/Debian
+sudo apt-get install sqlitebrowser
+
+# On macOS
+brew install --cask db-browser-for-sqlite
+
+# On Windows
+# Download from https://sqlitebrowser.org/dl/
+```
+
+With DB Browser for SQLite, you can:
+- View and edit database tables
+- Execute SQL queries
+- Create/modify tables and indexes
+- Import and export data
+
+### Migrating from MySQL to SQLite
+
+If you are migrating an existing project from MySQL to SQLite, follow these steps:
+
+1. Backup your MySQL database:
+   ```
+   mysqldump -u username -p braids_beyond_db > backup.sql
+   ```
+
+2. Use a tool like [mysql-to-sqlite3](https://github.com/techouse/mysql-to-sqlite3) to convert your data:
+   ```
+   pip install mysql-to-sqlite3
+   mysql2sqlite -f braids_beyond.db -d braids_beyond_db -u username -p password
+   ```
+
+3. Alternatively, you can re-initialize the database from scratch using the provided scripts:
+   ```
+   python setup_db.py
+   python init_db.py
+   ```
 
 ## Admin Access
 

@@ -39,16 +39,16 @@ def get_engine_url():
 config.set_main_option('sqlalchemy.url', get_engine_url())
 target_db = current_app.extensions['migrate'].db
 
-# other values from the config, defined by the needs of env.py,
-# can be acquired:
-# my_important_option = config.get_main_option("my_important_option")
-# ... etc.
-
-
 def get_metadata():
     if hasattr(target_db, 'metadatas'):
         return target_db.metadatas[None]
     return target_db.metadata
+
+# Import SQLite-specific operations if needed
+engine_url = get_engine_url()
+if 'sqlite' in engine_url:
+    from alembic.operations import Operations
+    from alembic.operations import ops
 
 
 def run_migrations_offline():
@@ -65,7 +65,9 @@ def run_migrations_offline():
     """
     url = config.get_main_option("sqlalchemy.url")
     context.configure(
-        url=url, target_metadata=get_metadata(), literal_binds=True
+        url=url, target_metadata=get_metadata(), literal_binds=True,
+        # Add batch support for SQLite when in offline mode too
+        render_as_batch='sqlite' in url
     )
 
     with context.begin_transaction():
@@ -95,6 +97,10 @@ def run_migrations_online():
         conf_args["process_revision_directives"] = process_revision_directives
 
     connectable = get_engine()
+    
+    # Add batch support for SQLite when in online mode
+    if 'sqlite' in str(connectable.url):
+        conf_args['render_as_batch'] = True
 
     with connectable.connect() as connection:
         context.configure(

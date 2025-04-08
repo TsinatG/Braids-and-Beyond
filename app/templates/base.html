@@ -8,7 +8,9 @@
     <title>{% if title %}{{ title }} - Braids & Beyond{% else %}Braids & Beyond{% endif %}</title>
     
     <!-- Favicon -->
-    <link rel="icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/favicon.png') }}">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/favicon.png') }}">
     
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -27,43 +29,43 @@
     <!-- Additional CSS -->
     {% block additional_head %}{% endblock %}
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
     <!-- Header -->
-    <header class="site-header sticky-top">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <header class="site-header sticky-top shadow-sm">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-2">
             <div class="container">
-                <a class="navbar-brand" href="{{ url_for('main.home') }}">
-                    <span class="logo-text">Braids</span>
-                    <span class="logo-tagline d-none d-md-inline">& Beyond</span>
+                <a class="navbar-brand d-flex align-items-center" href="{{ url_for('main.home') }}">
+                    <span class="logo-text fs-4 fw-bold">Braids</span>
+                    <span class="logo-tagline d-none d-md-inline ms-1">&amp; Beyond</span>
                 </a>
                 
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain" aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain" aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 
                 <div class="collapse navbar-collapse" id="navbarMain">
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link {% if request.endpoint == 'main.home' %}active{% endif %}" href="{{ url_for('main.home') }}">Home</a>
+                            <a class="nav-link px-3 {% if request.endpoint == 'main.home' %}active fw-bold{% endif %}" href="{{ url_for('main.home') }}">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {% if request.endpoint == 'main.about' %}active{% endif %}" href="{{ url_for('main.about') }}">About</a>
+                            <a class="nav-link px-3 {% if request.endpoint == 'main.about' %}active fw-bold{% endif %}" href="{{ url_for('main.about') }}">About</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {% if request.endpoint == 'main.services' %}active{% endif %}" href="{{ url_for('main.services') }}">Services</a>
+                            <a class="nav-link px-3 {% if request.endpoint == 'main.services' %}active fw-bold{% endif %}" href="{{ url_for('main.services') }}">Services</a>
                         </li>
                         {% if current_user.is_authenticated %}
                             <li class="nav-item">
-                                <a class="nav-link {% if request.endpoint == 'booking.calendar' %}active{% endif %}" href="{{ url_for('booking.calendar') }}">Book</a>
+                                <a class="nav-link px-3 {% if request.endpoint == 'booking.calendar' %}active fw-bold{% endif %}" href="{{ url_for('booking.calendar') }}">Book</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link {% if request.endpoint == 'booking.appointments' %}active{% endif %}" href="{{ url_for('booking.appointments') }}">My Appointments</a>
+                                <a class="nav-link px-3 {% if request.endpoint == 'booking.appointments' %}active fw-bold{% endif %}" href="{{ url_for('booking.appointments') }}">My Appointments</a>
                             </li>
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <a class="nav-link dropdown-toggle px-3" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     {{ current_user.name }}
                                 </a>
-                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0" aria-labelledby="navbarDropdown">
                                     {% if current_user.id == 1 %}
                                         <li><a class="dropdown-item" href="{{ url_for('admin.dashboard') }}">Admin Dashboard</a></li>
                                         <li><hr class="dropdown-divider"></li>
@@ -73,14 +75,14 @@
                             </li>
                         {% else %}
                             <li class="nav-item">
-                                <a class="nav-link {% if request.endpoint == 'auth.login' %}active{% endif %}" href="{{ url_for('auth.login') }}">Login</a>
+                                <a class="nav-link px-3 {% if request.endpoint == 'auth.login' %}active fw-bold{% endif %}" href="{{ url_for('auth.login') }}">Login</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link {% if request.endpoint == 'auth.register' %}active{% endif %}" href="{{ url_for('auth.register') }}">Register</a>
+                                <a class="nav-link px-3 {% if request.endpoint == 'auth.register' %}active fw-bold{% endif %}" href="{{ url_for('auth.register') }}">Register</a>
                             </li>
                         {% endif %}
                         <li class="nav-item">
-                            <a class="nav-link {% if request.endpoint == 'main.contact' %}active{% endif %}" href="{{ url_for('main.contact') }}">Contact</a>
+                            <a class="nav-link px-3 {% if request.endpoint == 'main.contact' %}active fw-bold{% endif %}" href="{{ url_for('main.contact') }}">Contact</a>
                         </li>
                     </ul>
                 </div>
@@ -89,11 +91,11 @@
     </header>
 
     <!-- Flash Messages -->
-    <div class="flash-messages">
+    <div class="container mt-3">
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}
-                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    <div class="alert alert-{{ category }} alert-dismissible fade show shadow-sm" role="alert">
                         {{ message }}
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
@@ -103,59 +105,59 @@
     </div>
 
     <!-- Main Content -->
-    <main>
+    <main class="flex-grow-1">
         {% block content %}{% endblock %}
     </main>
 
     <!-- Footer -->
-    <footer class="site-footer bg-dark text-white py-5">
+    <footer class="site-footer bg-dark text-white py-5 mt-auto">
         <div class="container">
             <div class="row">
                 <div class="col-md-4 mb-4 mb-md-0">
-                    <div class="footer-logo mb-3">
-                        <span class="logo-text">Braids</span>
-                        <span class="logo-tagline">& Beyond</span>
+                    <div class="footer-logo mb-3 d-flex align-items-center">
+                        <span class="logo-text fs-3 fw-bold">Braids</span>
+                        <span class="logo-tagline ms-1">&amp; Beyond</span>
                     </div>
-                    <p>Premium hair braiding and styling services by Tsinat Gezahegne. Creating beautiful, personalized styles that make you feel confident and beautiful.</p>
-                    <div class="social-links mt-3">
-                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
-                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" class="social-link"><i class="fab fa-tiktok"></i></a>
-                        <a href="#" class="social-link"><i class="fab fa-pinterest-p"></i></a>
+                    <p class="text-light">Premium hair braiding and styling services by Tsinat Gezahegne. Creating beautiful, personalized styles that make you feel confident and beautiful.</p>
+                    <div class="social-links mt-4 d-flex gap-3">
+                        <a href="#" class="social-link btn btn-outline-light btn-sm rounded-circle p-2"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link btn btn-outline-light btn-sm rounded-circle p-2"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link btn btn-outline-light btn-sm rounded-circle p-2"><i class="fab fa-tiktok"></i></a>
+                        <a href="#" class="social-link btn btn-outline-light btn-sm rounded-circle p-2"><i class="fab fa-pinterest-p"></i></a>
                     </div>
                 </div>
                 
                 <div class="col-md-4 mb-4 mb-md-0">
-                    <h5 class="mb-3">Quick Links</h5>
-                    <ul class="list-unstyled footer-links">
-                        <li class="mb-2"><a href="{{ url_for('main.home') }}">Home</a></li>
-                        <li class="mb-2"><a href="{{ url_for('main.about') }}">About Us</a></li>
-                        <li class="mb-2"><a href="{{ url_for('main.services') }}">Services</a></li>
-                        <li class="mb-2"><a href="{{ url_for('booking.calendar') }}">Book Appointment</a></li>
-                        <li><a href="{{ url_for('main.contact') }}">Contact Us</a></li>
+                    <h5 class="mb-3 fw-bold text-primary-custom">Quick Links</h5>
+                    <ul class="list-unstyled footer-links ps-0">
+                        <li class="mb-2"><a href="{{ url_for('main.home') }}" class="text-decoration-none text-light">Home</a></li>
+                        <li class="mb-2"><a href="{{ url_for('main.about') }}" class="text-decoration-none text-light">About Us</a></li>
+                        <li class="mb-2"><a href="{{ url_for('main.services') }}" class="text-decoration-none text-light">Services</a></li>
+                        <li class="mb-2"><a href="{{ url_for('booking.calendar') }}" class="text-decoration-none text-light">Book Appointment</a></li>
+                        <li><a href="{{ url_for('main.contact') }}" class="text-decoration-none text-light">Contact Us</a></li>
                     </ul>
                 </div>
                 
                 <div class="col-md-4">
-                    <h5 class="mb-3">Contact Info</h5>
-                    <ul class="list-unstyled contact-info">
-                        <li class="mb-2"><i class="fas fa-map-marker-alt me-2"></i> 123 Styling Avenue, London, UK</li>
-                        <li class="mb-2"><i class="fas fa-phone-alt me-2"></i> +44 20 1234 5678</li>
-                        <li class="mb-2"><i class="fas fa-envelope me-2"></i> info@braidsandbeyond.com</li>
-                        <li><i class="fas fa-clock me-2"></i> Mon-Fri: 9AM-7PM, Sat: 10AM-6PM</li>
+                    <h5 class="mb-3 fw-bold text-primary-custom">Contact Info</h5>
+                    <ul class="list-unstyled contact-info ps-0">
+                        <li class="mb-3 d-flex align-items-center"><i class="fas fa-map-marker-alt me-2 text-primary-custom"></i> 123 Styling Avenue, London, UK</li>
+                        <li class="mb-3 d-flex align-items-center"><i class="fas fa-phone-alt me-2 text-primary-custom"></i> +44 20 1234 5678</li>
+                        <li class="mb-3 d-flex align-items-center"><i class="fas fa-envelope me-2 text-primary-custom"></i> info@braidsandbeyond.com</li>
+                        <li class="d-flex align-items-center"><i class="fas fa-clock me-2 text-primary-custom"></i> Mon-Fri: 9AM-7PM, Sat: 10AM-6PM</li>
                     </ul>
                 </div>
             </div>
             
-            <hr class="my-4">
+            <hr class="my-4 opacity-25">
             
             <div class="row align-items-center">
                 <div class="col-md-6 text-center text-md-start">
-                    <p class="mb-md-0">&copy; <span class="current-year">2023</span> Braids & Beyond. All rights reserved.</p>
+                    <p class="mb-md-0 small">&copy; <span class="current-year">2023</span> Braids & Beyond. All rights reserved.</p>
                 </div>
                 <div class="col-md-6 text-center text-md-end">
-                    <a href="#" class="text-white text-decoration-none me-3">Privacy Policy</a>
-                    <a href="#" class="text-white text-decoration-none">Terms of Service</a>
+                    <a href="#" class="text-light text-decoration-none me-3 small">Privacy Policy</a>
+                    <a href="#" class="text-light text-decoration-none small">Terms of Service</a>
                 </div>
             </div>
         </div>

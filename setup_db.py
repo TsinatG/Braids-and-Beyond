@@ -1,62 +1,39 @@
-import pymysql
 import os
-from dotenv import load_dotenv
-import re
-
-# Load environment variables
-load_dotenv()
+import sqlite3
+from pathlib import Path
+from config import Config
 
 def setup_database():
-    # Extract database info from DATABASE_URL
-    db_url = os.environ.get('DATABASE_URL')
+    """
+    Setup SQLite database - much simpler than MySQL setup!
+    With SQLite, the database file is created automatically when first accessed,
+    so we just need to make sure the directory exists.
+    """
+    # Get the database path from config
+    db_path = Config.SQLALCHEMY_DATABASE_URI.replace('sqlite:///', '')
     
-    if not db_url or 'mysql+pymysql://' not in db_url:
-        print("Error: DATABASE_URL environment variable not set or not in the correct format.")
-        print("Expected format: mysql+pymysql://username:password@host/database_name")
-        return False
+    # Ensure the directory exists
+    db_dir = os.path.dirname(db_path)
+    if db_dir and not os.path.exists(db_dir):
+        os.makedirs(db_dir)
     
-    # Parse the URL - handle query parameters
-    db_info = db_url.replace('mysql+pymysql://', '')
-    
-    # Split at @ to separate auth from host
-    auth_part, rest = db_info.split('@', 1)
-    
-    # Extract username and password
-    username, password = auth_part.split(':', 1)
-    
-    # Handle host and database name, accounting for query parameters
-    host_db_part = rest.split('/', 1)
-    host = host_db_part[0]
-    
-    # Extract database name, removing any query parameters
-    db_with_params = host_db_part[1]
-    db_name = db_with_params.split('?')[0]
-    
+    # Connect to create the file if it doesn't exist
     try:
-        # Connect to MySQL server (without specifying a database)
-        conn = pymysql.connect(
-            host=host,
-            user=username,
-            password=password,
-            # Add auth_plugin parameter to handle MySQL 8+ authentication
-            client_flag=pymysql.constants.CLIENT.MULTI_STATEMENTS
-        )
+        # Extract just the file path from the URI
+        if os.path.isabs(db_path):
+            # Absolute path
+            file_path = db_path
+        else:
+            # Relative path - make it absolute
+            base_dir = os.path.abspath(os.path.dirname(__file__))
+            file_path = os.path.join(base_dir, db_path)
         
-        cursor = conn.cursor()
-        
-        # Create the database if it doesn't exist
-        cursor.execute(f"CREATE DATABASE IF NOT EXISTS {db_name}")
-        print(f"Database '{db_name}' created or already exists.")
-        
-        # Close the connection
-        cursor.close()
+        conn = sqlite3.connect(file_path)
         conn.close()
-        
-        print("Database setup completed successfully!")
+        print(f"SQLite database initialized at: {file_path}")
         return True
-        
     except Exception as e:
-        print(f"Error setting up database: {str(e)}")
+        print(f"Error setting up SQLite database: {str(e)}")
         return False
 
 if __name__ == "__main__":

@@ -11,7 +11,7 @@
     --accent-color: #f1c40f; /* Yellow accent */
 }
 
-/* Typography */
+/* Typography - Using Bootstrap fonts */
 body {
     font-family: 'Poppins', sans-serif;
     color: var(--dark-text);
@@ -22,11 +22,7 @@ h1, h2, h3, h4, h5, h6 {
     font-family: 'Playfair Display', serif;
 }
 
-/* Navbar customization */
-.navbar {
-    padding: 1rem 0;
-}
-
+/* Logo styling */
 .logo-text {
     font-family: 'Playfair Display', serif;
     font-size: 1.8rem;
@@ -41,28 +37,23 @@ h1, h2, h3, h4, h5, h6 {
     margin-left: 0.5rem;
 }
 
+/* Custom nav link styling */
 .nav-link {
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 1px;
-    padding: 0.5rem 1rem !important;
     transition: color 0.3s ease;
 }
 
-.nav-link:hover {
-    color: var(--primary-color) !important;
-}
-
+.nav-link:hover,
 .nav-link.active {
     color: var(--primary-color) !important;
 }
 
-/* Hero section enhancements */
+/* Hero section */
 .hero {
     position: relative;
     min-height: 90vh;
-    display: flex;
-    align-items: center;
     background-color: #000;
     color: var(--light-text);
     overflow: hidden;
@@ -99,7 +90,7 @@ h1, h2, h3, h4, h5, h6 {
     transform: scale(1.02);
 }
 
-/* Button styles */
+/* Custom button overrides */
 .btn-primary {
     background-color: var(--primary-color);
     border-color: var(--primary-color);
@@ -110,8 +101,14 @@ h1, h2, h3, h4, h5, h6 {
     border-color: var(--primary-dark);
 }
 
-.btn-outline-light:hover {
+.btn-outline-primary {
     color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
 }
 
 /* Service cards */
@@ -173,32 +170,16 @@ h1, h2, h3, h4, h5, h6 {
     transform: translateY(0);
 }
 
-/* Testimonial cards */
-.testimonials .card {
-    border: none;
-    background-color: rgba(255, 255, 255, 0.05);
-    transition: transform 0.3s ease;
+/* Custom backgrounds and text colors */
+.bg-dark-custom {
+    background-color: #0a0a0a;
 }
 
-.testimonials .card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-}
-
-/* CTA Section */
-.cta-section {
-    background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('../img/cta-background.jpg');
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-    padding: 5rem 0;
+.text-primary-custom {
+    color: var(--primary-color) !important;
 }
 
 /* Footer styles */
-.site-footer {
-    background-color: #111;
-}
-
 .footer-logo .logo-text {
     font-size: 2rem;
 }
@@ -249,69 +230,30 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--primary-color);
 }
 
-/* Background colors */
-.bg-dark-custom {
-    background-color: #0a0a0a;
-}
-
-/* Text colors */
-.text-primary-custom {
-    color: var(--primary-color) !important;
-}
-
-/* Section padding */
-.section-padding {
-    padding: 5rem 0;
-}
-
-/* Service Cards */
-.service-card {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.service-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-}
-
-.service-price {
-    font-weight: 600;
-    color: var(--primary-color);
-    font-size: 1.1rem;
-}
-
-.service-duration {
-    color: rgba(255, 255, 255, 0.7);
-    font-size: 0.9rem;
-}
-
-/* Service Categories */
+/* Service category header */
 .service-category h2 {
     position: relative;
-    display: inline-block;
     margin-bottom: 2rem;
+    padding-bottom: 1rem;
 }
 
 .service-category h2:after {
-    content: '';
+    content: "";
     position: absolute;
-    bottom: -10px;
     left: 0;
-    width: 50px;
+    bottom: 0;
+    width: 60px;
     height: 3px;
     background-color: var(--primary-color);
 }
 
 /* Booking CTA */
 .booking-cta {
-    background: rgba(0, 0, 0, 0.3);
-    border-radius: 1rem;
-    padding: 3rem !important;
-    margin-top: 2rem;
-    border: 1px solid rgba(155, 89, 182, 0.2);
+    background: linear-gradient(90deg, var(--primary-dark), var(--primary-color));
+    padding: 2rem;
+    border-radius: 10px;
 }
 
 .booking-cta h3 {
-    color: var(--light-text);
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
 }

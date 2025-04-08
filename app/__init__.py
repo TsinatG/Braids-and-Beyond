@@ -6,6 +6,7 @@ from flask_bcrypt import Bcrypt
 from config import Config
 import os
 from datetime import datetime, timedelta
+import sqlite3
 
 # Initialize extensions
 db = SQLAlchemy()
@@ -26,6 +27,25 @@ def create_app(config_class=Config):
     migrate.init_app(app, db)
     login_manager.init_app(app)
     bcrypt.init_app(app)
+    
+    # SQLite optimizations and settings
+    if 'sqlite' in app.config['SQLALCHEMY_DATABASE_URI']:
+        def _configure_sqlite(connection, connection_record):
+            if isinstance(connection, sqlite3.Connection):
+                cursor = connection.cursor()
+                # Enable foreign key constraints
+                cursor.execute("PRAGMA foreign_keys=ON;")
+                
+                # Performance optimizations
+                cursor.execute("PRAGMA journal_mode=WAL;")  # Write-Ahead Logging for better concurrency
+                cursor.execute("PRAGMA synchronous=NORMAL;")  # Reduces disk I/O
+                cursor.execute("PRAGMA cache_size=10000;")    # Increase cache size for better performance
+                cursor.execute("PRAGMA temp_store=MEMORY;")   # Store temp tables in memory
+                cursor.close()
+        
+        with app.app_context():
+            from sqlalchemy import event
+            event.listen(db.engine, 'connect', _configure_sqlite)
     
     # Custom Jinja filters
     @app.template_filter('dateadd')

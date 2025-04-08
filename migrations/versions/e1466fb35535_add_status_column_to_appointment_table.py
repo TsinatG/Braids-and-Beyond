@@ -7,7 +7,8 @@ Create Date: 2025-03-23 23:45:15.016918
 """
 from alembic import op
 import sqlalchemy as sa
-from sqlalchemy.dialects import mysql
+# Removing MySQL import as we're switching to SQLite
+# from sqlalchemy.dialects import mysql
 
 # revision identifiers, used by Alembic.
 revision = 'e1466fb35535'
@@ -36,11 +37,11 @@ def upgrade():
         batch_op.add_column(sa.Column('is_active', sa.Boolean(), nullable=True))
         batch_op.add_column(sa.Column('updated_at', sa.DateTime(), nullable=True))
         batch_op.alter_column('specialization',
-               existing_type=mysql.VARCHAR(collation='utf8mb4_unicode_ci', length=100),
+               existing_type=sa.String(length=100),
                type_=sa.String(length=200),
                existing_nullable=True)
         batch_op.alter_column('image_file',
-               existing_type=mysql.VARCHAR(collation='utf8mb4_unicode_ci', length=20),
+               existing_type=sa.String(length=20),
                type_=sa.String(length=100),
                nullable=True)
 
@@ -52,11 +53,11 @@ def downgrade():
     with op.batch_alter_table('stylist', schema=None) as batch_op:
         batch_op.alter_column('image_file',
                existing_type=sa.String(length=100),
-               type_=mysql.VARCHAR(collation='utf8mb4_unicode_ci', length=20),
+               type_=sa.String(length=20),
                nullable=False)
         batch_op.alter_column('specialization',
                existing_type=sa.String(length=200),
-               type_=mysql.VARCHAR(collation='utf8mb4_unicode_ci', length=100),
+               type_=sa.String(length=100),
                existing_nullable=True)
         batch_op.drop_column('updated_at')
         batch_op.drop_column('is_active')
