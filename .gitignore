@@ -1,0 +1,20 @@
+# Virtual Environments
+venv/
+venv_new/
+env/
+ENV/
+*.venv/
+.virtualenv/
+
+# Python
+__pycache__/
+*.py[cod]
+*.class
+*.so
+.Python
+build/
+dist/
+
+# Flask files
+instance/
+.webassets-cache
